@@ -10,6 +10,7 @@
 #include <rev/SparkAbsoluteEncoder.h>
 #include <rev/SparkClosedLoopController.h>
 #include <rev/SparkMax.h>
+#include <rev/SparkFlex.h>
 #include <rev/SparkRelativeEncoder.h>
 
 using namespace rev::spark;
@@ -52,7 +53,7 @@ class MAXSwerveModule {
   void ResetEncoders();
 
  private:
-  SparkMax m_drivingSpark;
+  SparkFlex m_drivingSpark;
   SparkMax m_turningSpark;
 
   SparkRelativeEncoder m_drivingEncoder = m_drivingSpark.GetEncoder();

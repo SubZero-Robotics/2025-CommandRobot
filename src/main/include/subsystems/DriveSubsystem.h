@@ -21,6 +21,7 @@
 #include <frc2/command/PIDCommand.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/RunCommand.h>
+#include <ctre/phoenix6/Pigeon2.hpp>
 
 #include "Constants.h"
 #include "MAXSwerveModule.h"
