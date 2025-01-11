@@ -104,3 +104,7 @@ namespace OIConstants {
 constexpr int kDriverControllerPort = 0;
 constexpr double kDriveDeadband = 0.05;
 }  // namespace OIConstants
+
+namespace GyroConstants {
+    constexpr units::time::second_t kPrintPeriod{500_ms};
+}

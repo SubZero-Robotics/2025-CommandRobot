@@ -9,6 +9,7 @@
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
+#include <iostream>
 
 #include "Constants.h"
 
@@ -32,6 +33,8 @@ DriveSubsystem::DriveSubsystem()
   // Usage reporting for MAXSwerve template
   HAL_Report(HALUsageReporting::kResourceType_RobotDrive,
              HALUsageReporting::kRobotDriveSwerve_MaxSwerve);
+
+    /* Configure Pigeon2 */
 }
 
 void DriveSubsystem::Periodic() {
@@ -40,6 +43,45 @@ void DriveSubsystem::Periodic() {
                         m_gyro.GetAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
                     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()});
+
+  if (frc::Timer::GetFPGATimestamp() - currentTime >= GyroConstants::kPrintPeriod) {
+    currentTime += GyroConstants::kPrintPeriod;
+
+    /**
+     * GetYaw automatically calls Refresh(), no need to manually refresh.
+     *
+     * StatusSignalValues also have the "ostream <<" operator implemented, to provide
+     * a useful print of the signal
+     */
+    auto &yaw = pidgey.GetYaw();
+    std::cout << "Yaw is " << yaw << " with " << yaw.GetTimestamp().GetLatency().value() << " seconds of latency" << std::endl;
+
+    /**
+     * Get the Gravity Vector Z component StatusSignalValue without refreshing
+     */
+    auto &gravityZ = pidgey.GetGravityVectorZ(false);
+    /* This time wait for the signal to reduce latency */
+    gravityZ.WaitForUpdate(GyroConstants::kPrintPeriod); // Wait up to our period
+    /**
+     * This uses the explicit GetValue and GetUnits methods to print, even though it's not
+     * necessary for the ostream print
+     */
+    std::cout << "Gravity Vector in the Z direction is " <<
+                  gravityZ.GetValue().value() << " " <<
+                  gravityZ.GetUnits() << " with " <<
+                  gravityZ.GetTimestamp().GetLatency().value() << " seconds of latency" <<
+                  std::endl;
+    /**
+     * Notice when running this example that the second print's latency is always shorter than the first print's latency.
+     * This is because we explicitly wait for the signal using the WaitForUpdate() method instead of using the Refresh()
+     * method, which only gets the last cached value (similar to how Phoenix v5 works).
+     * This can be used to make sure we synchronously update our control loop from the CAN bus, reducing any latency or jitter in
+     * CAN bus measurements.
+     * When the device is on a CANivore, the reported latency is very close to the true latency of the sensor, as the CANivore
+     * timestamps when it receives the frame. This can be further used for latency compensation.
+     */
+    std::cout << std::endl;
+  }
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,

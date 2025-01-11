@@ -119,6 +119,9 @@ class DriveSubsystem : public frc2::SubsystemBase {
   MAXSwerveModule m_frontRight;
   MAXSwerveModule m_rearRight;
 
+  ctre::phoenix6::hardware::Pigeon2 pidgey{13, "rio"};
+  units::time::second_t currentTime{frc::Timer::GetFPGATimestamp()};
+
   // The gyro sensor
   frc::ADIS16470_IMU m_gyro;
 
