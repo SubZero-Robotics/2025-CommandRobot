@@ -72,7 +72,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
    *
    * @return the robot's heading in degrees, from 180 to 180
    */
-  units::degree_t GetHeading() const;
+  units::degree_t GetHeading();
 
   /**
    * Zeroes the heading of the robot.
@@ -119,11 +119,9 @@ class DriveSubsystem : public frc2::SubsystemBase {
   MAXSwerveModule m_frontRight;
   MAXSwerveModule m_rearRight;
 
+  // Gyro Sensor
   ctre::phoenix6::hardware::Pigeon2 pidgey{13, "rio"};
   units::time::second_t currentTime{frc::Timer::GetFPGATimestamp()};
-
-  // The gyro sensor
-  frc::ADIS16470_IMU m_gyro;
 
   // Odometry class for tracking robot pose
   // 4 defines the number of modules

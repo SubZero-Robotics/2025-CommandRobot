@@ -26,7 +26,7 @@ DriveSubsystem::DriveSubsystem()
                   kRearRightChassisAngularOffset},
       m_odometry{kDriveKinematics,
                  frc::Rotation2d(units::radian_t{
-                     m_gyro.GetAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
+                     pidgey.GetYaw().GetValue()}),
                  {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
                  frc::Pose2d{}} {
@@ -35,12 +35,16 @@ DriveSubsystem::DriveSubsystem()
              HALUsageReporting::kRobotDriveSwerve_MaxSwerve);
 
     /* Configure Pigeon2 */
+
+  pidgey.SetYaw(144_deg, 100_ms); // Set our yaw to 144 degrees and wait up to 100 milliseconds for the setter to take affect
+  pidgey.GetYaw().WaitForUpdate(100_ms); // And wait up to 100 milliseconds for the yaw to take affect
+  std::cout << "Set the yaw to 144 degrees, we are currently at " << pidgey.GetYaw() << std::endl;
 }
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
   m_odometry.Update(frc::Rotation2d(units::radian_t{
-                        m_gyro.GetAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
+                        pidgey.GetYaw().GetValue()}),
                     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()});
 
@@ -101,7 +105,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
           ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                 xSpeedDelivered, ySpeedDelivered, rotDelivered,
                 frc::Rotation2d(units::radian_t{
-                    m_gyro.GetAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}))
+                    pidgey.GetYaw().GetValue()}))
           : frc::ChassisSpeeds{xSpeedDelivered, ySpeedDelivered, rotDelivered});
 
   kDriveKinematics.DesaturateWheelSpeeds(&states, DriveConstants::kMaxSpeed);
@@ -142,16 +146,16 @@ void DriveSubsystem::ResetEncoders() {
   m_rearRight.ResetEncoders();
 }
 
-units::degree_t DriveSubsystem::GetHeading() const {
+units::degree_t DriveSubsystem::GetHeading() {
   return frc::Rotation2d(
-             units::radian_t{m_gyro.GetAngle(frc::ADIS16470_IMU::IMUAxis::kZ)})
+             units::radian_t{pidgey.GetYaw().GetValue()})
       .Degrees();
 }
 
-void DriveSubsystem::ZeroHeading() { m_gyro.Reset(); }
+void DriveSubsystem::ZeroHeading() { pidgey.Reset(); }
 
 double DriveSubsystem::GetTurnRate() {
-  return -m_gyro.GetRate(frc::ADIS16470_IMU::IMUAxis::kZ).value();
+  return -pidgey.GetAngularVelocityZWorld().GetValue().value();
 }
 
 frc::Pose2d DriveSubsystem::GetPose() { return m_odometry.GetPose(); }
