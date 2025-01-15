@@ -51,5 +51,13 @@ void RobotContainer::ConfigureBindings() {
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  return pathplanner::PathPlannerAuto("Example Auto").ToPtr();
+
+  auto command = pathplanner::PathPlannerAuto("Example Auto");
+  auto rot = command.getStartingPose().Rotation().Degrees();
+
+  auto offset = m_drive.GetHeading() - rot;
+
+  m_drive.OffsetRotation(offset);
+
+  return pathplanner::PathPlannerAuto("Example Auto").AndThen(frc2::InstantCommand([this, offset]() { m_drive.OffsetRotation(offset); }).ToPtr());
 }

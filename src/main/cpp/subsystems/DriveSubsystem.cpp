@@ -209,3 +209,12 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
         m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
       pose);
 }
+
+void DriveSubsystem::OffsetRotation(frc::Rotation2d offset) {
+  pidgey.SetYaw(offset.Degrees() + pidgey.GetYaw().GetValue());
+    m_odometry.ResetPosition(
+      pidgey.GetYaw().GetValue(),
+      {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
+        m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
+      m_odometry.GetPose());
+}
