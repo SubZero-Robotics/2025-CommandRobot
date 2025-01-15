@@ -13,6 +13,7 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/button/JoystickButton.h>
+#include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <units/angle.h>
 #include <units/velocity.h>
 
@@ -50,5 +51,5 @@ void RobotContainer::ConfigureBindings() {
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  return autos::ExampleAuto(&m_subsystem);
+  return pathplanner::PathPlannerAuto("Example Auto").ToPtr();
 }

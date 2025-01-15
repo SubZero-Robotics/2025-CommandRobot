@@ -52,6 +52,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
              units::meters_per_second_t ySpeed, units::radians_per_second_t rot,
              bool fieldRelative);
 
+  void Drive(frc::ChassisSpeeds speeds);
+
   /**
    * Sets the wheels into an X formation to prevent movement.
    */
@@ -100,7 +102,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
    */
   void ResetOdometry(frc::Pose2d pose);
 
-  frc::SwerveDriveKinematics<4> kDriveKinematics{
+  frc::SwerveDriveKinematics<4> m_driveKinematics{
       frc::Translation2d{DriveConstants::kWheelBase / 2,
                          DriveConstants::kTrackWidth / 2},
       frc::Translation2d{DriveConstants::kWheelBase / 2,
@@ -113,6 +115,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
+
+  frc::ChassisSpeeds getRobotRelativeSpeeds();
 
   MAXSwerveModule m_frontLeft;
   MAXSwerveModule m_rearLeft;
