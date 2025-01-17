@@ -106,5 +106,5 @@ constexpr double kDriveDeadband = 0.05;
 }  // namespace OIConstants
 
 namespace GyroConstants {
-    constexpr units::time::second_t kPrintPeriod{100_ms};
+    constexpr units::time::second_t kPrintPeriod{1000_ms};
 }

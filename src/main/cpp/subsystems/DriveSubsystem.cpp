@@ -79,7 +79,10 @@ void DriveSubsystem::Periodic() {
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()});
     auto &yaw = pidgey.GetYaw();
   if (frc::Timer::GetFPGATimestamp() - currentTime >= GyroConstants::kPrintPeriod) {
-  //   currentTime += GyroConstants::kPrintPeriod;
+
+    std::cout << "Yaw: " << yaw.GetValue().value() << std::endl;
+  
+    currentTime += GyroConstants::kPrintPeriod;
   //   /**
   //    * GetYaw automatically calls Refresh(), no need to manually refresh.
   //    *

@@ -16,6 +16,7 @@
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <units/angle.h>
 #include <units/velocity.h>
+#include <iostream>
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
@@ -52,12 +53,13 @@ void RobotContainer::ConfigureBindings() {
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
 
-  auto command = pathplanner::PathPlannerAuto("Example Auto");
+  auto command = pathplanner::PathPlannerAuto("Spin Auto");
   auto rot = command.getStartingPose().Rotation().Degrees();
 
   auto offset = m_drive.GetHeading() - rot;
 
-  m_drive.OffsetRotation(offset);
+  std::cout << "Offset " << offset.value() << std::endl;
 
-  return pathplanner::PathPlannerAuto("Example Auto").AndThen(frc2::InstantCommand([this, offset]() { m_drive.OffsetRotation(offset); }).ToPtr());
+  return pathplanner::PathPlannerAuto("Spin Auto")
+    .AndThen(frc2::InstantCommand([this, offset]() { m_drive.OffsetRotation(offset); }).ToPtr());
 }
