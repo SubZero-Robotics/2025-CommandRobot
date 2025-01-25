@@ -14,6 +14,7 @@
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/button/JoystickButton.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <units/angle.h>
 #include <units/velocity.h>
 #include <iostream>
@@ -24,8 +25,14 @@
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
 
+  // m_chooser.SetDefaultOption(AutoConstants::kDefaultAutoName, AutoConstants::kDefaultAutoName);
+
+  frc::SmartDashboard::PutData(&m_chooser);
+  m_chooser.SetDefaultOption(AutoConstants::kOutAuto, AutoConstants::kSpinAuto);
+  m_chooser.AddOption(AutoConstants::kSpinAuto, AutoConstants::kSpinAuto);
+
   // Configure the button bindings
-    ConfigureBindings();
+  ConfigureBindings();
 
   // Set up default drive command
   // The left stick controls translation of the robot.
@@ -51,15 +58,15 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-  // An example command will be run in autonomous
-
   auto command = pathplanner::PathPlannerAuto("Spin Auto");
   auto rot = command.getStartingPose().Rotation().Degrees();
 
   auto offset = m_drive.GetHeading() - rot;
 
-  std::cout << "Offset " << offset.value() << std::endl;
+  m_autoSelected = m_chooser.GetSelected();
+  
+  std::cout << "Auto Selected: \"" << m_autoSelected << "\".\n";
 
-  return pathplanner::PathPlannerAuto("Spin Auto")
+  return pathplanner::PathPlannerAuto(m_autoSelected)
     .AndThen(frc2::InstantCommand([this, offset]() { m_drive.OffsetRotation(offset); }).ToPtr());
 }

@@ -13,6 +13,7 @@
 #include <frc2/command/PIDCommand.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/RunCommand.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
@@ -42,4 +43,7 @@ class RobotContainer {
   ExampleSubsystem m_subsystem;
 
   void ConfigureBindings();
+
+  frc::SendableChooser<std::string> m_chooser;
+  std::string m_autoSelected;
 };

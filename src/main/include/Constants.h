@@ -12,6 +12,7 @@
 #include <units/velocity.h>
 
 #include <numbers>
+#include <string>
 
 #pragma once
 
@@ -91,6 +92,9 @@ constexpr auto kMaxSpeed = 3_mps;
 constexpr auto kMaxAcceleration = 3_mps_sq;
 constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
 constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
+
+const std::string kOutAuto = "Out Auto";
+const std::string kSpinAuto = "Spin Auto";
 
 constexpr double kPXController = 0.5;
 constexpr double kPYController = 0.5;
