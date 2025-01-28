@@ -35,7 +35,12 @@ inline constexpr int kDriverControllerPort = 0;
 namespace DriveConstants {
 // Driving Parameters - Note that these are not the maximum capable speeds of
 // the robot, rather the allowed maximum speeds
-constexpr units::meters_per_second_t kMaxSpeed = 4.8_mps;
+
+// Test sewrve
+// constexpr units::meters_per_second_t kMaxSpeed = 4.8_mps;
+
+// Season robot
+constexpr units::meters_per_second_t kMaxSpeed = 4.92_mps;
 constexpr units::radians_per_second_t kMaxAngularSpeed{2 * std::numbers::pi};
 
 constexpr double kDirectionSlewRate = 1.2;   // radians per second
@@ -44,9 +49,9 @@ constexpr double kRotationalSlewRate = 2.0;  // percent per second (1 = 100%)
 
 // Chassis configuration
 constexpr units::meter_t kTrackWidth =
-    0.6731_m;  // Distance between centers of right and left wheels on robot
+    24_in;  // Distance between centers of right and left wheels on robot
 constexpr units::meter_t kWheelBase =
-    0.6731_m;  // Distance between centers of front and back wheels on robot
+    24_in;  // Distance between centers of front and back wheels on robot
 
 // Angular offsets of the modules relative to the chassis in radians
 constexpr double kFrontLeftChassisAngularOffset = -std::numbers::pi / 2;
@@ -70,7 +75,7 @@ namespace ModuleConstants {
 // The MAXSwerve module can be configured with one of three pinion gears: 12T,
 // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
 // more teeth will result in a robot that drives faster).
-constexpr int kDrivingMotorPinionTeeth = 14;
+constexpr int kDrivingMotorPinionTeeth = 12;
 
 // Calculations required for driving motor conversion factors and feed forward
 constexpr double kDrivingMotorFreeSpeedRps =
@@ -80,8 +85,14 @@ constexpr units::meter_t kWheelCircumference =
     kWheelDiameter * std::numbers::pi;
 // 45 teeth on the wheel's bevel gear, 21 teeth on the first-stage spur gear, 15
 // teeth on the bevel pinion
+
+// Test swerve bot
+// constexpr double kDrivingMotorReduction =
+//     (45.0 * 21) / (kDrivingMotorPinionTeeth * 15);
+
 constexpr double kDrivingMotorReduction =
-    (45.0 * 21) / (kDrivingMotorPinionTeeth * 15);
+    (45.0 * 22.0) / (kDrivingMotorPinionTeeth * 15);
+
 constexpr double kDriveWheelFreeSpeedRps =
     (kDrivingMotorFreeSpeedRps * kWheelCircumference.value()) /
     kDrivingMotorReduction;
