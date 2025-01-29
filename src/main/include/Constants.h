@@ -10,6 +10,7 @@
 #include <units/current.h>
 #include <units/length.h>
 #include <units/velocity.h>
+#include <subzero/singleaxis/ISingleAxisSubsystem.h>
 
 #include <numbers>
 #include <string>
@@ -122,4 +123,36 @@ constexpr double kDriveDeadband = 0.05;
 
 namespace GyroConstants {
     constexpr units::time::second_t kPrintPeriod{1000_ms};
+}
+
+namespace ElevatorConstants {
+    // Placeholder value
+    const int kElevatorMotorCanId = -1;
+
+    // Placeholder values
+    const double kElevatorP = -1.0;
+    const double kElevatorI = -1.0;
+    const double kElevatorD = -1.0;
+    const double kElevatorIZone = -1.0;
+    const double kElevatorFF = -1.0;
+
+    // Placeholder value
+    constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
+
+    // Placeholder values
+    constexpr units::meter_t kMinDistance = 0_in;
+    constexpr units::meter_t kMaxDistance = 24_in;
+    constexpr units::meter_t kRelativeDistancePerRev = 0.1_in; // TODO do math to figure out value
+    constexpr units::meter_t kAbsoluteDistancePerRev = 0.1_in;
+    constexpr units::meters_per_second_t kDefaultVelocity = 1_mps;
+    constexpr double kVelocityScalar = 1.0;
+    constexpr units::meter_t kTolerance = 1_m;
+
+    // Placeholder
+    subzero::SingleAxisMechanism kElevatorMechanism {
+        24_in,
+        0_deg,
+        0.0,
+        frc::Color8Bit()
+    };
 }
