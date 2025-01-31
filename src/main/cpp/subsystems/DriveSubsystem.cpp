@@ -30,7 +30,7 @@ DriveSubsystem::DriveSubsystem()
                   kRearRightChassisAngularOffset},
       m_odometry{m_driveKinematics,
                  frc::Rotation2d(units::radian_t{
-                     pidgey.GetYaw().GetValue()}),
+                     m_pidgey.GetYaw().GetValue()}),
                  {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
                  frc::Pose2d{}} {
@@ -66,18 +66,18 @@ DriveSubsystem::DriveSubsystem()
 
     /* Configure Pigeon2 */
 
-  pidgey.SetYaw(0_deg, 100_ms); // Set our yaw to 0 degrees and wait up to 100 milliseconds for the setter to take affect
-  pidgey.GetYaw().WaitForUpdate(100_ms); // And wait up to 100 milliseconds for the yaw to take affect
-  std::cout << "Set the yaw to 144 degrees, we are currently at " << pidgey.GetYaw() << std::endl;
+  m_pidgey.SetYaw(0_deg, 100_ms); // Set our yaw to 0 degrees and wait up to 100 milliseconds for the setter to take affect
+  m_pidgey.GetYaw().WaitForUpdate(100_ms); // And wait up to 100 milliseconds for the yaw to take affect
+  std::cout << "Set the yaw to 144 degrees, we are currently at " << m_pidgey.GetYaw() << std::endl;
 }
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
   m_odometry.Update(frc::Rotation2d(units::radian_t{
-                        pidgey.GetYaw().GetValue()}),
+                        m_pidgey.GetYaw().GetValue()}),
                     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()});
-    auto &yaw = pidgey.GetYaw();
+    auto &yaw = m_pidgey.GetYaw();
   if (frc::Timer::GetFPGATimestamp() - currentTime >= GyroConstants::kPrintPeriod) {
 
     std::cout << "Yaw: " << yaw.GetValue().value() << std::endl;
@@ -94,7 +94,7 @@ void DriveSubsystem::Periodic() {
   //   /**
   //    * Get the Gravity Vector Z component StatusSignalValue without refreshing
   //    */
-  //   auto &gravityZ = pidgey.GetGravityVectorZ(false);
+  //   auto &gravityZ = m_pidgey.GetGravityVectorZ(false);
   //   /* This time wait for the signal to reduce latency */
   //   gravityZ.WaitForUpdate(GyroConstants::kPrintPeriod); // Wait up to our period
   //   /**
@@ -136,7 +136,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
           ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                 xSpeedDelivered, ySpeedDelivered, rotDelivered,
                 frc::Rotation2d(units::radian_t{
-                    pidgey.GetYaw().GetValue()}))
+                    m_pidgey.GetYaw().GetValue()}))
           : frc::ChassisSpeeds{xSpeedDelivered, ySpeedDelivered, rotDelivered});
 
   m_driveKinematics.DesaturateWheelSpeeds(&states, DriveConstants::kMaxSpeed);
@@ -193,14 +193,14 @@ void DriveSubsystem::ResetEncoders() {
 
 units::degree_t DriveSubsystem::GetHeading() {
   return frc::Rotation2d(
-             units::radian_t{pidgey.GetYaw().GetValue()})
+             units::radian_t{m_pidgey.GetYaw().GetValue()})
       .Degrees();
 }
 
-void DriveSubsystem::ZeroHeading() { pidgey.Reset(); }
+void DriveSubsystem::ZeroHeading() { m_pidgey.Reset(); }
 
 double DriveSubsystem::GetTurnRate() {
-  return -pidgey.GetAngularVelocityZWorld().GetValue().value();
+  return -m_pidgey.GetAngularVelocityZWorld().GetValue().value();
 }
 
 frc::Pose2d DriveSubsystem::GetPose() { return m_odometry.GetPose(); }
@@ -214,9 +214,9 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
 }
 
 void DriveSubsystem::OffsetRotation(frc::Rotation2d offset) {
-  pidgey.SetYaw(offset.Degrees() + pidgey.GetYaw().GetValue());
+  m_pidgey.SetYaw(offset.Degrees() + m_pidgey.GetYaw().GetValue());
     m_odometry.ResetPosition(
-      pidgey.GetYaw().GetValue(),
+      m_pidgey.GetYaw().GetValue(),
       {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
         m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
       m_odometry.GetPose());
