@@ -8,6 +8,7 @@
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
+#include "subsystems/AlgeaArmSubsystem.h"
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
