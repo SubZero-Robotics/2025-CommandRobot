@@ -4,10 +4,19 @@
 
 #pragma once
 
-#include <frc2/command/CommandPtr.h>
-#include <frc2/command/button/CommandXboxController.h>
+#include <frc/XboxController.h>
+#include <frc/controller/PIDController.h>
+#include <frc/controller/ProfiledPIDController.h>
+#include <frc/smartdashboard/SendableChooser.h>
+#include <frc2/command/Command.h>
+#include <frc2/command/InstantCommand.h>
+#include <frc2/command/PIDCommand.h>
+#include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/RunCommand.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 #include "Constants.h"
+#include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 
 /**
@@ -25,11 +34,16 @@ class RobotContainer {
 
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  frc2::CommandXboxController m_driverController{
+  frc::XboxController m_driverController{
       OperatorConstants::kDriverControllerPort};
 
   // The robot's subsystems are defined here...
+   DriveSubsystem m_drive;
+
   ExampleSubsystem m_subsystem;
 
   void ConfigureBindings();
+
+  frc::SendableChooser<std::string> m_chooser;
+  std::string m_autoSelected;
 };
