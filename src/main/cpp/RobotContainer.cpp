@@ -21,7 +21,7 @@
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
-#include "subsystems/AlgeaArmSubsystem.h"
+#include "subsystems/AlgaeArmSubsystem.h"
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here

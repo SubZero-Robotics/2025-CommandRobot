@@ -7,8 +7,10 @@
 //ALL VALUES ARE CURRENTLY PLACE HOLDERS FOR KNOW!!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+
+
 namespace AlgaeArmConstants{
-    constexpr int KArmMotorId = -1;
+    constexpr int kArmMotorId = -1;
     constexpr double kArmP = -1;
     constexpr double kArmI = -1;
     constexpr double kArmD = -1;
@@ -37,5 +39,6 @@ namespace AlgaeArmConstants{
 
     const frc::TrapezoidProfile<units::degree>::Constraints
         kRotationalAxisConstraints{360_deg_per_s * 2.2, 360_deg_per_s_sq * 2.2};
+
 }
 
