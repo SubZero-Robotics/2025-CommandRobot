@@ -14,16 +14,16 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
       : subzero::RotationalSingleAxisSubsystem<subzero::IPidMotorController>{
             "Arm",
             frc::RobotBase::IsReal()
-                ? dynamic_cast<subzero::IPidMotorController&>(armController)
-                : dynamic_cast<subzero::IPidMotorController&>(simArmController),
+                ? dynamic_cast<subzero::IPidMotorController&>(algaeArmController)
+                : dynamic_cast<subzero::IPidMotorController&>(simAlgaeArmController),
             {
              AlgaeArmConstants::kHomeRotation,
              // Max distance
              AlgaeArmConstants::kMaxRotation,
              // Distance per revolution of relative encoder
-             AlgaeArmConstants::kArmRelativeDistancePerRev,
+             AlgaeArmConstants::kRelativeDistancePerRev,
              // Distance per revolution of absolute encoder
-             AlgaeArmConstants::kArmAbsoluteDistancePerRev,
+             AlgaeArmConstants::kAbsoluteDistancePerRev,
              // Default velocity
              AlgaeArmConstants::kDefaultVelocity,
              // Velocity scalar
@@ -37,7 +37,7 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
              // Reversed
              true,
              // Mechanism2d
-             AlgaeArmConstants::kArmMechanism,
+             AlgaeArmConstants::kAlgaeArmMechanism,
              // Conversion Function
              std::nullopt,
 
@@ -53,21 +53,21 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
   
 
  private:
-  rev::spark::SparkMax m_Motor{AlgaeArmConstants::kArmMotorId,
+  rev::spark::SparkMax m_motor{AlgaeArmConstants::kMotorId,
                                rev::spark::SparkLowLevel::MotorType::kBrushless};
-  rev::spark::SparkClosedLoopController m_PidController = m_Motor.GetClosedLoopController();
-  rev::spark::SparkRelativeEncoder m_enc = m_Motor.GetEncoder();
-  rev::spark::SparkAbsoluteEncoder m_absEnc = m_Motor.GetAbsoluteEncoder();
-  subzero::PidSettings armPidSettings = {
-      AlgaeArmConstants::kArmP, AlgaeArmConstants::kArmI, AlgaeArmConstants::kArmD,
-      AlgaeArmConstants::kArmIZone, AlgaeArmConstants::kArmFF};
-  SparkMaxController armController{"Arm",
-                                   m_Motor,
+  rev::spark::SparkClosedLoopController m_pidController = m_motor.GetClosedLoopController();
+  rev::spark::SparkRelativeEncoder m_enc = m_motor.GetEncoder();
+  rev::spark::SparkAbsoluteEncoder m_absEnc = m_motor.GetAbsoluteEncoder();
+  subzero::PidSettings algaeArmPidSettings = {
+      AlgaeArmConstants::kP, AlgaeArmConstants::kI, AlgaeArmConstants::kD,
+      AlgaeArmConstants::kIZone, AlgaeArmConstants::kFF};
+  SparkMaxController algaeArmController{"Arm",
+                                   m_motor,
                                    m_enc,
-                                   m_PidController,
-                                   armPidSettings,
+                                   m_pidController,
+                                   algaeArmPidSettings,
                                    &m_absEnc,
                                    AlgaeArmConstants::kMaxRpm};
-  subzero::SimPidMotorController simArmController{"Sim Arm", armPidSettings,
+  subzero::SimPidMotorController simAlgaeArmController{"Sim Arm", algaeArmPidSettings,
                                                   AlgaeArmConstants::kMaxRpm};
 };

@@ -10,24 +10,24 @@
 
 
 namespace AlgaeArmConstants{
-    constexpr int kArmMotorId = -1;
-    constexpr double kArmP = -1;
-    constexpr double kArmI = -1;
-    constexpr double kArmD = -1;
-    constexpr double kArmIZone = -1;
-    constexpr double kArmFF = -1;
+    constexpr int kMotorId = -1;
+    constexpr double kP = -1;
+    constexpr double kI = -1;
+    constexpr double kD = -1;
+    constexpr double kIZone = -1;
+    constexpr double kFF = -1;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 1_rpm;
     constexpr units::degree_t kHomeRotation = 10_deg;
     constexpr units::degree_t kMaxRotation = 190_deg;
-    constexpr units::degree_t kArmRelativeDistancePerRev = 360_deg * (1 / 8.75);
-    constexpr units::degree_t kArmAbsoluteDistancePerRev = 360_deg;
+    constexpr units::degree_t kRelativeDistancePerRev = 360_deg * (1 / 8.75);
+    constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
     constexpr units::degrees_per_second_t kDefaultVelocity = 10_deg_per_s;
     constexpr double kVelocityScalar = 1.0;
     constexpr units::degree_t kTolerance = 2_deg;
     constexpr units::meter_t kArmLength = 0.2_m;
     
-    static const subzero::SingleAxisMechanism kArmMechanism = {
+    static const subzero::SingleAxisMechanism kAlgaeArmMechanism = {
     // length
     0.2_m,
     // min angle
