@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+#pragma once
+
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <rev/SparkMax.h>
 #include <units/acceleration.h>
@@ -11,11 +13,19 @@
 #include <units/length.h>
 #include <units/velocity.h>
 #include <subzero/singleaxis/ISingleAxisSubsystem.h>
+#include <subzero/motor/PidMotorController.h>
 
 #include <numbers>
 #include <string>
 
-#pragma once
+typedef 
+    subzero::PidMotorController<rev::spark::SparkMax, rev::spark::SparkClosedLoopController,
+                                rev::spark::SparkRelativeEncoder,
+                                rev::spark::SparkAbsoluteEncoder, rev::spark::SparkMaxConfig> SparkMaxPidController;
+typedef
+    subzero::PidMotorController<rev::spark::SparkFlex, rev::spark::SparkClosedLoopController,
+                                rev::spark::SparkRelativeEncoder,
+                                rev::spark::SparkAbsoluteEncoder, rev::spark::SparkFlexConfig> SparkFlexController;
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -149,10 +159,12 @@ namespace ElevatorConstants {
     constexpr units::meter_t kTolerance = 1_m;
 
     // Placeholder
-    subzero::SingleAxisMechanism kElevatorMechanism {
+    static const subzero::SingleAxisMechanism kElevatorMechanism {
         24_in,
         0_deg,
         0.0,
         frc::Color8Bit()
     };
+
+    const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{};
 }
