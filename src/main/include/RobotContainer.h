@@ -18,6 +18,7 @@
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
+#include "subsystems/ElevatorSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -46,4 +47,6 @@ class RobotContainer {
 
   frc::SendableChooser<std::string> m_chooser;
   std::string m_autoSelected;
+  
+  ElevatorSubsystem m_elevator;
 };

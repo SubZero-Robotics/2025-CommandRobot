@@ -11,13 +11,13 @@
 
 #include "Constants.h"
 
-class ElevatorSubsystem : subzero::LinearSingleAxisSubsystem<subzero::IPidMotorController> {
+class ElevatorSubsystem : public subzero::LinearSingleAxisSubsystem<subzero::IPidMotorController> {
 public:
     explicit ElevatorSubsystem() 
     : subzero::LinearSingleAxisSubsystem<subzero::IPidMotorController>{
         "Elevator Subsystem",
-        elevatorController,
-        {   // Min distance
+         dynamic_cast<subzero::IPidMotorController&>(m_elevatorController),
+        {    // Min distance
              ElevatorConstants::kMinDistance,
              // Max distance
              ElevatorConstants::kMaxDistance,
@@ -39,13 +39,15 @@ public:
              false,
              // Mechanism2d
              ElevatorConstants::kElevatorMechanism,
-
+             // Conversion function to output values in different
+             // units in shuffleboard
              std::nullopt,
-
+             // Ignore soft limits if `true` is returned
              []() { return false; },
-
+             // Trapazoid profile constraints
              ElevatorConstants::kElevatorProfileConstraints
-        }        
+        },
+            nullptr        
     } {}
 
 private:
@@ -55,17 +57,17 @@ private:
     rev::spark::SparkClosedLoopController m_pidController = m_motor.GetClosedLoopController();
     rev::spark::SparkRelativeEncoder m_enc = m_motor.GetEncoder();
     rev::spark::SparkAbsoluteEncoder m_absEnc = m_motor.GetAbsoluteEncoder();
-    subzero::PidSettings elevatorPidSettings = {
+    subzero::PidSettings m_elevatorPidSettings = {
       ElevatorConstants::kElevatorP, ElevatorConstants::kElevatorI, ElevatorConstants::kElevatorD,
       ElevatorConstants::kElevatorIZone, ElevatorConstants::kElevatorFF, true};
-    SparkMaxPidController elevatorController{"Elevator",
+    SparkMaxPidController m_elevatorController{"Elevator",
                                    m_motor,
                                    m_enc,
                                    m_pidController,
-                                   elevatorPidSettings,
+                                   m_elevatorPidSettings,
                                    &m_absEnc,
                                    ElevatorConstants::kMaxRpm};
 
-  subzero::SimPidMotorController simArmController{"Sim Elevator", elevatorPidSettings,
-                                                  ElevatorConstants::kMaxRpm};
+//   subzero::SimPidMotorController simElevatorController{"Sim Elevator", elevatorPidSettings,
+//                                                   ElevatorConstants::kMaxRpm};
 };

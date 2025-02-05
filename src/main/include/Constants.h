@@ -18,10 +18,10 @@
 #include <numbers>
 #include <string>
 
-typedef 
+using SparkMaxPidController =
     subzero::PidMotorController<rev::spark::SparkMax, rev::spark::SparkClosedLoopController,
                                 rev::spark::SparkRelativeEncoder,
-                                rev::spark::SparkAbsoluteEncoder, rev::spark::SparkMaxConfig> SparkMaxPidController;
+                                rev::spark::SparkAbsoluteEncoder, rev::spark::SparkMaxConfig> ;
 typedef
     subzero::PidMotorController<rev::spark::SparkFlex, rev::spark::SparkClosedLoopController,
                                 rev::spark::SparkRelativeEncoder,
@@ -166,5 +166,5 @@ namespace ElevatorConstants {
         frc::Color8Bit()
     };
 
-    const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{};
+    extern const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{};
 }
