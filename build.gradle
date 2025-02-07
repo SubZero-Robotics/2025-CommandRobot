@@ -58,11 +58,12 @@ model {
 
             sources.cpp {
                 source {
-                    srcDir 'src/main/cpp'
+                    srcDirs 'src/main/cpp', 'SubZero-common/lib/cpp'
                     include '**/*.cpp', '**/*.cc'
+                
                 }
                 exportedHeaders {
-                    srcDir 'src/main/include'
+                    srcDirs 'src/main/include', 'SubZero-common/lib/include', 'SubZero-common/lib/cpp'
                 }
             }
 

@@ -10,6 +10,7 @@
 #include <units/current.h>
 #include <units/length.h>
 #include <units/velocity.h>
+#include <subzero/motor/PidMotorController.h>
 
 #include <numbers>
 #include <string>
@@ -30,7 +31,16 @@ inline constexpr int kDriverControllerPort = 0;
 
 }  // namespace OperatorConstants
 
-
+typedef
+    subzero::PidMotorController<rev::spark::SparkMax, rev::spark::SparkClosedLoopController,
+                                rev::spark::SparkRelativeEncoder,
+                                rev::spark::SparkAbsoluteEncoder,
+                                rev::spark::SparkMaxConfig> SparkMaxController;
+typedef
+    subzero::PidMotorController<rev::spark::SparkFlex, rev::spark::SparkClosedLoopController,
+                                rev::spark::SparkRelativeEncoder,
+                                rev::spark::SparkAbsoluteEncoder,
+                                rev::spark::SparkMaxConfig> SparkFlexController;
 
 namespace DriveConstants {
 // Driving Parameters - Note that these are not the maximum capable speeds of
@@ -85,6 +95,8 @@ constexpr units::meter_t kWheelCircumference =
     kWheelDiameter * std::numbers::pi;
 // 45 teeth on the wheel's bevel gear, 21 teeth on the first-stage spur gear, 15
 // teeth on the bevel pinion
+
+
 
 // Test swerve bot
 // constexpr double kDrivingMotorReduction =
