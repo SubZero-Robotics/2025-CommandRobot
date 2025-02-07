@@ -10,7 +10,8 @@
 
 
 namespace AlgaeArmConstants{
-    constexpr int kMotorId = -1;
+    constexpr int kArmMotorId = -1;
+    constexpr int kIntakeMotorId = 20;
     constexpr double kP = -1;
     constexpr double kI = -1;
     constexpr double kD = -1;
