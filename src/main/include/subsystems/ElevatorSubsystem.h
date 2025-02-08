@@ -8,6 +8,9 @@
 #include <subzero/motor/PidMotorController.h>
 #include <subzero/motor/SimPidMotorController.h>
 #include <subzero/singleaxis/LinearSingleAxisSubsystem.h>
+#include <subzero/motor/PidMotorController.cpp>
+#include <subzero/singleaxis/BaseSingleAxisSubsystem.cpp>
+#include <subzero/singleaxis/LinearSingleAxisSubsystem.cpp>
 
 #include "Constants.h"
 

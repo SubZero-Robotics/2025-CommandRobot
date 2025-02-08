@@ -159,12 +159,12 @@ namespace ElevatorConstants {
     constexpr units::meter_t kTolerance = 1_m;
 
     // Placeholder
-    static const subzero::SingleAxisMechanism kElevatorMechanism {
+    const subzero::SingleAxisMechanism kElevatorMechanism {
         24_in,
         0_deg,
         0.0,
         frc::Color8Bit()
     };
 
-    extern const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{};
+    const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{};
 }
