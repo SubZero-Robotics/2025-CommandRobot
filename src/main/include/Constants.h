@@ -14,6 +14,7 @@
 #include <units/velocity.h>
 #include <subzero/singleaxis/ISingleAxisSubsystem.h>
 #include <subzero/motor/PidMotorController.h>
+#include <subzero/constants/ColorConstants.h>
 
 #include <numbers>
 #include <string>
@@ -154,16 +155,16 @@ namespace ElevatorConstants {
     constexpr units::meter_t kMaxDistance = 24_in;
     constexpr units::meter_t kRelativeDistancePerRev = 0.1_in; // TODO do math to figure out value
     constexpr units::meter_t kAbsoluteDistancePerRev = 0.1_in;
-    constexpr units::meters_per_second_t kDefaultVelocity = 1_mps;
+    constexpr units::meters_per_second_t kDefaultVelocity = 0.66_mps;
     constexpr double kVelocityScalar = 1.0;
-    constexpr units::meter_t kTolerance = 1_m;
+    constexpr units::meter_t kTolerance = 0.5_in;
 
     // Placeholder
     const subzero::SingleAxisMechanism kElevatorMechanism {
-        24_in,
-        0_deg,
-        0.0,
-        frc::Color8Bit()
+        2_in,
+        90_deg,
+        6.0,
+        subzero::ColorConstants::kBlue
     };
 
     const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{};

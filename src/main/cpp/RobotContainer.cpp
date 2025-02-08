@@ -53,9 +53,24 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureBindings() {
-  frc2::JoystickButton(&m_driverController,
-                       frc::XboxController::Button::kRightBumper)
-      .WhileTrue(new frc2::RunCommand([this] { m_drive.SetX(); }, {&m_drive}));
+  //  m_drive.SetDefaultCommand(frc2::RunCommand(
+  //     [this] {
+  //       InputUtils::DeadzoneAxes axes = InputUtils::CalculateCircularDeadzone(
+  //           m_driverController.GetLeftX(), m_driverController.GetLeftY(),
+  //           OIConstants::kDriveDeadband);
+
+  //       ITurnToTarget* turnToTarget = m_shouldAim ? &m_turnToPose : nullptr;
+
+  //       m_drive.Drive(
+  //           -units::meters_per_second_t{axes.y},
+  //           -units::meters_per_second_t{axes.x},
+  //           -units::radians_per_second_t{frc::ApplyDeadband(
+  //               m_driverController.GetRightX(), OIConstants::kDriveDeadband)},
+  //           true, true, kLoopTime, turnToTarget);
+  //     },
+  //     {&m_drive}));
+
+  m_driverController.A().OnTrue(m_elevator.MoveToPositionAbsolute(10_m));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

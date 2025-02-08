@@ -14,6 +14,7 @@
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/RunCommand.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc2/command/button/CommandXboxController.h>
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
@@ -35,7 +36,7 @@ class RobotContainer {
 
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  frc::XboxController m_driverController{
+  frc2::CommandXboxController m_driverController{
       OperatorConstants::kDriverControllerPort};
 
   // The robot's subsystems are defined here...

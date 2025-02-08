@@ -19,7 +19,9 @@ public:
     explicit ElevatorSubsystem() 
     : subzero::LinearSingleAxisSubsystem<subzero::IPidMotorController>{
         "Elevator Subsystem",
-         dynamic_cast<subzero::IPidMotorController&>(m_elevatorController),
+        frc::RobotBase::IsReal() ?
+         dynamic_cast<subzero::IPidMotorController&>(m_elevatorController) :
+         dynamic_cast<subzero::IPidMotorController&>(simElevatorController),
         {    // Min distance
              ElevatorConstants::kMinDistance,
              // Max distance
@@ -71,6 +73,6 @@ private:
                                    &m_absEnc,
                                    ElevatorConstants::kMaxRpm};
 
-//   subzero::SimPidMotorController simElevatorController{"Sim Elevator", elevatorPidSettings,
-//                                                   ElevatorConstants::kMaxRpm};
+  subzero::SimPidMotorController simElevatorController{"Sim Elevator", m_elevatorPidSettings,
+                                                  ElevatorConstants::kMaxRpm};
 };
