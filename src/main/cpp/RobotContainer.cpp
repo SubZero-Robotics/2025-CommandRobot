@@ -70,7 +70,8 @@ void RobotContainer::ConfigureBindings() {
   //     },
   //     {&m_drive}));
 
-  m_driverController.A().OnTrue(m_elevator.MoveToPositionAbsolute(10_m));
+  m_driverController.A().OnTrue(m_elevator.MoveToPositionAbsolute(7_in));
+  m_driverController.B().OnTrue(m_elevator.MoveToPositionAbsolute(2_in));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
@@ -85,4 +86,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
   return pathplanner::PathPlannerAuto(m_autoSelected)
     .AndThen(frc2::InstantCommand([this, offset]() { m_drive.OffsetRotation(offset); }).ToPtr());
+}
+
+void RobotContainer::Periodic() {
+  frc::SmartDashboard::PutData("Robot Elevator", &m_elevatorMech);
+}
+
+void RobotContainer::Initialize() {
+  m_elevator.OnInit();
 }

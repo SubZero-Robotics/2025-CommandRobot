@@ -22,7 +22,7 @@
 using SparkMaxPidController =
     subzero::PidMotorController<rev::spark::SparkMax, rev::spark::SparkClosedLoopController,
                                 rev::spark::SparkRelativeEncoder,
-                                rev::spark::SparkAbsoluteEncoder, rev::spark::SparkMaxConfig> ;
+                                rev::spark::SparkAbsoluteEncoder, rev::spark::SparkMaxConfig>;
 typedef
     subzero::PidMotorController<rev::spark::SparkFlex, rev::spark::SparkClosedLoopController,
                                 rev::spark::SparkRelativeEncoder,
@@ -138,34 +138,37 @@ namespace GyroConstants {
 
 namespace ElevatorConstants {
     // Placeholder value
-    const int kElevatorMotorCanId = -1;
+    const int kElevatorMotorCanId = 0;
 
     // Placeholder values
-    const double kElevatorP = -1.0;
-    const double kElevatorI = -1.0;
-    const double kElevatorD = -1.0;
-    const double kElevatorIZone = -1.0;
-    const double kElevatorFF = -1.0;
+    const double kElevatorP = 0.075;
+    const double kElevatorI = 0.0;
+    const double kElevatorD = 0.075;
+    const double kElevatorIZone = 0.1;
+    const double kElevatorFF = 0.1;
 
     // Placeholder value
     constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
 
     // Placeholder values
-    constexpr units::meter_t kMinDistance = 0_in;
+    constexpr units::meter_t kMinDistance =2_in;
     constexpr units::meter_t kMaxDistance = 24_in;
-    constexpr units::meter_t kRelativeDistancePerRev = 0.1_in; // TODO do math to figure out value
-    constexpr units::meter_t kAbsoluteDistancePerRev = 0.1_in;
+    constexpr units::meter_t kRelativeDistancePerRev = 1_in / 23.1; // TODO do math to figure out value
+    constexpr units::meter_t kAbsoluteDistancePerRev = 1_in / 23.1;
     constexpr units::meters_per_second_t kDefaultVelocity = 0.66_mps;
     constexpr double kVelocityScalar = 1.0;
     constexpr units::meter_t kTolerance = 0.5_in;
 
     // Placeholder
     const subzero::SingleAxisMechanism kElevatorMechanism {
-        2_in,
-        90_deg,
-        6.0,
-        subzero::ColorConstants::kBlue
-    };
+    // min length
+    2_in,
+    // angle
+    90_deg,
+    // line width
+    10.0,
+    // color
+    subzero::ColorConstants::kRed};
 
-    const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{};
-}
+    const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{1_fps * 10, 0.75_fps_sq * 20};
+};

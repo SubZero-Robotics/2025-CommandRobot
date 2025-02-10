@@ -11,16 +11,17 @@
 #include <subzero/motor/PidMotorController.cpp>
 #include <subzero/singleaxis/BaseSingleAxisSubsystem.cpp>
 #include <subzero/singleaxis/LinearSingleAxisSubsystem.cpp>
+#include <frc/smartdashboard/Mechanism2d.h>
 
 #include "Constants.h"
 
 class ElevatorSubsystem : public subzero::LinearSingleAxisSubsystem<subzero::IPidMotorController> {
 public:
-    explicit ElevatorSubsystem() 
+    explicit ElevatorSubsystem(frc::MechanismObject2d* node = nullptr) 
     : subzero::LinearSingleAxisSubsystem<subzero::IPidMotorController>{
         "Elevator Subsystem",
-        frc::RobotBase::IsReal() ?
-         dynamic_cast<subzero::IPidMotorController&>(m_elevatorController) :
+        // frc::RobotBase::IsReal() ?
+        //  dynamic_cast<subzero::IPidMotorController&>(m_elevatorController) :
          dynamic_cast<subzero::IPidMotorController&>(simElevatorController),
         {    // Min distance
              ElevatorConstants::kMinDistance,
@@ -52,7 +53,7 @@ public:
              // Trapazoid profile constraints
              ElevatorConstants::kElevatorProfileConstraints
         },
-            nullptr        
+            node        
     } {}
 
 private:
