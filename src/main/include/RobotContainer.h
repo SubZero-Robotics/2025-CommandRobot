@@ -21,6 +21,7 @@
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/ElevatorSubsystem.h"
+#include "subsystems/AlgaeArmSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since

@@ -60,6 +60,7 @@ model {
                 source {
                     srcDirs 'src/main/cpp', 'SubZero-common/lib/cpp'
                     include '**/*.cpp', '**/*.cc'
+                
                 }
                 exportedHeaders {
                     srcDirs 'src/main/include', 'SubZero-common/lib/include', 'SubZero-common/lib/cpp'

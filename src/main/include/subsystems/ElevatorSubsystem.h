@@ -20,8 +20,8 @@ public:
     explicit ElevatorSubsystem(frc::MechanismObject2d* node = nullptr) 
     : subzero::LinearSingleAxisSubsystem<subzero::IPidMotorController>{
         "Elevator Subsystem",
-        // frc::RobotBase::IsReal() ?
-        //  dynamic_cast<subzero::IPidMotorController&>(m_elevatorController) :
+        frc::RobotBase::IsReal() ?
+         dynamic_cast<subzero::IPidMotorController&>(m_elevatorController) :
          dynamic_cast<subzero::IPidMotorController&>(simElevatorController),
         {    // Min distance
              ElevatorConstants::kMinDistance,

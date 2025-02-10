@@ -1,5 +1,5 @@
 ## Table of contents
-
+[![CI](https://github.com/SubZero-Robotics/2025-CommandRobot/actions/workflows/main.yml/badge.svg)](https://github.com/SubZero-Robotics/2025-CommandRobot/actions/workflows/main.yml)
 - [Table of contents](#table-of-contents)
 - [About](#about)
 - [Development Cycle](#development-cycle)
