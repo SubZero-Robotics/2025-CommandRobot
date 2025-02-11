@@ -6,10 +6,6 @@
 #include <subzero/motor/SimPidMotorController.h>
 #include <subzero/singleaxis/RotationalSingleAxisSubsystem.h>
 
-#include <subzero/motor/PidMotorController.cpp>
-#include <subzero/singleaxis/BaseSingleAxisSubsystem.cpp>
-#include <subzero/singleaxis/RotationalSingleAxisSubsystem.cpp>
-
 #include <frc/smartdashboard/Mechanism2d.h>
 #include "constants/ArmConstants.h"
 #include "Constants.h"

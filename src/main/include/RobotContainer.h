@@ -17,6 +17,8 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc/smartdashboard/Mechanism2d.h>
 
+#include "CommonCompile.h"
+
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/ExampleSubsystem.h"
