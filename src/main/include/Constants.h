@@ -165,7 +165,7 @@ namespace ElevatorConstants {
     constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
 
     // Placeholder values
-    constexpr units::meter_t kMinDistance =2_in;
+    constexpr units::meter_t kMinDistance = 2_in;
     constexpr units::meter_t kMaxDistance = 24_in;
     constexpr units::meter_t kRelativeDistancePerRev = 1_in / 23.1; // TODO do math to figure out value
     constexpr units::meter_t kAbsoluteDistancePerRev = 1_in / 23.1;

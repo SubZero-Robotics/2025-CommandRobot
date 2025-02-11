@@ -10,13 +10,13 @@
 
 
 namespace AlgaeArmConstants{
-    constexpr int kArmMotorId = -1;
+    constexpr int kArmMotorId = 62;
     constexpr int kIntakeMotorId = 20;
-    constexpr double kP = -1;
-    constexpr double kI = -1;
-    constexpr double kD = -1;
-    constexpr double kIZone = -1;
-    constexpr double kFF = -1;
+    constexpr double kP = 0.075;
+    constexpr double kI = 0.0;
+    constexpr double kD = 0.0;
+    constexpr double kIZone = 0.1;
+    constexpr double kFF = 0.1;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 1_rpm;
     constexpr units::degree_t kHomeRotation = 10_deg;
@@ -44,13 +44,13 @@ namespace AlgaeArmConstants{
 }
 
 namespace CoralArmConstants{
-    constexpr int kArmMotorId = 62;
+    constexpr int kArmMotorId = 20;
     constexpr int kIntakeMotorId = 20;
-    constexpr double kP = -1;
-    constexpr double kI = -1;
-    constexpr double kD = -1;
-    constexpr double kIZone = -1;
-    constexpr double kFF = -1;
+    constexpr double kP = 0.1;
+    constexpr double kI = 0.1;
+    constexpr double kD = 0.1;
+    constexpr double kIZone = 0.1;
+    constexpr double kFF = 0.1;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 1_rpm;
     constexpr units::degree_t kHomeRotation = 10_deg;

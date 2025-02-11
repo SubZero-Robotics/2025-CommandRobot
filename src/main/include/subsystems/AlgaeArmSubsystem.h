@@ -6,10 +6,11 @@
 #include <subzero/motor/SimPidMotorController.h>
 #include <subzero/singleaxis/RotationalSingleAxisSubsystem.h>
 
+#include <subzero/motor/PidMotorController.cpp>
 #include <subzero/singleaxis/BaseSingleAxisSubsystem.cpp>
-#include <subzero/singleaxis/LinearSingleAxisSubsystem.cpp>
-#include <frc/smartdashboard/Mechanism2d.h>
+#include <subzero/singleaxis/RotationalSingleAxisSubsystem.cpp>
 
+#include <frc/smartdashboard/Mechanism2d.h>
 #include "constants/ArmConstants.h"
 #include "Constants.h"
 
@@ -48,29 +49,25 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
 
              [] { return false; }, AlgaeArmConstants::kRotationalAxisConstraints},
             AlgaeArmConstants::kArmLength,
-            nullptr} {
+            node} {
     //m_Motor.SetIdleMode(rev::spark::SparkBase::IdleMode::kBrake);
     }
     
-    void Periodic() override;
+    // void Periodic() override;
 
-    void SimulationPeriodic() override;
+    // void SimulationPeriodic() override;
 
-    void Stop();
+    // void Stop();
 
-    void In(double);
-
-
-    void Out(double);
+    // void In(double);
 
 
-
-  
+    // void Out(double);
 
  private:
-  rev::spark::SparkMax m_intakeMotor{
-      AlgaeArmConstants::kIntakeMotorId,
-      rev::spark::SparkLowLevel::MotorType::kBrushless};
+//   rev::spark::SparkMax m_intakeMotor{
+//       AlgaeArmConstants::kIntakeMotorId,
+//       rev::spark::SparkLowLevel::MotorType::kBrushless};
 
   rev::spark::SparkMax m_armMotor{AlgaeArmConstants::kArmMotorId,
                                rev::spark::SparkLowLevel::MotorType::kBrushless};

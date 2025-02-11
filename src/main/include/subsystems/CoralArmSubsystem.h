@@ -1,13 +1,16 @@
 #pragma once
 
 #include <frc/RobotBase.h>
+#include <frc/smartdashboard/Mechanism2d.h>
+
 #include <subzero/motor/IPidMotorController.h>
 #include <subzero/motor/PidMotorController.h>
 #include <subzero/motor/SimPidMotorController.h>
 #include <subzero/singleaxis/RotationalSingleAxisSubsystem.h>
+
+#include <subzero/motor/PidMotorController.cpp>
 #include <subzero/singleaxis/BaseSingleAxisSubsystem.cpp>
-#include <subzero/singleaxis/LinearSingleAxisSubsystem.cpp>
-#include <frc/smartdashboard/Mechanism2d.h>
+#include <subzero/singleaxis/RotationalSingleAxisSubsystem.cpp>
 
 #include "constants/ArmConstants.h"
 #include "Constants.h"
@@ -53,16 +56,16 @@ class CoralArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
     //m_Motor.SetIdleMode(rev::spark::SparkBase::IdleMode::kBrake);
     }
     
-    void Periodic() override;
+    // void Periodic() override;
 
-    void SimulationPeriodic() override;
+    // void SimulationPeriodic() override;
 
-    void Stop();
+    // void Stop();
 
-    void In(double);
+    // void In(double);
 
 
-    void Out(double);
+    // void Out(double);
 
  private:
   rev::spark::SparkMax m_intakeMotor{
