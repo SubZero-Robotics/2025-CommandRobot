@@ -10,13 +10,13 @@
 
 
 namespace AlgaeArmConstants{
-    constexpr int kArmMotorId = 62;
+    constexpr int kArmMotorId = 0; // Placeholder
     constexpr int kIntakeMotorId = 20;
     constexpr double kP = 0.075;
     constexpr double kI = 0.0;
     constexpr double kD = 0.0;
-    constexpr double kIZone = 0.1;
-    constexpr double kFF = 0.1;
+    constexpr double kIZone = 0.0;
+    constexpr double kFF = 0.0;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 1_rpm;
     constexpr units::degree_t kHomeRotation = 10_deg;

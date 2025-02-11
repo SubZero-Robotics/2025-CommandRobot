@@ -47,7 +47,7 @@ class RobotContainer {
       OperatorConstants::kDriverControllerPort};
 
   // The robot's subsystems are defined here...
-  //  DriveSubsystem m_drive;
+   DriveSubsystem m_drive;
 
   ExampleSubsystem m_subsystem;
 
@@ -56,12 +56,12 @@ class RobotContainer {
   frc::SendableChooser<std::string> m_chooser;
   std::string m_autoSelected;
 
-  // frc::Mechanism2d m_elevatorMech{0.5, 0.5};
-  // frc::MechanismRoot2d* m_root = m_elevatorMech.GetRoot("Elevator", 0.25, 0.25);
+  frc::Mechanism2d m_elevatorMech{0.5, 0.5};
+  frc::MechanismRoot2d* m_root = m_elevatorMech.GetRoot("Elevator", 0.25, 0.25);
   
-  // ElevatorSubsystem m_elevator{(frc::MechanismObject2d*)m_elevatorMech.GetRoot("Elevator", 0.25, 0.25)};
+  ElevatorSubsystem m_elevator{(frc::MechanismObject2d*)m_elevatorMech.GetRoot("Elevator", 0.25, 0.25)};
 
   AlgaeArmSubsystem m_arm;
 
-  // CoralArmSubsystem m_coralArm;
+  CoralArmSubsystem m_coralArm;
 };
