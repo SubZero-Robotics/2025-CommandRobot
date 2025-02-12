@@ -27,7 +27,7 @@ public:
              // Distance per revolution of relative encoder
              ElevatorConstants::kRelativeDistancePerRev,
              // Distance per revolution of absolute encoder
-             ElevatorConstants::kAbsoluteDistancePerRev,
+             std::nullopt,
              // Default velocity
              ElevatorConstants::kDefaultVelocity,
              // Velocity scalar
@@ -51,24 +51,35 @@ public:
              ElevatorConstants::kElevatorProfileConstraints
         },
             node        
-    } {}
+    } {
+        m_followerConfig.Follow(m_leadMotor);
+        m_followerMotor.Configure(m_followerConfig, rev::spark::SparkBase::ResetMode::kNoResetSafeParameters, 
+                                  rev::spark::SparkBase::PersistMode::kPersistParameters);
+    }
 
 private:
-    rev::spark::SparkMax m_motor{
-        ElevatorConstants::kElevatorMotorCanId,
+    rev::spark::SparkMax m_leadMotor{
+        ElevatorConstants::kLeadElevatorMotorCanId,
         rev::spark::SparkLowLevel::MotorType::kBrushless};
-    rev::spark::SparkClosedLoopController m_pidController = m_motor.GetClosedLoopController();
-    rev::spark::SparkRelativeEncoder m_enc = m_motor.GetEncoder();
-    rev::spark::SparkAbsoluteEncoder m_absEnc = m_motor.GetAbsoluteEncoder();
+
+    rev::spark::SparkMax m_followerMotor{
+        ElevatorConstants::kFollowerElevatorMotorCanId,
+        rev::spark::SparkLowLevel::MotorType::kBrushless};
+
+    // Here so we can set the foller motor as a follower
+    rev::spark::SparkMaxConfig m_followerConfig;
+
+    rev::spark::SparkClosedLoopController m_pidController = m_leadMotor.GetClosedLoopController();
+    rev::spark::SparkRelativeEncoder m_enc = m_leadMotor.GetEncoder();
     subzero::PidSettings m_elevatorPidSettings = {
       ElevatorConstants::kElevatorP, ElevatorConstants::kElevatorI, ElevatorConstants::kElevatorD,
       ElevatorConstants::kElevatorIZone, ElevatorConstants::kElevatorFF, true};
     SparkMaxPidController m_elevatorController{"Elevator",
-                                   m_motor,
+                                   m_leadMotor,
                                    m_enc,
                                    m_pidController,
                                    m_elevatorPidSettings,
-                                   &m_absEnc,
+                                   nullptr,
                                    ElevatorConstants::kMaxRpm};
 
   subzero::SimPidMotorController simElevatorController{"Sim Elevator", m_elevatorPidSettings,

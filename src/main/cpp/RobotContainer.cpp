@@ -55,8 +55,7 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureBindings() {
-  m_driverController.A().OnTrue(m_elevator.MoveToPositionAbsolute(20_in));
-  m_driverController.B().OnTrue(m_elevator.MoveToPositionAbsolute(2_in));
+  m_driverController.A().OnTrue(m_arm.In());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

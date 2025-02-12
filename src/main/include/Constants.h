@@ -86,15 +86,15 @@ constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;
 constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 
 // SPARK MAX CAN IDs
-constexpr int kFrontLeftDrivingCanId = 8;
-constexpr int kRearLeftDrivingCanId = 6;
-constexpr int kFrontRightDrivingCanId = 2;
-constexpr int kRearRightDrivingCanId = 4;
+constexpr int kFrontLeftDrivingCanId = 18;
+constexpr int kRearLeftDrivingCanId = 1;
+constexpr int kFrontRightDrivingCanId = 4;
+constexpr int kRearRightDrivingCanId = 9;
 
-constexpr int kFrontLeftTurningCanId = 7;
-constexpr int kRearLeftTurningCanId = 5;
-constexpr int kFrontRightTurningCanId = 1;
-constexpr int kRearRightTurningCanId = 3;
+constexpr int kFrontLeftTurningCanId = 2;
+constexpr int kRearLeftTurningCanId = 20;
+constexpr int kFrontRightTurningCanId = 5;
+constexpr int kRearRightTurningCanId = 8;
 }  // namespace DriveConstants
 
 namespace ModuleConstants {
@@ -152,7 +152,8 @@ namespace GyroConstants {
 
 namespace ElevatorConstants {
     // Placeholder value
-    const int kElevatorMotorCanId = 0;
+    const int kLeadElevatorMotorCanId = 7;
+    const int kFollowerElevatorMotorCanId = 19;
 
     // Placeholder values
     const double kElevatorP = 0.075;
@@ -167,8 +168,7 @@ namespace ElevatorConstants {
     // Placeholder values
     constexpr units::meter_t kMinDistance = 2_in;
     constexpr units::meter_t kMaxDistance = 24_in;
-    constexpr units::meter_t kRelativeDistancePerRev = 1_in / 23.1; // TODO do math to figure out value
-    constexpr units::meter_t kAbsoluteDistancePerRev = 1_in / 23.1;
+    constexpr units::meter_t kRelativeDistancePerRev = 5.51977829236_in / 125; // 125:1 ratio gearbox
     constexpr units::meters_per_second_t kDefaultVelocity = 0.66_mps;
     constexpr double kVelocityScalar = 1.0;
     constexpr units::meter_t kTolerance = 0.5_in;

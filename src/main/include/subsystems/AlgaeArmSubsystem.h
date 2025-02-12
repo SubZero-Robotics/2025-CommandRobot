@@ -48,6 +48,7 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
              [] { return false; }, AlgaeArmConstants::kRotationalAxisConstraints},
             AlgaeArmConstants::kArmLength,
             node} {
+                
     //m_Motor.SetIdleMode(rev::spark::SparkBase::IdleMode::kBrake);
     }
     
