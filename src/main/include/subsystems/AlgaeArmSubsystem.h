@@ -5,6 +5,8 @@
 #include <subzero/motor/PidMotorController.h>
 #include <subzero/motor/SimPidMotorController.h>
 #include <subzero/singleaxis/RotationalSingleAxisSubsystem.h>
+#include <frc2/command/InstantCommand.h>
+#include <frc2/command/CommandPtr.h>
 
 #include <frc/smartdashboard/Mechanism2d.h>
 #include "constants/ArmConstants.h"
@@ -49,32 +51,32 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
     //m_Motor.SetIdleMode(rev::spark::SparkBase::IdleMode::kBrake);
     }
     
-    // void Periodic() override;
+    void Periodic() override;
 
-    // void SimulationPeriodic() override;
+    frc2::CommandPtr StopIntake();
 
-    // void Stop();
-
-    // void In(double);
+    frc2::CommandPtr In();
 
 
-    // void Out(double);
+    frc2::CommandPtr Out();
 
+     
  private:
-//   rev::spark::SparkMax m_intakeMotor{
-//       AlgaeArmConstants::kIntakeMotorId,
-//       rev::spark::SparkLowLevel::MotorType::kBrushless};
+  rev::spark::SparkMax m_intakeMotor{
+      AlgaeArmConstants::kIntakeMotorId,
+      rev::spark::SparkLowLevel::MotorType::kBrushless};
 
-  rev::spark::SparkMax m_armMotor{AlgaeArmConstants::kArmMotorId,
+
+  rev::spark::SparkMax m_algaeArmMotor{AlgaeArmConstants::kArmMotorId,
                                rev::spark::SparkLowLevel::MotorType::kBrushless};
-  rev::spark::SparkClosedLoopController m_pidController = m_armMotor.GetClosedLoopController();
-  rev::spark::SparkRelativeEncoder m_enc = m_armMotor.GetEncoder();
-  rev::spark::SparkAbsoluteEncoder m_absEnc = m_armMotor.GetAbsoluteEncoder();
+  rev::spark::SparkClosedLoopController m_pidController = m_algaeArmMotor.GetClosedLoopController();
+  rev::spark::SparkRelativeEncoder m_enc = m_algaeArmMotor.GetEncoder();
+  rev::spark::SparkAbsoluteEncoder m_absEnc = m_algaeArmMotor.GetAbsoluteEncoder();
   subzero::PidSettings algaeArmPidSettings = {
       AlgaeArmConstants::kP, AlgaeArmConstants::kI, AlgaeArmConstants::kD,
       AlgaeArmConstants::kIZone, AlgaeArmConstants::kFF, true};
   SparkMaxPidController algaeArmController{"Arm",
-                                   m_armMotor,
+                                   m_algaeArmMotor,
                                    m_enc,
                                    m_pidController,
                                    algaeArmPidSettings,

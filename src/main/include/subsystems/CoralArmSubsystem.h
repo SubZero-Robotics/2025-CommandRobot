@@ -63,21 +63,24 @@ class CoralArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
 
     // void Out(double);
 
+
+    
+
  private:
   rev::spark::SparkMax m_intakeMotor{
       CoralArmConstants::kIntakeMotorId,
       rev::spark::SparkLowLevel::MotorType::kBrushless};
 
-  rev::spark::SparkMax m_armMotor{CoralArmConstants::kArmMotorId,
+  rev::spark::SparkMax m_coralArmMotor{CoralArmConstants::kArmMotorId,
                                rev::spark::SparkLowLevel::MotorType::kBrushless};
-  rev::spark::SparkClosedLoopController m_pidController = m_armMotor.GetClosedLoopController();
-  rev::spark::SparkRelativeEncoder m_enc = m_armMotor.GetEncoder();
-  rev::spark::SparkAbsoluteEncoder m_absEnc = m_armMotor.GetAbsoluteEncoder();
+  rev::spark::SparkClosedLoopController m_pidController = m_coralArmMotor.GetClosedLoopController();
+  rev::spark::SparkRelativeEncoder m_enc = m_coralArmMotor.GetEncoder();
+  rev::spark::SparkAbsoluteEncoder m_absEnc = m_coralArmMotor.GetAbsoluteEncoder();
   subzero::PidSettings coralArmPidSettings = {
       CoralArmConstants::kP, CoralArmConstants::kI, CoralArmConstants::kD,
       CoralArmConstants::kIZone, CoralArmConstants::kFF, true};
   SparkMaxPidController coralArmController{"Arm",
-                                   m_armMotor,
+                                   m_coralArmMotor,
                                    m_enc,
                                    m_pidController,
                                    coralArmPidSettings,
