@@ -35,7 +35,7 @@ public:
              // Tolerance
              ElevatorConstants::kTolerance,
              // Min limit switch
-             std::nullopt,
+             &m_bottomLimitSwitchPort,
              // Max limit switch
              std::nullopt,
              // Reversed
@@ -68,6 +68,8 @@ private:
 
     // Here so we can set the foller motor as a follower
     rev::spark::SparkMaxConfig m_followerConfig;
+
+    frc::DigitalInput m_bottomLimitSwitchPort{ElevatorConstants::kBottomLimitSwitchPort};
 
     rev::spark::SparkClosedLoopController m_pidController = m_leadMotor.GetClosedLoopController();
     rev::spark::SparkRelativeEncoder m_enc = m_leadMotor.GetEncoder();

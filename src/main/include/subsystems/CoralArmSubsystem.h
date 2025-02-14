@@ -8,7 +8,6 @@
 #include <subzero/motor/SimPidMotorController.h>
 #include <subzero/singleaxis/RotationalSingleAxisSubsystem.h>
 
-#include "constants/ArmConstants.h"
 #include "Constants.h"
 
 //pretty much a copy paste of algae arm subsystem with differet names right now, subject to change later

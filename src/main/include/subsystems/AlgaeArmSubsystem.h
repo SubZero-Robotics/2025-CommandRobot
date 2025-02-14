@@ -7,10 +7,10 @@
 #include <subzero/singleaxis/RotationalSingleAxisSubsystem.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/CommandPtr.h>
-
 #include <frc/smartdashboard/Mechanism2d.h>
-#include "constants/ArmConstants.h"
+
 #include "Constants.h"
+#include "subsystems/IntakeSubsystem.h"
 
 class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero::IPidMotorController> {
  public:
@@ -65,7 +65,6 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
   rev::spark::SparkMax m_intakeMotor{
       AlgaeArmConstants::kIntakeMotorId,
       rev::spark::SparkLowLevel::MotorType::kBrushless};
-
 
   rev::spark::SparkMax m_algaeArmMotor{AlgaeArmConstants::kArmMotorId,
                                rev::spark::SparkLowLevel::MotorType::kBrushless};
