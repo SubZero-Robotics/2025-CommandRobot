@@ -49,16 +49,16 @@ namespace AlgaeArmConstants{
 namespace CoralArmConstants{
     constexpr int kArmMotorId = 16;
     constexpr int kIntakeMotorId = 15;
-    constexpr double kP = 0.1;
-    constexpr double kI = 0.1;
-    constexpr double kD = 0.1;
-    constexpr double kIZone = 0.1;
-    constexpr double kFF = 0.1;
+    constexpr double kP = 0.25;
+    constexpr double kI = 0.0;
+    constexpr double kD = 0.0;
+    constexpr double kIZone = 0.0;
+    constexpr double kFF = 0.0;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 1_rpm;
-    constexpr units::degree_t kHomeRotation = 10_deg;
-    constexpr units::degree_t kMaxRotation = 190_deg;
-    constexpr units::degree_t kRelativeDistancePerRev = 360_deg * (1 / 8.75);
+    constexpr units::degree_t kHomeRotation = 5_deg;
+    constexpr units::degree_t kMaxRotation = 180_deg;
+    constexpr units::degree_t kRelativeDistancePerRev = 360_deg / (75 * 4.7); // 4.7 is the ratio of the chain gear
     constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
     constexpr units::degrees_per_second_t kDefaultVelocity = 10_deg_per_s;
     constexpr double kVelocityScalar = 1.0;

@@ -58,6 +58,7 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.A().OnTrue(m_algaeArm.In());
   m_driverController.B().OnTrue(m_coralArm.MoveAtSpeed(-0.7));
   m_driverController.X().OnTrue(m_algaeArm.MoveToPositionAbsolute(40_deg));
+  m_driverController.Y().OnTrue(m_coralArm.MoveToPositionAbsolute(150_deg));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
