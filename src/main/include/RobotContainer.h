@@ -63,7 +63,7 @@ class RobotContainer {
   
   ElevatorSubsystem m_elevator{(frc::MechanismObject2d*)m_elevatorMech.GetRoot("Elevator", 0.25, 0.25)};
 
-  AlgaeArmSubsystem m_arm;
+  AlgaeArmSubsystem m_algaeArm;
 
   CoralArmSubsystem m_coralArm;
 };

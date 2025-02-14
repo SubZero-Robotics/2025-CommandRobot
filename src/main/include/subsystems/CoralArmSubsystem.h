@@ -17,7 +17,7 @@ class CoralArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
  public:
   explicit CoralArmSubsystem(frc::MechanismObject2d* node = nullptr)
       : subzero::RotationalSingleAxisSubsystem<subzero::IPidMotorController>{
-            "Arm",
+            "Coral Arm",
             frc::RobotBase::IsReal()
                 ? dynamic_cast<subzero::IPidMotorController&>(coralArmController)
                 : dynamic_cast<subzero::IPidMotorController&>(simCoralArmController),
@@ -52,19 +52,8 @@ class CoralArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
     //m_Motor.SetIdleMode(rev::spark::SparkBase::IdleMode::kBrake);
     }
     
-    // void Periodic() override;
 
-    // void SimulationPeriodic() override;
-
-    // void Stop();
-
-    // void In(double);
-
-
-    // void Out(double);
-
-
-    
+    frc2::CommandPtr MoveAtSpeed(double speed);
 
  private:
   rev::spark::SparkMax m_intakeMotor{
@@ -79,7 +68,7 @@ class CoralArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
   subzero::PidSettings coralArmPidSettings = {
       CoralArmConstants::kP, CoralArmConstants::kI, CoralArmConstants::kD,
       CoralArmConstants::kIZone, CoralArmConstants::kFF, true};
-  SparkMaxPidController coralArmController{"Arm",
+  SparkMaxPidController coralArmController{"Coral Arm",
                                    m_coralArmMotor,
                                    m_enc,
                                    m_pidController,

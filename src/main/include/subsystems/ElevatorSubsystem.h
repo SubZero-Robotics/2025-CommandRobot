@@ -52,7 +52,7 @@ public:
         },
             node        
     } {
-        m_followerConfig.Follow(m_leadMotor);
+        m_followerConfig.Follow(m_leadMotor, true);
         m_followerMotor.Configure(m_followerConfig, rev::spark::SparkBase::ResetMode::kNoResetSafeParameters, 
                                   rev::spark::SparkBase::PersistMode::kPersistParameters);
     }

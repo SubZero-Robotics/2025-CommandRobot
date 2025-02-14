@@ -16,7 +16,7 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
  public:
   explicit AlgaeArmSubsystem(frc::MechanismObject2d* node = nullptr)
       : subzero::RotationalSingleAxisSubsystem<subzero::IPidMotorController>{
-            "Arm",
+            "Algae Arm",
             frc::RobotBase::IsReal()
                 ? dynamic_cast<subzero::IPidMotorController&>(algaeArmController)
                 : dynamic_cast<subzero::IPidMotorController&>(simAlgaeArmController),
@@ -45,19 +45,18 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
              // Conversion Function
              std::nullopt,
 
-             [] { return false; }, AlgaeArmConstants::kRotationalAxisConstraints},
+             [] { return false; }, 
+             
+             AlgaeArmConstants::kRotationalAxisConstraints},
             AlgaeArmConstants::kArmLength,
             node} {
                 
     //m_Motor.SetIdleMode(rev::spark::SparkBase::IdleMode::kBrake);
     }
     
-    void Periodic() override;
-
     frc2::CommandPtr StopIntake();
 
     frc2::CommandPtr In();
-
 
     frc2::CommandPtr Out();
 
@@ -75,15 +74,15 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
   rev::spark::SparkAbsoluteEncoder m_absEnc = m_algaeArmMotor.GetAbsoluteEncoder();
   subzero::PidSettings algaeArmPidSettings = {
       AlgaeArmConstants::kP, AlgaeArmConstants::kI, AlgaeArmConstants::kD,
-      AlgaeArmConstants::kIZone, AlgaeArmConstants::kFF, true};
-  SparkMaxPidController algaeArmController{"Arm",
+      AlgaeArmConstants::kIZone, AlgaeArmConstants::kFF};
+  SparkMaxPidController algaeArmController{"Algae Arm",
                                    m_algaeArmMotor,
                                    m_enc,
                                    m_pidController,
                                    algaeArmPidSettings,
                                    &m_absEnc,
                                    AlgaeArmConstants::kMaxRpm};
-  subzero::SimPidMotorController simAlgaeArmController{"Sim Arm", algaeArmPidSettings,
+  subzero::SimPidMotorController simAlgaeArmController{"Sim Algae Arm", algaeArmPidSettings,
                                                   AlgaeArmConstants::kMaxRpm};
 
 };
