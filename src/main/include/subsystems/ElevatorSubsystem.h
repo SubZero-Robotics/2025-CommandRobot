@@ -57,6 +57,11 @@ public:
                                   rev::spark::SparkBase::PersistMode::kPersistParameters);
     }
 
+    void Periodic() override {
+        subzero::LinearSingleAxisSubsystem<subzero::IPidMotorController>::Periodic();
+        std::cout << (m_bottomLimitSwitchPort.Get() ? "Limit switch active" : "Limit switch inactive") << std::endl;
+    }
+
 private:
     rev::spark::SparkMax m_leadMotor{
         ElevatorConstants::kLeadElevatorMotorCanId,

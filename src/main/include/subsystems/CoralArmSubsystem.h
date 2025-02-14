@@ -9,6 +9,7 @@
 #include <subzero/singleaxis/RotationalSingleAxisSubsystem.h>
 
 #include "Constants.h"
+#include "subsystems/IntakeSubsystem.h"
 
 //pretty much a copy paste of algae arm subsystem with differet names right now, subject to change later
 
@@ -54,10 +55,10 @@ class CoralArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
 
     frc2::CommandPtr MoveAtSpeed(double speed);
 
+    IntakeSubsystem& GetIntakeSubsystem();
+
  private:
-  rev::spark::SparkMax m_intakeMotor{
-      CoralArmConstants::kIntakeMotorId,
-      rev::spark::SparkLowLevel::MotorType::kBrushless};
+  IntakeSubsystem m_intake{CoralArmConstants::kIntakeMotorId};
 
   rev::spark::SparkMax m_coralArmMotor{CoralArmConstants::kArmMotorId,
                                rev::spark::SparkLowLevel::MotorType::kBrushless};

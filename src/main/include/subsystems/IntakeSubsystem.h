@@ -10,6 +10,8 @@ public:
     IntakeSubsystem(const int id) : m_motor{id, rev::spark::SparkLowLevel::MotorType::kBrushless} {}
 
     frc2::CommandPtr MoveAtPercent(double percent);
+
+    frc2::CommandPtr Stop();
 private:
     rev::spark::SparkMax m_motor;
 };

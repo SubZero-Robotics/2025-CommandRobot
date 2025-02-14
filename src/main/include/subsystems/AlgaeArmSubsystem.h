@@ -53,18 +53,10 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
                 
     //m_Motor.SetIdleMode(rev::spark::SparkBase::IdleMode::kBrake);
     }
-    
-    frc2::CommandPtr StopIntake();
 
-    frc2::CommandPtr In();
-
-    frc2::CommandPtr Out();
-
-     
+    IntakeSubsystem& GetIntakeSubsystem();
  private:
-  rev::spark::SparkMax m_intakeMotor{
-      AlgaeArmConstants::kIntakeMotorId,
-      rev::spark::SparkLowLevel::MotorType::kBrushless};
+  IntakeSubsystem m_intake{AlgaeArmConstants::kIntakeMotorId};
 
   rev::spark::SparkMax m_algaeArmMotor{AlgaeArmConstants::kArmMotorId,
                                rev::spark::SparkLowLevel::MotorType::kBrushless};
