@@ -51,12 +51,8 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
             AlgaeArmConstants::kArmLength,
             node} {
                 
-    //m_Motor.SetIdleMode(rev::spark::SparkBase::IdleMode::kBrake);
-    }
-
-    IntakeSubsystem& GetIntakeSubsystem();
+            }
  private:
-  IntakeSubsystem m_intake{AlgaeArmConstants::kIntakeMotorId};
 
   rev::spark::SparkMax m_algaeArmMotor{AlgaeArmConstants::kArmMotorId,
                                rev::spark::SparkLowLevel::MotorType::kBrushless};
@@ -65,7 +61,7 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
   rev::spark::SparkAbsoluteEncoder m_absEnc = m_algaeArmMotor.GetAbsoluteEncoder();
   subzero::PidSettings algaeArmPidSettings = {
       AlgaeArmConstants::kP, AlgaeArmConstants::kI, AlgaeArmConstants::kD,
-      AlgaeArmConstants::kIZone, AlgaeArmConstants::kFF};
+      AlgaeArmConstants::kIZone, AlgaeArmConstants::kFF, false};
   SparkMaxPidController algaeArmController{"Algae Arm",
                                    m_algaeArmMotor,
                                    m_enc,

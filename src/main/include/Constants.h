@@ -38,6 +38,11 @@ using SparkMaxPidController =
     subzero::PidMotorController<rev::spark::SparkMax, rev::spark::SparkClosedLoopController,
                                 rev::spark::SparkRelativeEncoder,
                                 rev::spark::SparkAbsoluteEncoder, rev::spark::SparkMaxConfig>;
+
+using SparkMaxPidControllerTuner =
+    subzero::PidMotorControllerTuner<rev::spark::SparkMax, rev::spark::SparkClosedLoopController,
+                                rev::spark::SparkRelativeEncoder,
+                                rev::spark::SparkAbsoluteEncoder, rev::spark::SparkMaxConfig>;
 typedef
     subzero::PidMotorController<rev::spark::SparkFlex, rev::spark::SparkClosedLoopController,
                                 rev::spark::SparkRelativeEncoder,
@@ -161,7 +166,7 @@ namespace ElevatorConstants {
     const int kBottomLimitSwitchPort = 1;
 
     // Placeholder values
-    const double kElevatorP = 280.0;
+    const double kElevatorP = 100.0;
     const double kElevatorI = 0.0;
     const double kElevatorD = 0.0;
     const double kElevatorIZone = 0.0;
@@ -171,7 +176,7 @@ namespace ElevatorConstants {
 
     // Placeholder values
     constexpr units::meter_t kMinDistance = 0_in;
-    constexpr units::meter_t kMaxDistance = 20_in;
+    constexpr units::meter_t kMaxDistance = 18_in;
     constexpr units::meter_t kRelativeDistancePerRev = 5.51977829236_in / 36; // 36:1 ratio gearbox
     constexpr units::meters_per_second_t kDefaultVelocity = 0.66_mps;
     constexpr double kVelocityScalar = 1.0;
@@ -194,7 +199,7 @@ namespace ElevatorConstants {
 namespace AlgaeArmConstants{
     constexpr int kArmMotorId = 17;
     constexpr int kIntakeMotorId = 6;
-    constexpr double kP = 0.2;
+    constexpr double kP = 0.1;
     constexpr double kI = 0.0;
     constexpr double kD = 0.001;
     constexpr double kIZone = 0.0;
@@ -231,7 +236,7 @@ namespace AlgaeArmConstants{
 namespace CoralArmConstants{
     constexpr int kArmMotorId = 16;
     constexpr int kIntakeMotorId = 15;
-    constexpr double kP = 0.25;
+    constexpr double kP = 0.5;
     constexpr double kI = 0.0;
     constexpr double kD = 0.0;
     constexpr double kIZone = 0.0;
@@ -239,8 +244,8 @@ namespace CoralArmConstants{
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 1_rpm;
     constexpr units::degree_t kHomeRotation = 5_deg;
-    constexpr units::degree_t kMaxRotation = 180_deg;
-    constexpr units::degree_t kRelativeDistancePerRev = 360_deg / (75 * 4.7); // 4.7 is the ratio of the chain gear
+    constexpr units::degree_t kMaxRotation = 290_deg;
+    constexpr units::degree_t kRelativeDistancePerRev = 360_deg / (15 * 4.7); // 4.7 is the ratio of the chain gear
     constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
     constexpr units::degrees_per_second_t kDefaultVelocity = 10_deg_per_s;
     constexpr double kVelocityScalar = 1.0;

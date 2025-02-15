@@ -75,7 +75,7 @@ private:
     rev::spark::SparkRelativeEncoder m_enc = m_leadMotor.GetEncoder();
     subzero::PidSettings m_elevatorPidSettings = {
       ElevatorConstants::kElevatorP, ElevatorConstants::kElevatorI, ElevatorConstants::kElevatorD,
-      ElevatorConstants::kElevatorIZone, ElevatorConstants::kElevatorFF};
+      ElevatorConstants::kElevatorIZone, ElevatorConstants::kElevatorFF, false};
     SparkMaxPidController m_elevatorController{"Elevator",
                                    m_leadMotor,
                                    m_enc,
