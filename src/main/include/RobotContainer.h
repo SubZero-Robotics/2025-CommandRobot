@@ -25,6 +25,7 @@
 #include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/AlgaeArmSubsystem.h"
 #include "subsystems/CoralArmSubsystem.h"
+#include "subsystems/ClimberSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -68,4 +69,6 @@ class RobotContainer {
 
   CoralArmSubsystem m_coralArm;
   IntakeSubsystem m_coralIntake{CoralArmConstants::kIntakeMotorId};
+
+  ClimberSubsystem m_climber;
 };

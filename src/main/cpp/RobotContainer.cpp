@@ -83,4 +83,5 @@ void RobotContainer::Initialize() {
   m_elevator.OnInit();
   m_coralArm.OnInit();
   m_algaeArm.OnInit();
+  m_climber.OnInit();
 }

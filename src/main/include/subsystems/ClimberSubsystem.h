@@ -53,16 +53,15 @@ class ClimberSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero::
                                rev::spark::SparkLowLevel::MotorType::kBrushless};
   rev::spark::SparkClosedLoopController m_pidController = m_climberMotor.GetClosedLoopController();
   rev::spark::SparkRelativeEncoder m_enc = m_climberMotor.GetEncoder();
-  rev::spark::SparkAbsoluteEncoder m_absEnc = m_climberMotor.GetAbsoluteEncoder();
   subzero::PidSettings climberPidSettings = {
       ClimberConstants::kP, ClimberConstants::kI, ClimberConstants::kD,
       ClimberConstants::kIZone, ClimberConstants::kFF, true};
-  SparkMaxPidController climberController{"Coral Arm",
+  SparkMaxPidController climberController{"Climb Arm",
                                    m_climberMotor,
                                    m_enc,
                                    m_pidController,
                                    climberPidSettings,
-                                   &m_absEnc,
+                                   nullptr,
                                    ClimberConstants::kMaxRpm};
-  subzero::SimPidMotorController simClimberController{"Sim Arm", climberPidSettings, ClimberConstants::kMaxRpm};
+  subzero::SimPidMotorController simClimberController{"Sim Climb Arm", climberPidSettings, ClimberConstants::kMaxRpm};
 };
