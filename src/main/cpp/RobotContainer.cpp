@@ -55,7 +55,10 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureBindings() {
-  // m_driverController.A().OnTrue(m_elevator.MoveToPositionAbsolute(10_in));
+  // m_driverController.A().OnTrue(m_elevator.MoveToPositionRelative(20_in));
+  // m_driverController.B().OnTrue(m_elevator.MoveToPositionAbsolute(0_m));
+  m_driverController.X().OnTrue(m_coralArm.GetIntakeSubsystem().MoveAtPercent(-0.35));
+  m_driverController.Y().OnTrue(m_algaeArm.GetIntakeSubsystem().MoveAtPercent(-0.50));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

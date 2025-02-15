@@ -155,24 +155,24 @@ namespace GyroConstants {
 }
 
 namespace ElevatorConstants {
-    const int kLeadElevatorMotorCanId = 7;
-    const int kFollowerElevatorMotorCanId = 19;
+    const int kLeadElevatorMotorCanId = 19;
+    const int kFollowerElevatorMotorCanId = 7;
 
     const int kBottomLimitSwitchPort = 1;
 
     // Placeholder values
-    const double kElevatorP = 0.075;
+    const double kElevatorP = 280.0;
     const double kElevatorI = 0.0;
-    const double kElevatorD = 0.075;
-    const double kElevatorIZone = 0.1;
-    const double kElevatorFF = 0.1;
+    const double kElevatorD = 0.0;
+    const double kElevatorIZone = 0.0;
+    const double kElevatorFF = 0.0;
 
     constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
 
     // Placeholder values
-    constexpr units::meter_t kMinDistance = 2_in;
-    constexpr units::meter_t kMaxDistance = 24_in;
-    constexpr units::meter_t kRelativeDistancePerRev = 5.51977829236_in / 125; // 125:1 ratio gearbox
+    constexpr units::meter_t kMinDistance = 0_in;
+    constexpr units::meter_t kMaxDistance = 20_in;
+    constexpr units::meter_t kRelativeDistancePerRev = 5.51977829236_in / 36; // 36:1 ratio gearbox
     constexpr units::meters_per_second_t kDefaultVelocity = 0.66_mps;
     constexpr double kVelocityScalar = 1.0;
     constexpr units::meter_t kTolerance = 0.5_in;
