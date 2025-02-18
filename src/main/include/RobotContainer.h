@@ -16,6 +16,7 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc/smartdashboard/Mechanism2d.h>
+#include <pathplanner/lib/auto/NamedCommands.h>
 
 #include "CommonCompile.h"
 
@@ -26,6 +27,7 @@
 #include "subsystems/AlgaeArmSubsystem.h"
 #include "subsystems/CoralArmSubsystem.h"
 #include "subsystems/ClimberSubsystem.h"
+#include "commands/CommandFactory.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -71,4 +73,15 @@ class RobotContainer {
   IntakeSubsystem m_coralIntake{CoralArmConstants::kIntakeMotorId};
 
   ClimberSubsystem m_climber;
+
+  Subsystems_t subsystems = {
+    .algaeArm = &m_algaeArm,
+    .coralArm = &m_coralArm,
+    .elevator = &m_elevator,
+    .coralIntake = &m_coralIntake,
+    .algaeIntake = &m_algaeIntake,
+    .climber = &m_climber
+  };
+
+  CommandController m_commandFactory{subsystems};
 };

@@ -201,7 +201,7 @@ namespace AlgaeArmConstants{
     constexpr int kIntakeMotorId = 6;
     constexpr double kP = 0.1;
     constexpr double kI = 0.0;
-    constexpr double kD = 0.001;
+    constexpr double kD = 0.0;
     constexpr double kIZone = 0.0;
     constexpr double kFF = 0.0;
     
@@ -236,7 +236,7 @@ namespace AlgaeArmConstants{
 namespace CoralArmConstants{
     constexpr int kArmMotorId = 16;
     constexpr int kIntakeMotorId = 15;
-    constexpr double kP = 0.5;
+    constexpr double kP = 0.3;
     constexpr double kI = 0.0;
     constexpr double kD = 0.0;
     constexpr double kIZone = 0.0;
@@ -247,9 +247,9 @@ namespace CoralArmConstants{
     constexpr units::degree_t kMaxRotation = 290_deg;
     constexpr units::degree_t kRelativeDistancePerRev = 360_deg / (15 * 4.7); // 4.7 is the ratio of the chain gear
     constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
-    constexpr units::degrees_per_second_t kDefaultVelocity = 10_deg_per_s;
+    constexpr units::degrees_per_second_t kDefaultVelocity = 100_deg_per_s;
     constexpr double kVelocityScalar = 1.0;
-    constexpr units::degree_t kTolerance = 2_deg;
+    constexpr units::degree_t kTolerance = 0.5_deg;
     constexpr units::meter_t kArmLength = 0.2_m;
     
     static const subzero::SingleAxisMechanism kCoralArmMechanism = {
@@ -303,4 +303,35 @@ namespace ClimberConstants{
     const frc::TrapezoidProfile<units::degree>::Constraints
         kRotationalAxisConstraints;
 
+}
+
+namespace CommandConstants {
+    // Placeholder values
+    constexpr units::meter_t kElevatorL1Position = 5_in;
+    constexpr units::meter_t kElevatorL2Position = 10_in;
+    constexpr units::meter_t kElevatorL3Position = 15_in;
+    constexpr units::meter_t kElevatorFeedPosition = 4_in;
+
+    // Placeholder values
+    constexpr units::degree_t kCoralL1Position = 10_deg;
+    constexpr units::degree_t kCoralL2Position = 20_deg;
+    constexpr units::degree_t kCoralL3Position = 30_deg;
+    constexpr units::degree_t kCoralFeedPosition = 10_deg;
+
+    // Placeholder values
+    constexpr units::degree_t kAlgaeIntakePosition = 50_deg;
+    constexpr units::degree_t kAlgaeStorePosition = 30_deg;
+    constexpr units::degree_t kAlgaeStowPosition = 0_deg;
+
+    // Placeholder values
+    constexpr double kCoralFeedSpeed = 0.25;
+    constexpr double kCoralExpelSpeed = 0.25;
+
+    // Placeholder values
+    constexpr double kAlgaeIntakeSpeed = 0.3;
+    constexpr double kAlgaeExpelSpeed = 0.3;
+
+    // Placeholder values
+    constexpr units::degree_t kClimberDownAngle = 0_deg;
+    constexpr units::degree_t kClimberUpAngle = 90_deg;
 }

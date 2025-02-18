@@ -19,6 +19,7 @@
 #include <units/velocity.h>
 
 #include <iostream>
+#include <memory>
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
@@ -33,6 +34,10 @@ RobotContainer::RobotContainer() {
   frc::SmartDashboard::PutData(&m_chooser);
   m_chooser.SetDefaultOption(AutoConstants::kOutAuto, AutoConstants::kSpinAuto);
   m_chooser.AddOption(AutoConstants::kSpinAuto, AutoConstants::kSpinAuto);
+
+  pathplanner::NamedCommands::registerCommand("hehe", std::move(m_commandFactory.MoveToPositionL1()));
+  pathplanner::NamedCommands::registerCommand("hehe2", std::move(m_commandFactory.MoveToPositionL2()));
+  pathplanner::NamedCommands::registerCommand("hehe3", std::move(m_commandFactory.MoveToPositionL3()));
 
   // Configure the button bindings
   ConfigureBindings();
