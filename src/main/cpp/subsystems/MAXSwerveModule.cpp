@@ -6,7 +6,7 @@
 
 #include <frc/geometry/Rotation2d.h>
 
-#include "Subsystems/Configs.h"
+#include "subsystems/Configs.h"
 
 using namespace rev::spark;
 
