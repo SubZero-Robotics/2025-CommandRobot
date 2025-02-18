@@ -17,8 +17,14 @@ jobs:
     container: wpilib/roborio-cross-ubuntu:2025-22.04
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v4
+    - name: initialize common
+      run: git submodule init
+    - name: add common
+      run: git submodule add https://github.com/SubZero-Robotics/2025-CommandRobot
+    - name: update common
+      run: git submodule update
     # Declares the repository safe and not under dubious ownership.
     - name: Add repository to git safe directories
       run: git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -27,9 +33,7 @@ jobs:
       run: chmod +x gradlew
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code
+
+      run: ./gradlew build
     
-      run: | 
-        git submodule init
-        git submodule add https://github.com/SubZero-Robotics/2025-CommandRobot
-        git submodule update
-        ./gradlew build
+    
