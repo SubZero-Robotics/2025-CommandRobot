@@ -128,7 +128,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
   MAXSwerveModule m_rearRight;
 
   // Gyro Sensor
-  ctre::phoenix6::hardware::Pigeon2 m_pidgey{13, "rio"};
+  ctre::phoenix6::hardware::Pigeon2 m_pidgey{DriveConstants::kPigeonCanId, "rio"};
   units::time::second_t currentTime{frc::Timer::GetFPGATimestamp()};
 
   // Odometry class for tracking robot pose

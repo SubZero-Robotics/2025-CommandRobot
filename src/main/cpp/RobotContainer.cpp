@@ -17,10 +17,13 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <units/angle.h>
 #include <units/velocity.h>
+
 #include <iostream>
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
+#include "subsystems/AlgaeArmSubsystem.h"
+#include "subsystems/CoralArmSubsystem.h"
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
@@ -52,9 +55,10 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureBindings() {
-  frc2::JoystickButton(&m_driverController,
-                       frc::XboxController::Button::kRightBumper)
-      .WhileTrue(new frc2::RunCommand([this] { m_drive.SetX(); }, {&m_drive}));
+  m_driverController.A().OnTrue(m_algaeArm.MoveToPositionAbsolute(50_deg));
+  m_driverController.B().OnTrue(m_algaeArm.MoveToPositionAbsolute(5_deg));
+  m_driverController.X().OnTrue(m_coralArm.MoveToPositionAbsolute(120_deg));
+  m_driverController.Y().OnTrue(m_coralArm.MoveToPositionAbsolute(5_deg));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
@@ -69,4 +73,15 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
   return pathplanner::PathPlannerAuto(m_autoSelected)
     .AndThen(frc2::InstantCommand([this, offset]() { m_drive.OffsetRotation(offset); }).ToPtr());
+}
+
+void RobotContainer::Periodic() {
+  frc::SmartDashboard::PutData("Robot Elevator", &m_elevatorMech);
+}
+
+void RobotContainer::Initialize() {
+  m_elevator.OnInit();
+  m_coralArm.OnInit();
+  m_algaeArm.OnInit();
+  m_climber.OnInit();
 }

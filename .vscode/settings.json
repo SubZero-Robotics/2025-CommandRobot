@@ -93,6 +93,9 @@
     "typeindex": "cpp",
     "typeinfo": "cpp",
     "valarray": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "xmemory": "cpp",
+    "xstring": "cpp",
+    "xutility": "cpp"
   }
 }

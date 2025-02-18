@@ -10,14 +10,47 @@
 #include <units/current.h>
 #include <units/length.h>
 #include <units/velocity.h>
+#include <subzero/motor/PidMotorController.h>
+#include <subzero/constants/ColorConstants.h>
+#include <subzero/singleaxis/ISingleAxisSubsystem.h>
 
 #include <numbers>
 #include <string>
 
 #pragma once
 
+#include <frc/trajectory/TrapezoidProfile.h>
+#include <rev/SparkMax.h>
+#include <units/acceleration.h>
+#include <units/angular_acceleration.h>
+#include <units/angular_velocity.h>
+#include <units/current.h>
+#include <units/length.h>
+#include <units/velocity.h>
+#include <subzero/singleaxis/ISingleAxisSubsystem.h>
+#include <subzero/motor/PidMotorController.h>
+#include <subzero/constants/ColorConstants.h>
+
+#include <numbers>
+#include <string>
+
+using SparkMaxPidController =
+    subzero::PidMotorController<rev::spark::SparkMax, rev::spark::SparkClosedLoopController,
+                                rev::spark::SparkRelativeEncoder,
+                                rev::spark::SparkAbsoluteEncoder, rev::spark::SparkMaxConfig>;
+
+using SparkMaxPidControllerTuner =
+    subzero::PidMotorControllerTuner<rev::spark::SparkMax, rev::spark::SparkClosedLoopController,
+                                rev::spark::SparkRelativeEncoder,
+                                rev::spark::SparkAbsoluteEncoder, rev::spark::SparkMaxConfig>;
+typedef
+    subzero::PidMotorController<rev::spark::SparkFlex, rev::spark::SparkClosedLoopController,
+                                rev::spark::SparkRelativeEncoder,
+                                rev::spark::SparkAbsoluteEncoder, rev::spark::SparkFlexConfig> SparkFlexController;
+
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
+ * numerical or bool constants.  This should not be used for any other purpose.
  * numerical or bool constants.  This should not be used for any other purpose.
  *
  * It is generally a good idea to place constants into subsystem- or
@@ -43,6 +76,8 @@ namespace DriveConstants {
 constexpr units::meters_per_second_t kMaxSpeed = 4.92_mps;
 constexpr units::radians_per_second_t kMaxAngularSpeed{2 * std::numbers::pi};
 
+const int kPigeonCanId = 13;
+
 constexpr double kDirectionSlewRate = 1.2;   // radians per second
 constexpr double kMagnitudeSlewRate = 1.8;   // percent per second (1 = 100%)
 constexpr double kRotationalSlewRate = 2.0;  // percent per second (1 = 100%)
@@ -60,15 +95,15 @@ constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;
 constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 
 // SPARK MAX CAN IDs
-constexpr int kFrontLeftDrivingCanId = 8;
-constexpr int kRearLeftDrivingCanId = 6;
-constexpr int kFrontRightDrivingCanId = 2;
-constexpr int kRearRightDrivingCanId = 4;
+constexpr int kFrontLeftDrivingCanId = 18;
+constexpr int kRearLeftDrivingCanId = 1;
+constexpr int kFrontRightDrivingCanId = 4;
+constexpr int kRearRightDrivingCanId = 9;
 
-constexpr int kFrontLeftTurningCanId = 7;
-constexpr int kRearLeftTurningCanId = 5;
-constexpr int kFrontRightTurningCanId = 1;
-constexpr int kRearRightTurningCanId = 3;
+constexpr int kFrontLeftTurningCanId = 2;
+constexpr int kRearLeftTurningCanId = 20;
+constexpr int kFrontRightTurningCanId = 5;
+constexpr int kRearRightTurningCanId = 8;
 }  // namespace DriveConstants
 
 namespace ModuleConstants {
@@ -122,4 +157,150 @@ constexpr double kDriveDeadband = 0.05;
 
 namespace GyroConstants {
     constexpr units::time::second_t kPrintPeriod{1000_ms};
+}
+
+namespace ElevatorConstants {
+    const int kLeadElevatorMotorCanId = 19;
+    const int kFollowerElevatorMotorCanId = 7;
+
+    const int kBottomLimitSwitchPort = 1;
+
+    // Placeholder values
+    const double kElevatorP = 100.0;
+    const double kElevatorI = 0.0;
+    const double kElevatorD = 0.0;
+    const double kElevatorIZone = 0.0;
+    const double kElevatorFF = 0.0;
+
+    constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
+
+    // Placeholder values
+    constexpr units::meter_t kMinDistance = 0_in;
+    constexpr units::meter_t kMaxDistance = 18_in;
+    constexpr units::meter_t kRelativeDistancePerRev = 5.51977829236_in / 36; // 36:1 ratio gearbox
+    constexpr units::meters_per_second_t kDefaultVelocity = 0.66_mps;
+    constexpr double kVelocityScalar = 1.0;
+    constexpr units::meter_t kTolerance = 0.5_in;
+
+    // Placeholder
+    const subzero::SingleAxisMechanism kElevatorMechanism {
+    // min length
+    2_in,
+    // angle
+    90_deg,
+    // line width
+    10.0,
+    // color
+    subzero::ColorConstants::kRed};
+
+    const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{1_fps * 10, 0.75_fps_sq * 20};
+};
+
+namespace AlgaeArmConstants{
+    constexpr int kArmMotorId = 17;
+    constexpr int kIntakeMotorId = 6;
+    constexpr double kP = 0.1;
+    constexpr double kI = 0.0;
+    constexpr double kD = 0.001;
+    constexpr double kIZone = 0.0;
+    constexpr double kFF = 0.0;
+    
+    constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
+    constexpr units::degree_t kHomeRotation = 0_deg;
+    constexpr units::degree_t kMaxRotation = 85_deg;
+    constexpr units::degree_t kRelativeDistancePerRev = 360_deg / 75;
+    constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
+    constexpr units::degrees_per_second_t kDefaultVelocity = 10_deg_per_s;
+    constexpr double kVelocityScalar = 1.0;
+    constexpr units::degree_t kTolerance = 2_deg;
+    constexpr units::meter_t kArmLength = 17_in;
+    
+    static const subzero::SingleAxisMechanism kAlgaeArmMechanism = {
+    // length
+    0.2_m,
+    // min angle
+    110_deg,
+    // line width
+    6,
+    // color
+    subzero::ColorConstants::kBlue};
+
+    // const frc::TrapezoidProfile<units::degree>::Constraints
+    //     kRotationalAxisConstraints{360_deg_per_s * 2.2, 360_deg_per_s_sq * 2.2};
+
+    const frc::TrapezoidProfile<units::degree>::Constraints
+        kRotationalAxisConstraints;
+
+}
+
+namespace CoralArmConstants{
+    constexpr int kArmMotorId = 16;
+    constexpr int kIntakeMotorId = 15;
+    constexpr double kP = 0.5;
+    constexpr double kI = 0.0;
+    constexpr double kD = 0.0;
+    constexpr double kIZone = 0.0;
+    constexpr double kFF = 0.0;
+    
+    constexpr units::revolutions_per_minute_t kMaxRpm = 1_rpm;
+    constexpr units::degree_t kHomeRotation = 5_deg;
+    constexpr units::degree_t kMaxRotation = 290_deg;
+    constexpr units::degree_t kRelativeDistancePerRev = 360_deg / (15 * 4.7); // 4.7 is the ratio of the chain gear
+    constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
+    constexpr units::degrees_per_second_t kDefaultVelocity = 10_deg_per_s;
+    constexpr double kVelocityScalar = 1.0;
+    constexpr units::degree_t kTolerance = 2_deg;
+    constexpr units::meter_t kArmLength = 0.2_m;
+    
+    static const subzero::SingleAxisMechanism kCoralArmMechanism = {
+    // length
+    0.2_m,
+    // min angle
+    110_deg,
+    // line width
+    6,
+    // color
+    subzero::ColorConstants::kBlue};
+
+    const frc::TrapezoidProfile<units::degree>::Constraints
+        kRotationalAxisConstraints{360_deg_per_s * 2.2, 360_deg_per_s_sq * 2.2};
+
+}
+
+namespace ClimberConstants{
+    constexpr int kArmMotorId = 14;
+    
+    // Placeholder values
+    constexpr double kP = 0.2;
+    constexpr double kI = 0.0;
+    constexpr double kD = 0.0;
+    constexpr double kIZone = 0.0;
+    constexpr double kFF = 0.0;
+    
+    constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
+    constexpr units::degree_t kHomeRotation = 0_deg;
+    constexpr units::degree_t kMaxRotation = 85_deg;
+    constexpr units::degree_t kRelativeDistancePerRev = 360_deg / 125;
+    constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
+    constexpr units::degrees_per_second_t kDefaultVelocity = 10_deg_per_s;
+    constexpr double kVelocityScalar = 1.0;
+    constexpr units::degree_t kTolerance = 2_deg;
+    constexpr units::meter_t kArmLength = 17_in;
+    
+    static const subzero::SingleAxisMechanism kClimberMechanism = {
+    // length
+    kArmLength,
+    // min angle
+    110_deg,
+    // line width
+    6,
+    // color
+    subzero::ColorConstants::kBlue};
+
+    // const frc::TrapezoidProfile<units::degree>::Constraints
+    //     kRotationalAxisConstraints{360_deg_per_s * 2.2, 360_deg_per_s_sq * 2.2};
+
+    const frc::TrapezoidProfile<units::degree>::Constraints
+        kRotationalAxisConstraints;
+
 }
