@@ -61,24 +61,23 @@ Following the WPILib command based structure we have broken our robot up into a 
 | :-------------------------------------------------------- | :-------------------------------------------------------- |
 | [Drive](src/main/include/subsystems/DriveSubsystem.h)     | Drives robot                                              |
 | [Intake](src/main/include/subsystems/IntakeSubsystem.h)   | Activates the intake                                      |
-| [Scoring](src/main/include/subsystems/ScoringSubsystem.h) | Scores Notes                                              |
-| [Arm](src/main/include/subsystems/ArmSubsystem.h)         | Raises and lowers the amp arm, uses BaseSingleAxis        |
+| [Arm](src/main/include/subsystems/CoralArmSubsystem.h)    | Changes the position of the the coral arm, uses BaseSingleAxis |
+| [Arm](src/main/include/subsystems/AlgaeArmSubsystem.h)    | Raises and lowers the Algae arm, uses BaseSingleAxis      |
+| [Arm](src/main/include/subsystems/ClimberSubsystem.h)     | Moves climbing arm, uses BaseSingleAxis                   |
 | [LED](src/main/include/subsystems/LedSubsystem.h)         | Wrapper for the ConnectorX moduledriver, reads from State |
-| [Climb](src/main/include/subsystems/ClimbSubsystem.h)     | Climbs on the Stage                                       |
-| [State](src/main/include/subsystems/StateSubsystem.h)     | Finite state machine for the robot during teleop          |
 
 ## CAN IDs
 
 |   Purpose/Name    | CAN ID | Motor/Driver Type | PDH Port |
 | :---------------: | :----: | :---------------: | :------: |
-| Front Right Drive |   2    |     SparkMax      |    8     |
-| Rear Right Drive  |   4    |     SparkMax      |    3     |
-|  Rear Left Drive  |   6    |     SparkMax      |    16    |
-| Front Left Drive  |   8    |     SparkMax      |    11    |
-| Front Right Turn  |   1    |     SparkMax      |    7     |
-|  Rear Right Turn  |   3    |     SparkMax      |    4     |
-|  Rear Left Turn   |   5    |     SparkMax      |    15    |
-|  Front Left Turn  |   7    |     SparkMax      |    12    |
+| Front Right Drive |   4    |     SparkMax      |    4     |
+| Rear Right Drive  |   9    |     SparkMax      |    9     |
+|  Rear Left Drive  |   1    |     SparkMax      |    1     |
+| Front Left Drive  |   18   |     SparkMax      |    18    |
+| Front Right Turn  |   5    |     SparkMax      |    5     |
+|  Rear Right Turn  |   8    |     SparkMax      |    8     |
+|  Rear Left Turn   |   20   |     SparkMax      |    20    |
+|  Front Left Turn  |   2    |     SparkMax      |    2     |
 
 \* = Inverted
 
@@ -93,12 +92,10 @@ Following the WPILib command based structure we have broken our robot up into a 
 | Device  |             Address              |
 | :-----: | :------------------------------: |
 | Gateway |            10.56.90.1            |
-| Gateway | 10.56.90.129 (subject to change) |
+| Gateway | 10.56.90.80 (subject to change)  |
 |   RIO   |            10.56.90.2            |
 | Laptop  |             Dynamic              |
-|   LL3   |           10.56.90.11            |
-|  LL2+   |           10.56.90.12            |
-|   LL3   |           10.56.90.13            |
+
 
 ## Button Bindings
 
@@ -235,35 +232,6 @@ All robot states begin by calling `ShowFromState` with the `RobotState` on the L
 |      StartSource      |                       Returns a CommandPtr to drive to a source location                        | 20 seconds |
 |      StartFunni       |                                              Funni                                              |    N/A     |
 
-## LED Commands
-
-|       Method        |                                                      Purpose                                                       |
-| :-----------------: | :----------------------------------------------------------------------------------------------------------------: |
-|    ShowFromState    |                           Returns a CommandPtr to set the LEDs based on a `StateGetter`                            |
-|      Intaking       | Sets left and right zones to red and a chase pattern, sets the front and back zones to red and a sine roll pattern |
-|   ScoringSpeaker    |             Sets left and right and front zones to solid yellow, sets back zone to purple and a blink              |
-|     ScoringAmp      |               Sets left right and back zones to solid yellow, sets front zone to purple and a blink                |
-|  ScoringSubwoofer   |                                          Sets climbers to chasing yellow                                           |
-|       Loaded        |                                           Sets all zones to blink green                                            |
-|       Idling        |                                           Sets all zones to breathe blue                                           |
-|        Climb        |             Sets left and right zones to a blue sine roll, front and back zones to a yellow sine roll              |
-|        Funni        |                                                    Does a Funni                                                    |
-|      AngryFace      |                                    Plays an angry face animation on the matrix                                     |
-|      HappyFace      |                                     Plays a happy face animation on the matrix                                     |
-|    BlinkingFace     |                               Plays an idling, blinking face animation on the matrix                               |
-|    SurprisedFace    |                 Shows a surprised/dazed face; appears automatically when acceleration exceeds 7Gs                  |
-|     AmogusFace      |                                                ඞ It's A M O G U S ඞ                                                |
-|       OwOFace       |                                         \*_Notices LEDs_\* OwO what's this                                         |
-|    AimbotEnable     |                                        Sets all LEDs to an acid green blink                                        |
-|     OnTheFlyPP      |                                               Sets all LEDs to blue                                                |
-|  SuccessfulIntake   |                                                 Sets LEDs to green                                                 |
-| VisionNoteDetected  |                                             Sets all LEDs chase orange                                             |
-|        Error        |                                         Sets all zones to red and a blink                                          |
-|     AutoScoring     |                            Turns LEDs to a climbing purple to indicate imminent scoring                            |
-| setZoneColorPattern |                                    Helper to set a zone to a color and pattern                                     |
-|     createZones     |                                      Helper to create a std::vector of zones                                       |
-|    syncAllZones     |                                              Helper to sync all zones                                              |
-
 ## Getting started
 
 ### Prerequisites
@@ -327,4 +295,4 @@ If you would like to contact the subzero robotics programmers, you can do so at 
 
 To contact the team directly, you can find us on [facebook](https://www.facebook.com/Esko-SubZero-Robotics-Team-5690-695407257248414/) or email us at [subzerorobotics@goesko.com](mailto:subzerorobotics@goesko.com)
 
-Project Link: [https://github.com/subzero-robotics/2024-CommandRobot](https://github.com/subzero-robotics/2024-CommandRobot)
+Project Link: [https://github.com/subzero-robotics/2025-CommandRobot](https://github.com/subzero-robotics/2024-CommandRobot)
