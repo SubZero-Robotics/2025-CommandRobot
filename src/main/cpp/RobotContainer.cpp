@@ -35,9 +35,9 @@ RobotContainer::RobotContainer() {
   m_chooser.SetDefaultOption(AutoConstants::kOutAuto, AutoConstants::kSpinAuto);
   m_chooser.AddOption(AutoConstants::kSpinAuto, AutoConstants::kSpinAuto);
 
-  pathplanner::NamedCommands::registerCommand("hehe", std::move(m_commandFactory.MoveToPositionL1()));
-  pathplanner::NamedCommands::registerCommand("hehe2", std::move(m_commandFactory.MoveToPositionL2()));
-  pathplanner::NamedCommands::registerCommand("hehe3", std::move(m_commandFactory.MoveToPositionL3()));
+  pathplanner::NamedCommands::registerCommand("hehe", std::move(m_commandController.MoveToPositionL1()));
+  pathplanner::NamedCommands::registerCommand("hehe2", std::move(m_commandController.MoveToPositionL2()));
+  pathplanner::NamedCommands::registerCommand("hehe3", std::move(m_commandController.MoveToPositionL3()));
 
   // Configure the button bindings
   ConfigureBindings();
@@ -60,10 +60,18 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureBindings() {
-  m_driverController.A().OnTrue(m_algaeArm.MoveToPositionAbsolute(50_deg));
-  m_driverController.B().OnTrue(m_algaeArm.MoveToPositionAbsolute(5_deg));
-  m_driverController.X().OnTrue(m_coralArm.MoveToPositionAbsolute(120_deg));
-  m_driverController.Y().OnTrue(m_coralArm.MoveToPositionAbsolute(5_deg));
+  // NOT FINAL
+
+  m_operatorController.POVLeft().OnTrue(m_commandController.MoveToPositionL1());
+  m_operatorController.POVUp().OnTrue(m_commandController.MoveToPositionL2());
+  m_operatorController.POVRight().OnTrue(m_commandController.MoveToPositionL3());
+  m_operatorController.POVDown().OnTrue(m_commandController.FeedCoral());
+
+  m_operatorController.Y().OnTrue(m_commandController.FeedCoral());
+  m_operatorController.X().OnTrue(m_commandController.IntakeAlgae());
+
+  m_operatorController.LeftBumper().WhileTrue(m_commandController.ExpelAlgae());
+  m_operatorController.RightBumper().WhileTrue(m_commandController.ExpelCoral());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

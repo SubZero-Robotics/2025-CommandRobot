@@ -20,26 +20,12 @@ frc2::CommandPtr CommandController::MoveToPositionL3() {
 }
 
 frc2::CommandPtr CommandController::FeedCoral() {
-    return 
-    m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorL3Position)
-    .AndThen(frc2::FunctionalCommand(
-    // On init
-    []() {},
-    // On execute
-    [this]() {
-        m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralFeedSpeed);
-    },
-    // On end
-    [this](bool interupted) {
-        m_subsystems.coralIntake->Stop();
-    },
-    // Is finished
-    []() {
-        return false;
-    },
-    // Requirements
-    {m_subsystems.coralIntake}
-    ).ToPtr());
+    return m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralFeedPosition)
+    .AndThen(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralIntakeSpeed)
+    .Until([this]() {
+        return m_subsystems.coralIntake->HasGamePiece();
+    })
+    .WithTimeout(CoralArmConstants::kIntakeTimeout));
 }
 
 frc2::CommandPtr CommandController::ExpelCoral() {
@@ -82,7 +68,11 @@ frc2::CommandPtr CommandController::IntakeAlgae() {
     },
     // Requirements
     {m_subsystems.algaeIntake}
-    ).ToPtr());
+    ).ToPtr())
+        .Until([this]() {
+        return m_subsystems.coralIntake->HasGamePiece();
+    })
+    .WithTimeout(AlgaeArmConstants::kIntakeTimeout);
 }
 
 frc2::CommandPtr CommandController::ExpelAlgae() {

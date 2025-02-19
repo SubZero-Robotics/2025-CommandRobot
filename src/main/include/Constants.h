@@ -59,7 +59,8 @@ typedef
  */
 namespace OperatorConstants {
 
-inline constexpr int kDriverControllerPort = 0;
+inline constexpr int kDriverControllerPort = 4;
+inline constexpr int kOperatorControllerPort = 1;
 
 }  // namespace OperatorConstants
 
@@ -204,6 +205,8 @@ namespace AlgaeArmConstants{
     constexpr double kD = 0.0;
     constexpr double kIZone = 0.0;
     constexpr double kFF = 0.0;
+
+    constexpr double kHasAlgaeCurrent = 20;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
     constexpr units::degree_t kHomeRotation = 0_deg;
@@ -214,6 +217,8 @@ namespace AlgaeArmConstants{
     constexpr double kVelocityScalar = 1.0;
     constexpr units::degree_t kTolerance = 2_deg;
     constexpr units::meter_t kArmLength = 17_in;
+
+    constexpr units::second_t kIntakeTimeout = 5_s;
     
     static const subzero::SingleAxisMechanism kAlgaeArmMechanism = {
     // length
@@ -251,6 +256,11 @@ namespace CoralArmConstants{
     constexpr double kVelocityScalar = 1.0;
     constexpr units::degree_t kTolerance = 0.5_deg;
     constexpr units::meter_t kArmLength = 0.2_m;
+ 
+    constexpr units::second_t kIntakeTimeout = 3_s;
+
+    // placeholder
+    constexpr double kHasCoralCurrent = 30;
     
     static const subzero::SingleAxisMechanism kCoralArmMechanism = {
     // length
@@ -316,7 +326,7 @@ namespace CommandConstants {
     constexpr units::degree_t kCoralL1Position = 10_deg;
     constexpr units::degree_t kCoralL2Position = 20_deg;
     constexpr units::degree_t kCoralL3Position = 30_deg;
-    constexpr units::degree_t kCoralFeedPosition = 10_deg;
+    constexpr units::degree_t kCoralFeedPosition = 90_deg;
 
     // Placeholder values
     constexpr units::degree_t kAlgaeIntakePosition = 50_deg;
@@ -324,7 +334,7 @@ namespace CommandConstants {
     constexpr units::degree_t kAlgaeStowPosition = 0_deg;
 
     // Placeholder values
-    constexpr double kCoralFeedSpeed = 0.25;
+    constexpr double kCoralIntakeSpeed = 0.25;
     constexpr double kCoralExpelSpeed = 0.25;
 
     // Placeholder values
