@@ -21,79 +21,28 @@ frc2::CommandPtr CommandController::MoveToPositionL3() {
 
 frc2::CommandPtr CommandController::FeedCoral() {
     return m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralFeedPosition)
-    .AndThen(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralIntakeSpeed)
+    .AndThen(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralFeedSpeed)
     .Until([this]() {
         return m_subsystems.coralIntake->HasGamePiece();
     })
-    .WithTimeout(CoralArmConstants::kIntakeTimeout));
+    .WithTimeout(CommandConstants::kCoralFeedTimeout));
 }
 
 frc2::CommandPtr CommandController::ExpelCoral() {
-    return frc2::FunctionalCommand(
-    // On init
-    []() {},
-    // On execute
-    [this]() {
-        m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralExpelSpeed);
-    },
-    // On end
-    [this](bool interupted) {
-        m_subsystems.coralIntake->Stop();
-    },
-    // Is finished
-    []() {
-        return false;
-    },
-    // Requirements
-    {m_subsystems.coralIntake}
-    ).ToPtr();
+    return m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralExpelSpeed);
 }
 
 frc2::CommandPtr CommandController::IntakeAlgae() {
     return m_subsystems.algaeArm->MoveToPositionAbsolute(CommandConstants::kAlgaeIntakePosition)
-    .AndThen(frc2::FunctionalCommand(
-    // On init
-    []() {},
-    // On execute
-    [this]() {
-        m_subsystems.algaeIntake->MoveAtPercent(CommandConstants::kAlgaeIntakeSpeed);
-    },
-    // On end
-    [this](bool interupted) {
-        m_subsystems.algaeIntake->Stop();
-    },
-    // Is finished
-    []() {
-        return false;
-    },
-    // Requirements
-    {m_subsystems.algaeIntake}
-    ).ToPtr())
-        .Until([this]() {
-        return m_subsystems.coralIntake->HasGamePiece();
+    .AndThen(m_subsystems.algaeIntake->MoveAtPercent(CommandConstants::kAlgaeIntakeSpeed))
+    .Until([this]() {
+        return m_subsystems.algaeIntake->HasGamePiece();
     })
-    .WithTimeout(AlgaeArmConstants::kIntakeTimeout);
+    .WithTimeout(CommandConstants::kAlgaeIntakeTimeout);
 }
 
 frc2::CommandPtr CommandController::ExpelAlgae() {
-    return frc2::FunctionalCommand(
-    // On init
-    []() {},
-    // On execute
-    [this]() {
-        m_subsystems.algaeIntake->MoveAtPercent(CommandConstants::kAlgaeExpelSpeed);
-    },
-    // On end
-    [this](bool interupted) {
-        m_subsystems.algaeIntake->Stop();
-    },
-    // Is finished
-    []() {
-        return false;
-    },
-    // Requirements
-    {m_subsystems.algaeIntake}
-    ).ToPtr();
+    return m_subsystems.algaeIntake->MoveAtPercent(CommandConstants::kAlgaeExpelSpeed);
 }
 
 frc2::CommandPtr CommandController::ClimberDown() {
@@ -102,4 +51,14 @@ frc2::CommandPtr CommandController::ClimberDown() {
 
 frc2::CommandPtr CommandController::ClimberUp() {
     return m_subsystems.climber->MoveToPositionAbsolute(CommandConstants::kClimberUpAngle);
+}
+
+frc2::CommandPtr CommandController::SetElevatorZeroPosition() {
+    return m_subsystems.coralArm->MoveToPositionAbsolute(CoralArmConstants::kMinRotation)
+    .AndThen(frc2::InstantCommand(
+        [this]() {
+            m_subsystems.elevator->SetEncoderPosition(CommandConstants::kElevatorStartPosition);
+        }
+    ).ToPtr())
+    .AndThen(m_subsystems.elevator->MoveToPositionAbsolute(ElevatorConstants::kMinDistance));
 }

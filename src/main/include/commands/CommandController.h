@@ -33,6 +33,12 @@ public:
     
     frc2::CommandPtr ClimberDown();
     frc2::CommandPtr ClimberUp();
+
+    /** 
+        @brief Must be called first during auto in order
+        to zero the elevator properly
+    */
+    frc2::CommandPtr SetElevatorZeroPosition();
 private:
     Subsystems_t m_subsystems;
 };

@@ -165,6 +165,7 @@ namespace ElevatorConstants {
     const int kFollowerElevatorMotorCanId = 7;
 
     const int kBottomLimitSwitchPort = 1;
+    const int kTopLimitSwitchPort = 2;
 
     // Placeholder values
     const double kElevatorP = 100.0;
@@ -217,8 +218,6 @@ namespace AlgaeArmConstants{
     constexpr double kVelocityScalar = 1.0;
     constexpr units::degree_t kTolerance = 2_deg;
     constexpr units::meter_t kArmLength = 17_in;
-
-    constexpr units::second_t kIntakeTimeout = 5_s;
     
     static const subzero::SingleAxisMechanism kAlgaeArmMechanism = {
     // length
@@ -248,7 +247,7 @@ namespace CoralArmConstants{
     constexpr double kFF = 0.0;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 1_rpm;
-    constexpr units::degree_t kHomeRotation = 5_deg;
+    constexpr units::degree_t kMinRotation = 50_deg;
     constexpr units::degree_t kMaxRotation = 290_deg;
     constexpr units::degree_t kRelativeDistancePerRev = 360_deg / (15 * 4.7); // 4.7 is the ratio of the chain gear
     constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
@@ -257,8 +256,6 @@ namespace CoralArmConstants{
     constexpr units::degree_t kTolerance = 0.5_deg;
     constexpr units::meter_t kArmLength = 0.2_m;
  
-    constexpr units::second_t kIntakeTimeout = 3_s;
-
     // placeholder
     constexpr double kHasCoralCurrent = 30;
     
@@ -321,6 +318,7 @@ namespace CommandConstants {
     constexpr units::meter_t kElevatorL2Position = 10_in;
     constexpr units::meter_t kElevatorL3Position = 15_in;
     constexpr units::meter_t kElevatorFeedPosition = 4_in;
+    constexpr units::meter_t kElevatorStartPosition = 5_in;
 
     // Placeholder values
     constexpr units::degree_t kCoralL1Position = 10_deg;
@@ -334,7 +332,7 @@ namespace CommandConstants {
     constexpr units::degree_t kAlgaeStowPosition = 0_deg;
 
     // Placeholder values
-    constexpr double kCoralIntakeSpeed = 0.25;
+    constexpr double kCoralFeedSpeed = 0.25;
     constexpr double kCoralExpelSpeed = 0.25;
 
     // Placeholder values
@@ -344,4 +342,7 @@ namespace CommandConstants {
     // Placeholder values
     constexpr units::degree_t kClimberDownAngle = 0_deg;
     constexpr units::degree_t kClimberUpAngle = 90_deg;
+
+    constexpr units::second_t kCoralFeedTimeout = 3_s;
+    constexpr units::second_t kAlgaeIntakeTimeout = 5_s;
 }

@@ -35,9 +35,9 @@ RobotContainer::RobotContainer() {
   m_chooser.SetDefaultOption(AutoConstants::kOutAuto, AutoConstants::kSpinAuto);
   m_chooser.AddOption(AutoConstants::kSpinAuto, AutoConstants::kSpinAuto);
 
-  pathplanner::NamedCommands::registerCommand("hehe", std::move(m_commandController.MoveToPositionL1()));
-  pathplanner::NamedCommands::registerCommand("hehe2", std::move(m_commandController.MoveToPositionL2()));
-  pathplanner::NamedCommands::registerCommand("hehe3", std::move(m_commandController.MoveToPositionL3()));
+  pathplanner::NamedCommands::registerCommand("Test", std::move(m_commandController.MoveToPositionL1()));
+  pathplanner::NamedCommands::registerCommand("Test2", std::move(m_commandController.MoveToPositionL2()));
+  pathplanner::NamedCommands::registerCommand("Test3", std::move(m_commandController.MoveToPositionL3()));
 
   // Configure the button bindings
   ConfigureBindings();
@@ -69,6 +69,8 @@ void RobotContainer::ConfigureBindings() {
 
   m_operatorController.Y().OnTrue(m_commandController.FeedCoral());
   m_operatorController.X().OnTrue(m_commandController.IntakeAlgae());
+  m_operatorController.A().WhileTrue(m_commandController.ExpelCoral());
+  m_operatorController.B().WhileTrue(m_commandController.ExpelAlgae());
 
   m_operatorController.LeftBumper().WhileTrue(m_commandController.ExpelAlgae());
   m_operatorController.RightBumper().WhileTrue(m_commandController.ExpelCoral());
