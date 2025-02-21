@@ -67,10 +67,9 @@ void RobotContainer::ConfigureBindings() {
   m_operatorController.POVRight().OnTrue(m_commandController.MoveToPositionL3());
   m_operatorController.POVDown().OnTrue(m_commandController.FeedCoral());
 
-  m_operatorController.Y().OnTrue(m_commandController.FeedCoral());
-  m_operatorController.X().OnTrue(m_commandController.IntakeAlgae());
   m_operatorController.A().WhileTrue(m_commandController.ExpelCoral());
   m_operatorController.B().WhileTrue(m_commandController.ExpelAlgae());
+  m_operatorController.X().OnTrue(m_commandController.IntakeAlgae());
 
   m_operatorController.LeftBumper().WhileTrue(m_commandController.ExpelAlgae());
   m_operatorController.RightBumper().WhileTrue(m_commandController.ExpelCoral());

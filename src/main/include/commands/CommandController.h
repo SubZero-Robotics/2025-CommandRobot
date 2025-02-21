@@ -34,6 +34,9 @@ public:
     frc2::CommandPtr ClimberDown();
     frc2::CommandPtr ClimberUp();
 
+    frc2::CommandPtr RemoveAlgaeFromL2();
+    frc2::CommandPtr RemoveAlgaeFromL3();
+
     /** 
         @brief Must be called first during auto in order
         to zero the elevator properly

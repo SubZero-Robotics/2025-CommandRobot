@@ -62,3 +62,18 @@ frc2::CommandPtr CommandController::SetElevatorZeroPosition() {
     ).ToPtr())
     .AndThen(m_subsystems.elevator->MoveToPositionAbsolute(ElevatorConstants::kMinDistance));
 }
+
+frc2::CommandPtr CommandController::RemoveAlgaeFromL2() {
+    return m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorRemoveAlgaeFromL2Position)
+    .AndThen(m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralArmRemoveAlgaeFromL2Position))
+    .AndThen(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralFeedSpeed))
+    .WithTimeout(CommandConstants::kRemoveAlgaeFromReefTimeout);
+    ;
+}
+
+frc2::CommandPtr CommandController::RemoveAlgaeFromL3() {
+    return m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorRemoveAlgaeFromL3Position)
+    .AndThen(m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralArmRemoveAlgaeFromL3Position))
+    .AndThen(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralFeedSpeed))
+    .WithTimeout(CommandConstants::kRemoveAlgaeFromReefTimeout);
+}

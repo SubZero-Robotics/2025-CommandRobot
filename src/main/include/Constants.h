@@ -319,12 +319,16 @@ namespace CommandConstants {
     constexpr units::meter_t kElevatorL3Position = 15_in;
     constexpr units::meter_t kElevatorFeedPosition = 4_in;
     constexpr units::meter_t kElevatorStartPosition = 5_in;
+    constexpr units::meter_t kElevatorRemoveAlgaeFromL2Position = 10_in;
+    constexpr units::meter_t kElevatorRemoveAlgaeFromL3Position = 15_in;
 
     // Placeholder values
     constexpr units::degree_t kCoralL1Position = 10_deg;
     constexpr units::degree_t kCoralL2Position = 20_deg;
     constexpr units::degree_t kCoralL3Position = 30_deg;
     constexpr units::degree_t kCoralFeedPosition = 90_deg;
+    constexpr units::degree_t kCoralArmRemoveAlgaeFromL2Position = 70_deg;
+    constexpr units::degree_t kCoralArmRemoveAlgaeFromL3Position = 90_deg;
 
     // Placeholder values
     constexpr units::degree_t kAlgaeIntakePosition = 50_deg;
@@ -345,4 +349,5 @@ namespace CommandConstants {
 
     constexpr units::second_t kCoralFeedTimeout = 3_s;
     constexpr units::second_t kAlgaeIntakeTimeout = 5_s;
+    constexpr units::second_t kRemoveAlgaeFromReefTimeout = 3_s;
 }
