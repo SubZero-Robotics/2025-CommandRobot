@@ -323,7 +323,8 @@ static const frc::Transform3d kRobotToCam{
 constexpr photon::PoseStrategy kPoseStrategy =
     photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR;
 static const frc::AprilTagFieldLayout kTagLayout{
-    frc::LoadAprilTagLayoutField(frc::AprilTagField::k2024Crescendo)};
+    //Change This Constant Depending on Arc Field/Competition Layout!
+    frc::LoadAprilTagLayoutField(frc::AprilTagField::k2025ReefscapeWelded)};
 static const Eigen::Matrix<double, 3, 1> kSingleTagStdDevs{4, 4, 8};
 static const Eigen::Matrix<double, 3, 1> kMultiTagStdDevs{0.5, 0.5, 1};
 

@@ -79,6 +79,20 @@ DriveSubsystem::DriveSubsystem()
 }
 
 void DriveSubsystem::Periodic() {
+  
+  if (frc::RobotBase::IsReal()) {
+    poseEstimator.UpdateWithTime(frc::Timer::GetFPGATimestamp(), GetHeading(),
+                                 GetModulePositions());
+    logDrivebase();
+
+    m_vision->UpdateEstimatedGlobalPose(poseEstimator, true);
+
+    auto updatedPose = poseEstimator.GetEstimatedPosition();
+    // https://github.com/Hemlock5712/2023-Robot/blob/dd5ac64587a3839492cfdb0a28d21677d465584a/src/main/java/frc/robot/subsystems/PoseEstimatorSubsystem.java#L149
+    m_lastGoodPosition = updatedPose;
+    m_field.SetRobotPose(updatedPose);
+  }
+  
   // Implementation of subsystem periodic method goes here.
   m_odometry.Update(frc::Rotation2d(units::radian_t{
                         m_pidgey.GetYaw().GetValue()}),
@@ -240,3 +254,28 @@ void DriveSubsystem::AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
   wpi::array<double, 3> newStdDevs{stdDevs(0), stdDevs(1), stdDevs(2)};
   poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp, newStdDevs);
 }
+
+void DriveSubsystem::logDrivebase() {
+  std::vector states_vec = {m_frontLeft.GetState(), m_frontRight.GetState(),
+                            m_rearLeft.GetState(), m_rearRight.GetState()};
+  std::span<frc::SwerveModuleState, 4> states(states_vec.begin(),
+                                              states_vec.end());
+  std::vector desired_vec = {
+      m_frontLeft.GetDesiredState(), m_frontRight.GetDesiredState(),
+      m_rearLeft.GetDesiredState(), m_rearRight.GetDesiredState()};
+  std::span<frc::SwerveModuleState, 4> desiredStates(desired_vec.begin(),
+                                                     desired_vec.end());
+
+  m_publisher.Set(states);
+  m_desiredPublisher.Set(desiredStates);
+
+
+  
+}
+
+wpi::array<frc::SwerveModulePosition, 4U> DriveSubsystem::GetModulePositions()
+    const {
+  return {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
+          m_rearLeft.GetPosition(), m_rearRight.GetPosition()};
+}
+

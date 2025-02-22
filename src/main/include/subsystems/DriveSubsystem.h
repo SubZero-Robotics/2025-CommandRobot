@@ -114,6 +114,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   void ResetOdometry();
 
+ 
   frc::SwerveDriveKinematics<4> m_driveKinematics{
       frc::Translation2d{DriveConstants::kWheelBase / 2,
                          DriveConstants::kTrackWidth / 2},
@@ -129,6 +130,14 @@ class DriveSubsystem : public frc2::SubsystemBase {
   void AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
                             units::second_t timestamp,
                             const Eigen::Vector3d& stdDevs);
+
+  void logDrivebase();
+ 
+  wpi::array<frc::SwerveModulePosition, 4U> GetModulePositions() const;
+
+  ctre::phoenix6::hardware::Pigeon2 m_gyro1{DriveConstants::kPigeonCanId, "rio"};
+
+  ctre::phoenix6::sim::Pigeon2SimState& m_gyro1Sim = m_gyro1.GetSimState();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be

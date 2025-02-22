@@ -52,6 +52,8 @@ class MAXSwerveModule {
    */
   void ResetEncoders();
 
+  frc::SwerveModuleState GetDesiredState() { return m_desiredState; }
+
  private:
   SparkFlex m_drivingSpark;
   SparkMax m_turningSpark;
