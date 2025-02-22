@@ -2,17 +2,24 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "subsystems/DriveSubsystem.h"
-
+#include "subsystems/DriveSubsystem.h" 
+#include <frc/DriverStation.h>
+#include <frc/RobotBase.h>
+#include <frc/RobotController.h>
+#include <frc/Timer.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <pathplanner/lib/path/PathPlannerPath.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/config/RobotConfig.h>
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+#include <subzero/drivetrain/SwerveUtils.h>
 #include <frc/geometry/Rotation2d.h>
 #include <hal/FRCUsageReporting.h>
 #include <frc/DriverStation.h>
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
+#include <units/length.h>
 #include <iostream>
 
 #include "Constants.h"
@@ -220,4 +227,16 @@ void DriveSubsystem::OffsetRotation(frc::Rotation2d offset) {
       {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
         m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
       m_odometry.GetPose());
+}
+
+void DriveSubsystem::AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
+                                          units::second_t timestamp) {
+  poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp);
+}
+
+void DriveSubsystem::AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
+                                          units::second_t timestamp,
+                                          const Eigen::Vector3d& stdDevs) {
+  wpi::array<double, 3> newStdDevs{stdDevs(0), stdDevs(1), stdDevs(2)};
+  poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp, newStdDevs);
 }
