@@ -169,7 +169,7 @@ namespace ElevatorConstants {
     const int kTopLimitSwitchPort = 2;
 
     // Placeholder values
-    const double kElevatorP = 100.0;
+    const double kElevatorP = 10.0;
     const double kElevatorI = 0.0;
     const double kElevatorD = 0.0;
     const double kElevatorIZone = 0.0;
@@ -345,7 +345,7 @@ namespace CommandConstants {
 
     // Placeholder values
     constexpr units::degree_t kClimberDownAngle = 0_deg;
-    constexpr units::degree_t kClimberUpAngle = 90_deg;
+    constexpr units::degree_t kClimberUpAngle = 110_deg;
 
     // Placeholder
     constexpr units::second_t kCoralFeedTimeout = 3_s;
