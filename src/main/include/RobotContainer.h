@@ -16,6 +16,7 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc/smartdashboard/Mechanism2d.h>
+#include <pathplanner/lib/auto/NamedCommands.h>
 
 #include "CommonCompile.h"
 
@@ -26,6 +27,7 @@
 #include "subsystems/AlgaeArmSubsystem.h"
 #include "subsystems/CoralArmSubsystem.h"
 #include "subsystems/ClimberSubsystem.h"
+#include "commands/CommandController.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -49,6 +51,9 @@ class RobotContainer {
   frc2::CommandXboxController m_driverController{
       OperatorConstants::kDriverControllerPort};
 
+    frc2::CommandXboxController m_operatorController{
+      OperatorConstants::kOperatorControllerPort};
+
   // The robot's subsystems are defined here...
    DriveSubsystem m_drive;
 
@@ -65,10 +70,21 @@ class RobotContainer {
   ElevatorSubsystem m_elevator{(frc::MechanismObject2d*)m_elevatorMech.GetRoot("Elevator", 0.25, 0.25)};
 
   AlgaeArmSubsystem m_algaeArm;
-  IntakeSubsystem m_algaeIntake{AlgaeArmConstants::kIntakeMotorId};
+  IntakeSubsystem m_algaeIntake{AlgaeArmConstants::kIntakeMotorId, AlgaeArmConstants::kHasAlgaeCurrent, true};
 
   CoralArmSubsystem m_coralArm;
-  IntakeSubsystem m_coralIntake{CoralArmConstants::kIntakeMotorId};
+  IntakeSubsystem m_coralIntake{CoralArmConstants::kIntakeMotorId, CoralArmConstants::kHasCoralCurrent, true};
 
   ClimberSubsystem m_climber;
+
+  Subsystems_t subsystems = {
+    .algaeArm = &m_algaeArm,
+    .coralArm = &m_coralArm,
+    .elevator = &m_elevator,
+    .coralIntake = &m_coralIntake,
+    .algaeIntake = &m_algaeIntake,
+    .climber = &m_climber
+  };
+
+  CommandController m_commandController{subsystems};
 };

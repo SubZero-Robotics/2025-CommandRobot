@@ -1,5 +1,7 @@
 #include <subsystems/IntakeSubsystem.h>
 
+#include <iostream>
+
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/FunctionalCommand.h>
 
@@ -31,4 +33,9 @@ frc2::CommandPtr IntakeSubsystem::Stop() {
         },
         {this}
     ).ToPtr();
+}
+
+bool IntakeSubsystem::HasGamePiece() {
+    std::cout << "Motor amperage is " << m_motor.GetOutputCurrent() << " amps." << std::endl;
+    return m_motor.GetOutputCurrent() > m_hasGamePieceCurrent;
 }

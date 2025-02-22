@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -19,6 +20,7 @@
 #include <units/velocity.h>
 
 #include <iostream>
+#include <memory>
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
@@ -31,8 +33,13 @@ RobotContainer::RobotContainer() {
   // m_chooser.SetDefaultOption(AutoConstants::kDefaultAutoName, AutoConstants::kDefaultAutoName);
 
   frc::SmartDashboard::PutData(&m_chooser);
-  m_chooser.SetDefaultOption(AutoConstants::kOutAuto, AutoConstants::kSpinAuto);
-  m_chooser.AddOption(AutoConstants::kSpinAuto, AutoConstants::kSpinAuto);
+  m_chooser.SetDefaultOption(AutoConstants::kCenterToCenterAuto, AutoConstants::kCenterToCenterAuto);
+  m_chooser.AddOption(AutoConstants::kFarLeftAuto, AutoConstants::kFarLeftAuto);
+  m_chooser.AddOption(AutoConstants::kFarRightAuto, AutoConstants::kFarRightAuto);
+
+  pathplanner::NamedCommands::registerCommand("Test Named Command", frc2::InstantCommand([]() { std::cout << "Test Command Was Called" << std::endl; }).ToPtr());
+  pathplanner::NamedCommands::registerCommand("L2 Position", std::move(m_commandController.MoveToPositionL2()));
+  pathplanner::NamedCommands::registerCommand("L3 Position", std::move(m_commandController.MoveToPositionL3()));
 
   // Configure the button bindings
   ConfigureBindings();
@@ -52,25 +59,38 @@ RobotContainer::RobotContainer() {
             true);
       },
       {&m_drive}));
+
+  // Has to be raised before match so coral arm is within frame perimeter
+  m_elevator.SetEncoderPosition(ElevatorConstants::kElevatorStartPosition);
 }
 
 void RobotContainer::ConfigureBindings() {
-  m_driverController.A().OnTrue(m_algaeArm.MoveToPositionAbsolute(50_deg));
-  m_driverController.B().OnTrue(m_algaeArm.MoveToPositionAbsolute(5_deg));
-  m_driverController.X().OnTrue(m_coralArm.MoveToPositionAbsolute(120_deg));
-  m_driverController.Y().OnTrue(m_coralArm.MoveToPositionAbsolute(5_deg));
+  // NOT FINAL
+
+  m_operatorController.POVLeft().OnTrue(m_commandController.MoveToPositionL1());
+  m_operatorController.POVUp().OnTrue(m_commandController.MoveToPositionL2());
+  m_operatorController.POVRight().OnTrue(m_commandController.MoveToPositionL3());
+  m_operatorController.POVDown().OnTrue(m_commandController.FeedCoral());
+
+
+  m_operatorController.A().WhileTrue(m_commandController.ExpelCoral());
+  m_operatorController.X().WhileTrue(m_commandController.ExpelAlgae());
+  m_operatorController.Y().OnTrue(m_commandController.IntakeAlgae());
+
+  // m_operatorController.LeftBumper().WhileTrue(m_commandController.ExpelAlgae());
+  // m_operatorController.RightBumper().WhileTrue(m_commandController.ExpelCoral());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-  auto command = pathplanner::PathPlannerAuto("Spin Auto");
+  m_autoSelected = m_chooser.GetSelected();
+
+  std::cout << "Auto Selected: \"" << m_autoSelected << "\".\n";
+
+  auto command = pathplanner::PathPlannerAuto(m_autoSelected);
   auto rot = command.getStartingPose().Rotation().Degrees();
 
   auto offset = m_drive.GetHeading() - rot;
-
-  m_autoSelected = m_chooser.GetSelected();
   
-  std::cout << "Auto Selected: \"" << m_autoSelected << "\".\n";
-
   return pathplanner::PathPlannerAuto(m_autoSelected)
     .AndThen(frc2::InstantCommand([this, offset]() { m_drive.OffsetRotation(offset); }).ToPtr());
 }

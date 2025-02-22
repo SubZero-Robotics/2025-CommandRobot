@@ -60,6 +60,7 @@ typedef
 namespace OperatorConstants {
 
 inline constexpr int kDriverControllerPort = 0;
+inline constexpr int kOperatorControllerPort = 1;
 
 }  // namespace OperatorConstants
 
@@ -70,7 +71,7 @@ namespace DriveConstants {
 // the robot, rather the allowed maximum speeds
 
 // Test sewrve
-// constexpr units::meters_per_second_t kMaxSpeed = 4.8_mps;
+// constexpr units::meters_per_second_t kMaxSpeed = 4.8_mps;+
 
 // Season robot
 constexpr units::meters_per_second_t kMaxSpeed = 4.92_mps;
@@ -139,8 +140,9 @@ constexpr auto kMaxAcceleration = 3_mps_sq;
 constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
 constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 
-const std::string kOutAuto = "Out Auto";
-const std::string kSpinAuto = "Spin Auto";
+const std::string kCenterToCenterAuto = "Center To Rear Center Reef (1 Coral)";
+const std::string kFarLeftAuto = "Far Left Auto (3 Coral)";
+const std::string kFarRightAuto = "Far Right Auto (3 Coral)";
 
 constexpr double kPXController = 0.5;
 constexpr double kPYController = 0.5;
@@ -164,19 +166,22 @@ namespace ElevatorConstants {
     const int kFollowerElevatorMotorCanId = 7;
 
     const int kBottomLimitSwitchPort = 1;
+    const int kTopLimitSwitchPort = 2;
 
     // Placeholder values
-    const double kElevatorP = 100.0;
+    const double kElevatorP = 10.0;
     const double kElevatorI = 0.0;
     const double kElevatorD = 0.0;
     const double kElevatorIZone = 0.0;
     const double kElevatorFF = 0.0;
 
+    constexpr units::meter_t kElevatorStartPosition = 4.875_in;
+
     constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
 
     // Placeholder values
     constexpr units::meter_t kMinDistance = 0_in;
-    constexpr units::meter_t kMaxDistance = 18_in;
+    constexpr units::meter_t kMaxDistance = 20.1_in;
     constexpr units::meter_t kRelativeDistancePerRev = 5.51977829236_in / 36; // 36:1 ratio gearbox
     constexpr units::meters_per_second_t kDefaultVelocity = 0.66_mps;
     constexpr double kVelocityScalar = 1.0;
@@ -201,9 +206,11 @@ namespace AlgaeArmConstants{
     constexpr int kIntakeMotorId = 6;
     constexpr double kP = 0.1;
     constexpr double kI = 0.0;
-    constexpr double kD = 0.001;
+    constexpr double kD = 0.0;
     constexpr double kIZone = 0.0;
     constexpr double kFF = 0.0;
+
+    constexpr double kHasAlgaeCurrent = 30;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
     constexpr units::degree_t kHomeRotation = 0_deg;
@@ -236,21 +243,24 @@ namespace AlgaeArmConstants{
 namespace CoralArmConstants{
     constexpr int kArmMotorId = 16;
     constexpr int kIntakeMotorId = 15;
-    constexpr double kP = 0.5;
+    constexpr double kP = 0.3;
     constexpr double kI = 0.0;
     constexpr double kD = 0.0;
     constexpr double kIZone = 0.0;
     constexpr double kFF = 0.0;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 1_rpm;
-    constexpr units::degree_t kHomeRotation = 5_deg;
+    constexpr units::degree_t kMinRotation = 50_deg;
     constexpr units::degree_t kMaxRotation = 290_deg;
     constexpr units::degree_t kRelativeDistancePerRev = 360_deg / (15 * 4.7); // 4.7 is the ratio of the chain gear
     constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
-    constexpr units::degrees_per_second_t kDefaultVelocity = 10_deg_per_s;
+    constexpr units::degrees_per_second_t kDefaultVelocity = 100_deg_per_s;
     constexpr double kVelocityScalar = 1.0;
-    constexpr units::degree_t kTolerance = 2_deg;
+    constexpr units::degree_t kTolerance = 0.5_deg;
     constexpr units::meter_t kArmLength = 0.2_m;
+ 
+    // placeholder
+    constexpr double kHasCoralCurrent = 30;
     
     static const subzero::SingleAxisMechanism kCoralArmMechanism = {
     // length
@@ -303,4 +313,42 @@ namespace ClimberConstants{
     const frc::TrapezoidProfile<units::degree>::Constraints
         kRotationalAxisConstraints;
 
+}
+
+namespace CommandConstants {
+    // Edging placeholfer
+    constexpr units::meter_t kElevatorL1Position = 0.25_m;
+    constexpr units::meter_t kElevatorL2Position = 0.33_m;
+    constexpr units::meter_t kElevatorL3Position = 0.51_m;
+    constexpr units::meter_t kElevatorFeedPosition = 3_in;
+    constexpr units::meter_t kElevatorRemoveAlgaeFromL2Position = 0.38_m;
+    constexpr units::meter_t kElevatorRemoveAlgaeFromL3Position = 0.50_m;
+
+    constexpr units::degree_t kCoralL1Position = 260_deg;
+    constexpr units::degree_t kCoralL2Position = 234_deg;
+    constexpr units::degree_t kCoralL3Position = 210_deg;
+    constexpr units::degree_t kCoralFeedPosition = 70_deg;
+    constexpr units::degree_t kCoralArmRemoveAlgaeFromL2Position = 219_deg;
+    constexpr units::degree_t kCoralArmRemoveAlgaeFromL3Position = 188_deg;
+
+    constexpr units::degree_t kAlgaeIntakePosition = 30_deg;
+    constexpr units::degree_t kAlgaeStorePosition = 30_deg;
+    constexpr units::degree_t kAlgaeStowPosition = 0_deg;
+    constexpr units::degree_t kAlgaeArmReefPosition = 10_deg;
+
+    constexpr double kCoralFeedSpeed = 0.25;
+    constexpr double kCoralExpelSpeed = -0.25;
+    constexpr double kCoralIntakeRetainCoralSpeed = 0.25;
+
+    constexpr double kAlgaeIntakeSpeed = -0.3;
+    constexpr double kAlgaeExpelSpeed = 0.3;
+
+    // Placeholder values
+    constexpr units::degree_t kClimberDownAngle = 0_deg;
+    constexpr units::degree_t kClimberUpAngle = 110_deg;
+
+    // Placeholder
+    constexpr units::second_t kCoralFeedTimeout = 3_s;
+    constexpr units::second_t kAlgaeIntakeTimeout = 5_s;
+    constexpr units::second_t kRemoveAlgaeFromReefTimeout = 3_s;
 }
