@@ -140,8 +140,9 @@ constexpr auto kMaxAcceleration = 3_mps_sq;
 constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
 constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 
-const std::string kOutAuto = "Out Auto";
-const std::string kSpinAuto = "Spin Auto";
+const std::string kCenterToCenterAuto = "Center To Rear Center Reef (1 Coral)";
+const std::string kFarLeftAuto = "Far Left Auto (3 Coral)";
+const std::string kFarRightAuto = "Far Right Auto (3 Coral)";
 
 constexpr double kPXController = 0.5;
 constexpr double kPYController = 0.5;

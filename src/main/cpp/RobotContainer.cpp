@@ -32,12 +32,13 @@ RobotContainer::RobotContainer() {
   // m_chooser.SetDefaultOption(AutoConstants::kDefaultAutoName, AutoConstants::kDefaultAutoName);
 
   frc::SmartDashboard::PutData(&m_chooser);
-  m_chooser.SetDefaultOption(AutoConstants::kOutAuto, AutoConstants::kSpinAuto);
-  m_chooser.AddOption(AutoConstants::kSpinAuto, AutoConstants::kSpinAuto);
+  m_chooser.SetDefaultOption(AutoConstants::kCenterToCenterAuto, AutoConstants::kCenterToCenterAuto);
+  m_chooser.AddOption(AutoConstants::kFarLeftAuto, AutoConstants::kFarLeftAuto);
+  m_chooser.AddOption(AutoConstants::kFarRightAuto, AutoConstants::kFarRightAuto);
 
-  pathplanner::NamedCommands::registerCommand("Test", std::move(m_commandController.MoveToPositionL1()));
-  pathplanner::NamedCommands::registerCommand("Test2", std::move(m_commandController.MoveToPositionL2()));
-  pathplanner::NamedCommands::registerCommand("Test3", std::move(m_commandController.MoveToPositionL3()));
+  pathplanner::NamedCommands::registerCommand("Test Named Command", frc2::InstantCommand([]() { std::cout << "Test Command Was Called" << std::endl; }).ToPtr());
+  pathplanner::NamedCommands::registerCommand("L2 Position", std::move(m_commandController.MoveToPositionL2()));
+  pathplanner::NamedCommands::registerCommand("L3 Position", std::move(m_commandController.MoveToPositionL3()));
 
   // Configure the button bindings
   ConfigureBindings();
@@ -77,15 +78,15 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-  auto command = pathplanner::PathPlannerAuto("Spin Auto");
+  m_autoSelected = m_chooser.GetSelected();
+
+  std::cout << "Auto Selected: \"" << m_autoSelected << "\".\n";
+
+  auto command = pathplanner::PathPlannerAuto(m_autoSelected);
   auto rot = command.getStartingPose().Rotation().Degrees();
 
   auto offset = m_drive.GetHeading() - rot;
-
-  m_autoSelected = m_chooser.GetSelected();
   
-  std::cout << "Auto Selected: \"" << m_autoSelected << "\".\n";
-
   return pathplanner::PathPlannerAuto(m_autoSelected)
     .AndThen(frc2::InstantCommand([this, offset]() { m_drive.OffsetRotation(offset); }).ToPtr());
 }
