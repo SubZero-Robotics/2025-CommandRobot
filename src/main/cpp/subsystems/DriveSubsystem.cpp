@@ -220,6 +220,10 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
       pose);
 }
 
+void DriveSubsystem::ResetRotation() {
+  m_odometry.ResetRotation(frc::Rotation2d());
+}
+
 void DriveSubsystem::OffsetRotation(frc::Rotation2d offset) {
   m_pidgey.SetYaw(offset.Degrees() + m_pidgey.GetYaw().GetValue());
     m_odometry.ResetPosition(

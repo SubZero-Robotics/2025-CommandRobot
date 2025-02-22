@@ -77,6 +77,12 @@ void RobotContainer::ConfigureBindings() {
   m_operatorController.X().WhileTrue(m_commandController.ExpelAlgae());
   m_operatorController.Y().OnTrue(m_commandController.IntakeAlgae());
 
+  m_driverController.RightStick().OnTrue(frc2::InstantCommand(
+    [this]() {
+      m_drive.ResetRotation();
+    }
+  ).ToPtr());
+
   // m_operatorController.LeftBumper().WhileTrue(m_commandController.ExpelAlgae());
   // m_operatorController.RightBumper().WhileTrue(m_commandController.ExpelCoral());
 }
@@ -97,6 +103,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
 void RobotContainer::Periodic() {
   frc::SmartDashboard::PutData("Robot Elevator", &m_elevatorMech);
+
+  frc::SmartDashboard::PutData("Zero Odometry", new frc2::InstantCommand([this]() { m_drive.ResetRotation(); }));
 }
 
 void RobotContainer::Initialize() {

@@ -112,7 +112,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   void OffsetRotation(frc::Rotation2d rot);
 
-  void ResetOdometry();
+  void ResetRotation();
 
   frc::SwerveDriveKinematics<4> m_driveKinematics{
       frc::Translation2d{DriveConstants::kWheelBase / 2,
