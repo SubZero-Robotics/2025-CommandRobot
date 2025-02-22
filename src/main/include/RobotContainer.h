@@ -70,10 +70,10 @@ class RobotContainer {
   ElevatorSubsystem m_elevator{(frc::MechanismObject2d*)m_elevatorMech.GetRoot("Elevator", 0.25, 0.25)};
 
   AlgaeArmSubsystem m_algaeArm;
-  IntakeSubsystem m_algaeIntake{AlgaeArmConstants::kIntakeMotorId, AlgaeArmConstants::kHasAlgaeCurrent};
+  IntakeSubsystem m_algaeIntake{AlgaeArmConstants::kIntakeMotorId, AlgaeArmConstants::kHasAlgaeCurrent, true};
 
   CoralArmSubsystem m_coralArm;
-  IntakeSubsystem m_coralIntake{CoralArmConstants::kIntakeMotorId, CoralArmConstants::kHasCoralCurrent};
+  IntakeSubsystem m_coralIntake{CoralArmConstants::kIntakeMotorId, CoralArmConstants::kHasCoralCurrent, true};
 
   ClimberSubsystem m_climber;
 

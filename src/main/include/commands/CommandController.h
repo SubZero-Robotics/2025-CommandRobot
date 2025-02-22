@@ -36,12 +36,6 @@ public:
 
     frc2::CommandPtr RemoveAlgaeFromL2();
     frc2::CommandPtr RemoveAlgaeFromL3();
-
-    /** 
-        @brief Must be called first during auto in order
-        to zero the elevator properly
-    */
-    frc2::CommandPtr SetElevatorZeroPosition();
 private:
     Subsystems_t m_subsystems;
 };

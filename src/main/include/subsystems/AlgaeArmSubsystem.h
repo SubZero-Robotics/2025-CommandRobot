@@ -39,7 +39,7 @@ class AlgaeArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
              // Max limit switch
              std::nullopt,
              // Reversed
-             false,
+             true,
              // Mechanism2d
              AlgaeArmConstants::kAlgaeArmMechanism,
              // Conversion Function

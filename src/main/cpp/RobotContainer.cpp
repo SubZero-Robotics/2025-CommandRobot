@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -58,6 +59,9 @@ RobotContainer::RobotContainer() {
             true);
       },
       {&m_drive}));
+
+  // Has to be raised before match so coral arm is within frame perimeter
+  m_elevator.SetEncoderPosition(ElevatorConstants::kElevatorStartPosition);
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -68,10 +72,10 @@ void RobotContainer::ConfigureBindings() {
   m_operatorController.POVRight().OnTrue(m_commandController.MoveToPositionL3());
   m_operatorController.POVDown().OnTrue(m_commandController.FeedCoral());
 
+
   m_operatorController.A().WhileTrue(m_commandController.ExpelCoral());
-  m_operatorController.B().WhileTrue(m_commandController.ExpelAlgae());
-  m_operatorController.X().OnTrue(m_commandController.IntakeAlgae());
-  m_operatorController.Y().OnTrue(m_commandController.SetElevatorZeroPosition());
+  m_operatorController.X().WhileTrue(m_commandController.ExpelAlgae());
+  m_operatorController.Y().OnTrue(m_commandController.IntakeAlgae());
 
   // m_operatorController.LeftBumper().WhileTrue(m_commandController.ExpelAlgae());
   // m_operatorController.RightBumper().WhileTrue(m_commandController.ExpelCoral());

@@ -66,7 +66,7 @@ class CoralArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
   rev::spark::SparkAbsoluteEncoder m_absEnc = m_coralArmMotor.GetAbsoluteEncoder();
   subzero::PidSettings coralArmPidSettings = {
       CoralArmConstants::kP, CoralArmConstants::kI, CoralArmConstants::kD,
-      CoralArmConstants::kIZone, CoralArmConstants::kFF, false};
+      CoralArmConstants::kIZone, CoralArmConstants::kFF, true};
   SparkMaxPidController m_coralArmController{"Coral Arm",
                                    m_coralArmMotor,
                                    m_enc,
