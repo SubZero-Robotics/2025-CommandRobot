@@ -59,7 +59,7 @@ typedef
  */
 namespace OperatorConstants {
 
-inline constexpr int kDriverControllerPort = 4;
+inline constexpr int kDriverControllerPort = 0;
 inline constexpr int kOperatorControllerPort = 1;
 
 }  // namespace OperatorConstants
@@ -71,7 +71,7 @@ namespace DriveConstants {
 // the robot, rather the allowed maximum speeds
 
 // Test sewrve
-// constexpr units::meters_per_second_t kMaxSpeed = 4.8_mps;
+// constexpr units::meters_per_second_t kMaxSpeed = 4.8_mps;+
 
 // Season robot
 constexpr units::meters_per_second_t kMaxSpeed = 4.92_mps;
@@ -314,39 +314,37 @@ namespace ClimberConstants{
 
 namespace CommandConstants {
     // Placeholder values
-    constexpr units::meter_t kElevatorL1Position = 5_in;
-    constexpr units::meter_t kElevatorL2Position = 10_in;
-    constexpr units::meter_t kElevatorL3Position = 15_in;
-    constexpr units::meter_t kElevatorFeedPosition = 4_in;
-    constexpr units::meter_t kElevatorStartPosition = 5_in;
-    constexpr units::meter_t kElevatorRemoveAlgaeFromL2Position = 10_in;
-    constexpr units::meter_t kElevatorRemoveAlgaeFromL3Position = 15_in;
+    constexpr units::meter_t kElevatorL1Position = 0.25_m;
+    constexpr units::meter_t kElevatorL2Position = 0.33_m;
+    constexpr units::meter_t kElevatorL3Position = 0.51_m;
+    constexpr units::meter_t kElevatorFeedPosition = 4.875_in;
+    constexpr units::meter_t kElevatorStartPosition = 4.875_in;
+    constexpr units::meter_t kElevatorRemoveAlgaeFromL2Position = 0.38_m;
+    constexpr units::meter_t kElevatorRemoveAlgaeFromL3Position = 0.50_m;
 
-    // Placeholder values
-    constexpr units::degree_t kCoralL1Position = 10_deg;
-    constexpr units::degree_t kCoralL2Position = 20_deg;
-    constexpr units::degree_t kCoralL3Position = 30_deg;
-    constexpr units::degree_t kCoralFeedPosition = 90_deg;
-    constexpr units::degree_t kCoralArmRemoveAlgaeFromL2Position = 70_deg;
-    constexpr units::degree_t kCoralArmRemoveAlgaeFromL3Position = 90_deg;
+    constexpr units::degree_t kCoralL1Position = 260_deg;
+    constexpr units::degree_t kCoralL2Position = 260_deg;
+    constexpr units::degree_t kCoralL3Position = 244_deg;
+    constexpr units::degree_t kCoralFeedPosition = 80_deg;
+    constexpr units::degree_t kCoralArmRemoveAlgaeFromL2Position = 219_deg;
+    constexpr units::degree_t kCoralArmRemoveAlgaeFromL3Position = 188_deg;
 
-    // Placeholder values
     constexpr units::degree_t kAlgaeIntakePosition = 50_deg;
     constexpr units::degree_t kAlgaeStorePosition = 30_deg;
     constexpr units::degree_t kAlgaeStowPosition = 0_deg;
+    constexpr units::degree_t kAlgaeArmL1Position = 34_deg;
 
-    // Placeholder values
     constexpr double kCoralFeedSpeed = 0.25;
-    constexpr double kCoralExpelSpeed = 0.25;
+    constexpr double kCoralExpelSpeed = -0.25;
 
-    // Placeholder values
     constexpr double kAlgaeIntakeSpeed = 0.3;
-    constexpr double kAlgaeExpelSpeed = 0.3;
+    constexpr double kAlgaeExpelSpeed = -0.3;
 
     // Placeholder values
     constexpr units::degree_t kClimberDownAngle = 0_deg;
     constexpr units::degree_t kClimberUpAngle = 90_deg;
 
+    // Placeholder
     constexpr units::second_t kCoralFeedTimeout = 3_s;
     constexpr units::second_t kAlgaeIntakeTimeout = 5_s;
     constexpr units::second_t kRemoveAlgaeFromReefTimeout = 3_s;

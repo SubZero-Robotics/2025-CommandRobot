@@ -70,9 +70,10 @@ void RobotContainer::ConfigureBindings() {
   m_operatorController.A().WhileTrue(m_commandController.ExpelCoral());
   m_operatorController.B().WhileTrue(m_commandController.ExpelAlgae());
   m_operatorController.X().OnTrue(m_commandController.IntakeAlgae());
+  m_operatorController.Y().OnTrue(m_commandController.SetElevatorZeroPosition());
 
-  m_operatorController.LeftBumper().WhileTrue(m_commandController.ExpelAlgae());
-  m_operatorController.RightBumper().WhileTrue(m_commandController.ExpelCoral());
+  // m_operatorController.LeftBumper().WhileTrue(m_commandController.ExpelAlgae());
+  // m_operatorController.RightBumper().WhileTrue(m_commandController.ExpelCoral());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

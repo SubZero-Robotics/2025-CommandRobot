@@ -6,7 +6,8 @@
 
 frc2::CommandPtr CommandController::MoveToPositionL1() {
     return m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorL1Position)
-    .AndThen(m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralL1Position));
+    .AndThen(m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralL1Position))
+    .AndThen(m_subsystems.algaeArm->MoveToPositionAbsolute(CommandConstants::kAlgaeArmL1Position));
 }
 
 frc2::CommandPtr CommandController::MoveToPositionL2() {
@@ -60,7 +61,8 @@ frc2::CommandPtr CommandController::SetElevatorZeroPosition() {
             m_subsystems.elevator->SetEncoderPosition(CommandConstants::kElevatorStartPosition);
         }
     ).ToPtr())
-    .AndThen(m_subsystems.elevator->MoveToPositionAbsolute(ElevatorConstants::kMinDistance));
+    .AndThen(m_subsystems.elevator->MoveToPositionAbsolute(ElevatorConstants::kMinDistance))
+    ;
 }
 
 frc2::CommandPtr CommandController::RemoveAlgaeFromL2() {
