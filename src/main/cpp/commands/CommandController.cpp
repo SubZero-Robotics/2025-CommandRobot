@@ -53,14 +53,6 @@ frc2::CommandPtr CommandController::ExpelAlgae() {
     return m_subsystems.algaeIntake->MoveAtPercent(CommandConstants::kAlgaeExpelSpeed);
 }
 
-frc2::CommandPtr CommandController::ClimberDown() {
-    return m_subsystems.climber->MoveToPositionAbsolute(CommandConstants::kClimberDownAngle);
-}
-
-frc2::CommandPtr CommandController::ClimberUp() {
-    return m_subsystems.climber->MoveToPositionAbsolute(CommandConstants::kClimberUpAngle);
-}
-
 frc2::CommandPtr CommandController::RemoveAlgaeFromL2() {
     return m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorRemoveAlgaeFromL2Position)
     .AndThen(m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralArmRemoveAlgaeFromL2Position))

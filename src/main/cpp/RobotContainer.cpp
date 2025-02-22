@@ -18,6 +18,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <units/angle.h>
 #include <units/velocity.h>
+#include <frc2/command/DeferredCommand.h>
 
 #include <iostream>
 #include <memory>
@@ -60,8 +61,17 @@ RobotContainer::RobotContainer() {
       },
       {&m_drive}));
 
+    m_climber.SetDefaultCommand(
+      frc2::RunCommand(
+        [this]() {
+          m_climber.RunMotorPercentage((-m_driverController.GetLeftTriggerAxis() 
+            + m_driverController.GetRightTriggerAxis()) * ClimberConstants::kPercentageScalar);
+        }
+      )
+    );
+
   // Has to be raised before match so coral arm is within frame perimeter
-  m_elevator.SetEncoderPosition(ElevatorConstants::kElevatorStartPosition);
+  // m_elevator.SetEncoderPosition(ElevatorConstants::kElevatorStartPosition);
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -79,6 +89,7 @@ void RobotContainer::ConfigureBindings() {
 
   m_driverController.RightStick().OnTrue(frc2::InstantCommand(
     [this]() {
+      std::cout << "Resetting rotation" << std::endl;
       m_drive.ResetRotation();
     }
   ).ToPtr());

@@ -302,6 +302,8 @@ namespace ClimberConstants{
     constexpr double kVelocityScalar = 1.0;
     constexpr units::degree_t kTolerance = 2_deg;
     constexpr units::meter_t kArmLength = 17_in;
+
+    constexpr double kPercentageScalar = 0.1;
     
     static const subzero::SingleAxisMechanism kClimberMechanism = {
     // length

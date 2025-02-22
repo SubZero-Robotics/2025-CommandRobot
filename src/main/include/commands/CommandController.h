@@ -30,9 +30,6 @@ public:
 
     frc2::CommandPtr IntakeAlgae();
     frc2::CommandPtr ExpelAlgae();
-    
-    frc2::CommandPtr ClimberDown();
-    frc2::CommandPtr ClimberUp();
 
     frc2::CommandPtr RemoveAlgaeFromL2();
     frc2::CommandPtr RemoveAlgaeFromL3();
