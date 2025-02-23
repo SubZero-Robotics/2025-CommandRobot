@@ -153,6 +153,7 @@ constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 const std::string kCenterToCenterAuto = "Center To Rear Center Reef (1 Coral)";
 const std::string kFarLeftAuto = "Far Left Auto (3 Coral)";
 const std::string kFarRightAuto = "Far Right Auto (3 Coral)";
+const std::string kDefaultAutoName = kCenterToCenterAuto;
 
 constexpr double kPXController = 0.5;
 constexpr double kPYController = 0.5;
@@ -375,7 +376,7 @@ namespace CommandConstants {
 
 namespace VisionConstants {
 static constexpr std::string_view kFrontCamera{"PhotonVision"};
-static constexpr std::string_view kRearCamera{"Photonvision2"};
+static constexpr std::string_view kRearCamera{"PhotonVision2"};
 static const frc::Transform3d kRobotToCam2{
     frc::Translation3d{2.147_in, 0_in, 23.369_in},
     frc::Rotation3d{0_deg, -23.461_deg, 180_deg}};
