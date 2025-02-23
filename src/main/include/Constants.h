@@ -307,7 +307,7 @@ namespace ClimberConstants{
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
     constexpr units::degree_t kHomeRotation = 0_deg;
-    constexpr units::degree_t kMaxRotation = 85_deg;
+    constexpr units::degree_t kMaxRotation = 110_deg;
     constexpr units::degree_t kRelativeDistancePerRev = 360_deg / 125;
     constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
     constexpr units::degrees_per_second_t kDefaultVelocity = 10_deg_per_s;
@@ -315,7 +315,7 @@ namespace ClimberConstants{
     constexpr units::degree_t kTolerance = 2_deg;
     constexpr units::meter_t kArmLength = 17_in;
 
-    constexpr double kPercentageScalar = 0.1;
+    constexpr double kPercentageScalar = 0.8;
     
     static const subzero::SingleAxisMechanism kClimberMechanism = {
     // length

@@ -75,7 +75,7 @@ class RobotContainer {
   CoralArmSubsystem m_coralArm;
   IntakeSubsystem m_coralIntake{CoralArmConstants::kIntakeMotorId, CoralArmConstants::kHasCoralCurrent, true};
 
-  ClimberSubsystem m_climber;
+  // ClimberSubsystem m_climber;
 
   Subsystems_t subsystems = {
     .algaeArm = &m_algaeArm,
@@ -83,7 +83,7 @@ class RobotContainer {
     .elevator = &m_elevator,
     .coralIntake = &m_coralIntake,
     .algaeIntake = &m_algaeIntake,
-    .climber = &m_climber
+    .climber = NULL
   };
 
   CommandController m_commandController{subsystems};
