@@ -346,17 +346,17 @@ namespace CommandConstants {
 
     constexpr units::degree_t kCoralL1Position = 254_deg;
     constexpr units::degree_t kCoralL2Position = 233_deg;
-    constexpr units::degree_t kCoralL3Position = 213_deg;
-    constexpr units::degree_t kCoralFeedPosition = 67_deg;
+    constexpr units::degree_t kCoralL3Position = 217_deg;
+    constexpr units::degree_t kCoralFeedPosition = 77_deg;
     constexpr units::degree_t kCoralArmRemoveAlgaeFromL2Position = 204_deg;
-    constexpr units::degree_t kCoralArmRemoveAlgaeFromL3Position = 248.5_deg;
+    constexpr units::degree_t kCoralArmRemoveAlgaeFromL3Position = 210_deg;
 
     constexpr units::degree_t kAlgaeIntakePosition = 39_deg;
     constexpr units::degree_t kAlgaeStorePosition = 30_deg;
     constexpr units::degree_t kAlgaeStowPosition = 0_deg;
     constexpr units::degree_t kAlgaeArmReefPosition = 20_deg;
 
-    constexpr double kCoralFeedSpeed = -0.25;
+    constexpr double kCoralFeedSpeed = 0.25;
     constexpr double kCoralExpelSpeed = -0.25;
     constexpr double kCoralIntakeRetainCoralSpeed = 0.25;
 
