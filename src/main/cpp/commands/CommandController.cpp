@@ -70,12 +70,7 @@ frc2::CommandPtr CommandController::RemoveAlgaeFromL3() {
 
 frc2::CommandPtr CommandController::HomeElevator() {
     return
-    frc2::InstantCommand(
-        [this]() {
-            std::cout << "Homing elevator" << std::endl;
-            m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralFeedPosition);
-        }
-    ).ToPtr()
+    m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralFeedPosition)
     .AndThen(frc2::InstantCommand(
         [this]() {
             m_subsystems.elevator->SetEncoderPosition(ElevatorConstants::kMaxDistance);
