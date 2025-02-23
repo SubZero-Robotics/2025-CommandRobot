@@ -85,6 +85,7 @@ void RobotContainer::ConfigureBindings() {
   m_operatorController.POVDown().OnTrue(m_commandController.FeedCoral());
 
   m_operatorController.A().WhileTrue(m_commandController.ExpelCoral());
+  m_operatorController.B().WhileTrue(m_coralIntake.MoveAtPercent(CommandConstants::kCoralFeedSpeed));
   m_operatorController.X().WhileTrue(m_commandController.ExpelAlgae());
   m_operatorController.Y().OnTrue(m_commandController.IntakeAlgae());
 
