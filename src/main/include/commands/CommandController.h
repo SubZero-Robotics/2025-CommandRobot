@@ -33,6 +33,8 @@ public:
 
     frc2::CommandPtr RemoveAlgaeFromL2();
     frc2::CommandPtr RemoveAlgaeFromL3();
+
+    frc2::CommandPtr HomeElevator();
 private:
     Subsystems_t m_subsystems;
 };

@@ -40,6 +40,10 @@
 #include <numbers>
 #include <string>
 
+#ifndef M_PI
+    #define M_PI 3.141592653589793238462643383279502884197
+#endif
+
 using SparkMaxPidController =
     subzero::PidMotorController<rev::spark::SparkMax, rev::spark::SparkClosedLoopController,
                                 rev::spark::SparkRelativeEncoder,
@@ -175,11 +179,19 @@ namespace ElevatorConstants {
     const int kTopLimitSwitchPort = 2;
 
     // Placeholder values
-    const double kElevatorP = 10.0;
+    const double kElevatorP = 70.0;
     const double kElevatorI = 0.0;
     const double kElevatorD = 0.0;
     const double kElevatorIZone = 0.0;
     const double kElevatorFF = 0.0;
+
+    const subzero::PidSettings kElevatorPidSettings = {
+      40.0, 0.0, 0.0,
+      0.0, 0.0, false};
+
+    const subzero::PidSettings kHomePidSettings = {
+      10.0, 0.0, 0.0,
+      0.0, 0.0, false};
 
     constexpr units::meter_t kElevatorStartPosition = 4.875_in;
 
@@ -188,7 +200,7 @@ namespace ElevatorConstants {
     // Placeholder values
     constexpr units::meter_t kMinDistance = 0_in;
     constexpr units::meter_t kMaxDistance = 20.1_in;
-    constexpr units::meter_t kRelativeDistancePerRev = 5.51977829236_in / 36; // 36:1 ratio gearbox
+    constexpr units::meter_t kRelativeDistancePerRev = (1.685_in * M_PI) / 36; // Pitch diameter of gear with 36:1 ratio gearbox
     constexpr units::meters_per_second_t kDefaultVelocity = 0.66_mps;
     constexpr double kVelocityScalar = 1.0;
     constexpr units::meter_t kTolerance = 0.5_in;
@@ -216,7 +228,7 @@ namespace AlgaeArmConstants{
     constexpr double kIZone = 0.0;
     constexpr double kFF = 0.0;
 
-    constexpr double kHasAlgaeCurrent = 30;
+    constexpr double kHasAlgaeCurrent = 35;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
     constexpr units::degree_t kHomeRotation = 0_deg;
@@ -266,7 +278,7 @@ namespace CoralArmConstants{
     constexpr units::meter_t kArmLength = 0.2_m;
  
     // placeholder
-    constexpr double kHasCoralCurrent = 30;
+    constexpr double kHasCoralCurrent = 36;
     
     static const subzero::SingleAxisMechanism kCoralArmMechanism = {
     // length
@@ -332,17 +344,17 @@ namespace CommandConstants {
     constexpr units::meter_t kElevatorRemoveAlgaeFromL2Position = 0.38_m;
     constexpr units::meter_t kElevatorRemoveAlgaeFromL3Position = 0.50_m;
 
-    constexpr units::degree_t kCoralL1Position = 260_deg;
+    constexpr units::degree_t kCoralL1Position = 254_deg;
     constexpr units::degree_t kCoralL2Position = 234_deg;
     constexpr units::degree_t kCoralL3Position = 210_deg;
     constexpr units::degree_t kCoralFeedPosition = 70_deg;
-    constexpr units::degree_t kCoralArmRemoveAlgaeFromL2Position = 219_deg;
+    constexpr units::degree_t kCoralArmRemoveAlgaeFromL2Position = 204_deg;
     constexpr units::degree_t kCoralArmRemoveAlgaeFromL3Position = 188_deg;
 
-    constexpr units::degree_t kAlgaeIntakePosition = 30_deg;
+    constexpr units::degree_t kAlgaeIntakePosition = 39_deg;
     constexpr units::degree_t kAlgaeStorePosition = 30_deg;
     constexpr units::degree_t kAlgaeStowPosition = 0_deg;
-    constexpr units::degree_t kAlgaeArmReefPosition = 10_deg;
+    constexpr units::degree_t kAlgaeArmReefPosition = 20_deg;
 
     constexpr double kCoralFeedSpeed = 0.25;
     constexpr double kCoralExpelSpeed = -0.25;

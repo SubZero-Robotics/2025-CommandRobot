@@ -19,6 +19,7 @@
 #include <units/angle.h>
 #include <units/velocity.h>
 #include <frc2/command/DeferredCommand.h>
+#include <frc2/command/StartEndCommand.h>
 
 #include <iostream>
 #include <memory>
@@ -38,7 +39,7 @@ RobotContainer::RobotContainer() {
   m_chooser.AddOption(AutoConstants::kFarLeftAuto, AutoConstants::kFarLeftAuto);
   m_chooser.AddOption(AutoConstants::kFarRightAuto, AutoConstants::kFarRightAuto);
 
-  pathplanner::NamedCommands::registerCommand("Test Named Command", frc2::InstantCommand([]() { std::cout << "Test Command Was Called" << std::endl; }).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Test Command", frc2::InstantCommand([]() { std::cout << "Test Command Was Called" << std::endl; }).ToPtr());
   pathplanner::NamedCommands::registerCommand("L2 Position", std::move(m_commandController.MoveToPositionL2()));
   pathplanner::NamedCommands::registerCommand("L3 Position", std::move(m_commandController.MoveToPositionL3()));
 
@@ -61,14 +62,15 @@ RobotContainer::RobotContainer() {
       },
       {&m_drive}));
 
-    m_climber.SetDefaultCommand(
-      frc2::RunCommand(
-        [this]() {
-          m_climber.RunMotorPercentage((-m_driverController.GetLeftTriggerAxis() 
-            + m_driverController.GetRightTriggerAxis()) * ClimberConstants::kPercentageScalar);
-        }
-      )
-    );
+    // m_climber.SetDefaultCommand(
+    //   frc2::RunCommand(
+    //     [this]() {
+    //       m_climber.RunMotorPercentage((-m_driverController.GetLeftTriggerAxis() 
+    //         + m_driverController.GetRightTriggerAxis()) * ClimberConstants::kPercentageScalar);
+    //     },
+    //     {&m_climber}
+    //   )
+    // );
 
   // Has to be raised before match so coral arm is within frame perimeter
   // m_elevator.SetEncoderPosition(ElevatorConstants::kElevatorStartPosition);
@@ -82,12 +84,15 @@ void RobotContainer::ConfigureBindings() {
   m_operatorController.POVRight().OnTrue(m_commandController.MoveToPositionL3());
   m_operatorController.POVDown().OnTrue(m_commandController.FeedCoral());
 
-
   m_operatorController.A().WhileTrue(m_commandController.ExpelCoral());
   m_operatorController.X().WhileTrue(m_commandController.ExpelAlgae());
   m_operatorController.Y().OnTrue(m_commandController.IntakeAlgae());
 
-  m_driverController.RightStick().OnTrue(frc2::InstantCommand(
+  m_operatorController.LeftBumper().OnTrue(m_commandController.RemoveAlgaeFromL2());
+  m_operatorController.RightBumper().OnTrue(m_commandController.RemoveAlgaeFromL3());
+
+  m_driverController.LeftBumper().OnTrue(m_commandController.HomeElevator());
+  m_driverController.RightBumper().OnTrue(frc2::InstantCommand(
     [this]() {
       std::cout << "Resetting rotation" << std::endl;
       m_drive.ResetRotation();
@@ -115,7 +120,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 void RobotContainer::Periodic() {
   frc::SmartDashboard::PutData("Robot Elevator", &m_elevatorMech);
 
-  frc::SmartDashboard::PutData("Zero Odometry", new frc2::InstantCommand([this]() { m_drive.ResetRotation(); }));
+  // frc::SmartDashboard::PutData("Zero Odometry", new frc2::InstantCommand([this]() { m_drive.ResetRotation(); }));
 }
 
 void RobotContainer::Initialize() {

@@ -63,6 +63,8 @@ public:
 
     bool GetMaxLimitSwitch();
 
+    void UpdatePidSettings(subzero::PidSettings settings);
+
     void Periodic() override;
 
 private:
@@ -79,9 +81,7 @@ private:
 
     rev::spark::SparkClosedLoopController m_pidController = m_leadMotor.GetClosedLoopController();
     rev::spark::SparkRelativeEncoder m_enc = m_leadMotor.GetEncoder();
-    subzero::PidSettings m_elevatorPidSettings = {
-      ElevatorConstants::kElevatorP, ElevatorConstants::kElevatorI, ElevatorConstants::kElevatorD,
-      ElevatorConstants::kElevatorIZone, ElevatorConstants::kElevatorFF, false};
+    subzero::PidSettings m_elevatorPidSettings = ElevatorConstants::kElevatorPidSettings;
     SparkMaxPidController m_elevatorController{"Elevator",
                                    m_leadMotor,
                                    m_enc,

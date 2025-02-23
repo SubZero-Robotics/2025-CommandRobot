@@ -75,7 +75,7 @@ DriveSubsystem::DriveSubsystem()
 
   m_pidgey.SetYaw(0_deg, 100_ms); // Set our yaw to 0 degrees and wait up to 100 milliseconds for the setter to take affect
   m_pidgey.GetYaw().WaitForUpdate(100_ms); // And wait up to 100 milliseconds for the yaw to take affect
-  std::cout << "Set the yaw to 144 degrees, we are currently at " << m_pidgey.GetYaw() << std::endl;
+  // std::cout << "Set the yaw to 144 degrees, we are currently at " << m_pidgey.GetYaw() << std::endl;
 }
 
 void DriveSubsystem::Periodic() {
@@ -221,7 +221,7 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
 }
 
 void DriveSubsystem::ResetRotation() {
-  m_odometry.ResetRotation(frc::Rotation2d());
+  m_pidgey.Reset();
 }
 
 void DriveSubsystem::OffsetRotation(frc::Rotation2d offset) {
@@ -235,12 +235,12 @@ void DriveSubsystem::OffsetRotation(frc::Rotation2d offset) {
 
 void DriveSubsystem::AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
                                           units::second_t timestamp) {
-  poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp);
+  // poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp);
 }
 
 void DriveSubsystem::AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
                                           units::second_t timestamp,
                                           const Eigen::Vector3d& stdDevs) {
-  wpi::array<double, 3> newStdDevs{stdDevs(0), stdDevs(1), stdDevs(2)};
-  poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp, newStdDevs);
+  // wpi::array<double, 3> newStdDevs{stdDevs(0), stdDevs(1), stdDevs(2)};
+  // poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp, newStdDevs);
 }

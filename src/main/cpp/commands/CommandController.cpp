@@ -56,7 +56,7 @@ frc2::CommandPtr CommandController::ExpelAlgae() {
 frc2::CommandPtr CommandController::RemoveAlgaeFromL2() {
     return m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorRemoveAlgaeFromL2Position)
     .AndThen(m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralArmRemoveAlgaeFromL2Position))
-    .AndThen(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralFeedSpeed))
+    .AndThen(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralExpelSpeed))
     .WithTimeout(CommandConstants::kRemoveAlgaeFromReefTimeout);
     ;
 }
@@ -66,4 +66,32 @@ frc2::CommandPtr CommandController::RemoveAlgaeFromL3() {
     .AndThen(m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralArmRemoveAlgaeFromL3Position))
     .AndThen(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralFeedSpeed))
     .WithTimeout(CommandConstants::kRemoveAlgaeFromReefTimeout);
+}
+
+frc2::CommandPtr CommandController::HomeElevator() {
+    return
+    frc2::InstantCommand(
+        [this]() {
+            std::cout << "Homing elevator" << std::endl;
+            m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralFeedPosition);
+        }
+    ).ToPtr()
+    .AndThen(frc2::InstantCommand(
+        [this]() {
+            m_subsystems.elevator->SetEncoderPosition(ElevatorConstants::kMaxDistance);
+        }
+    ).ToPtr())
+    .AndThen(frc2::InstantCommand(
+        [this]() {
+            std::cout << "Setting homing PID settings" << std::endl;
+            m_subsystems.elevator->UpdatePidSettings(ElevatorConstants::kHomePidSettings);
+        }
+    ).ToPtr())
+    .AndThen(m_subsystems.elevator->MoveToPositionAbsolute(ElevatorConstants::kMinDistance))
+    .FinallyDo(
+        [this]() {
+            std::cout << "Setting typical PID settings" << std::endl;
+            m_subsystems.elevator->UpdatePidSettings(ElevatorConstants::kElevatorPidSettings);
+        }
+    );
 }
