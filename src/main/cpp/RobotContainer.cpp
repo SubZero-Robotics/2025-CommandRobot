@@ -38,10 +38,14 @@ RobotContainer::RobotContainer() {
   m_chooser.SetDefaultOption(AutoConstants::kCenterToCenterAuto, AutoConstants::kCenterToCenterAuto);
   m_chooser.AddOption(AutoConstants::kFarLeftAuto, AutoConstants::kFarLeftAuto);
   m_chooser.AddOption(AutoConstants::kFarRightAuto, AutoConstants::kFarRightAuto);
-
-  pathplanner::NamedCommands::registerCommand("Test Command", frc2::InstantCommand([]() { std::cout << "Test Command Was Called" << std::endl; }).ToPtr());
-  pathplanner::NamedCommands::registerCommand("L2 Position", std::move(m_commandController.MoveToPositionL2()));
-  pathplanner::NamedCommands::registerCommand("L3 Position", std::move(m_commandController.MoveToPositionL3()));
+      
+  // pathplanner::NamedCommands::registerCommand("Test Command", frc2::InstantCommand([]() { std::cout << "Test Command Was Called" << std::endl; }).ToPtr());
+  pathplanner::NamedCommands::registerCommand("To L1 Position", std::move(m_commandController.MoveToPositionL1()));
+  pathplanner::NamedCommands::registerCommand("To L2 Position", std::move(m_commandController.MoveToPositionL2()));
+  pathplanner::NamedCommands::registerCommand("To L3 Position", std::move(m_commandController.MoveToPositionL3()));
+  pathplanner::NamedCommands::registerCommand("Home Elevator", std::move(m_commandController.HomeElevator()));
+  pathplanner::NamedCommands::registerCommand("To Feed Position", std::move(m_commandController.FeedCoral()));
+  pathplanner::NamedCommands::registerCommand("Expel Coral", std::move(m_commandController.ExpelCoral().WithTimeout(CommandConstants::kExpelCoralTimeout)));
 
   // Configure the button bindings
   ConfigureBindings();
@@ -91,7 +95,7 @@ void RobotContainer::ConfigureBindings() {
   m_operatorController.A().WhileTrue(m_commandController.ExpelCoral());
   m_operatorController.B().WhileTrue(m_coralIntake.MoveAtPercent(CommandConstants::kCoralFeedSpeed));
   m_operatorController.X().WhileTrue(m_commandController.ExpelAlgae());
-  m_operatorController.Y().OnTrue(m_commandController.IntakeAlgae());
+  m_operatorController.Y().WhileTrue(m_commandController.IntakeAlgae());
 
   m_operatorController.LeftBumper().OnTrue(m_commandController.RemoveAlgaeFromL2());
   m_operatorController.RightBumper().OnTrue(m_commandController.RemoveAlgaeFromL3());

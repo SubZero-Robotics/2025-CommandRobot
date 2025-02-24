@@ -27,6 +27,7 @@ frc2::CommandPtr CommandController::MoveToPositionL3() {
 
 frc2::CommandPtr CommandController::FeedCoral() {
     return m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralFeedPosition)
+    .AndThen(m_subsystems.algaeArm->MoveToPositionAbsolute(CommandConstants::kAlgaeArmReefPosition))
     .AndThen(m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorFeedPosition))
     .RaceWith(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralIntakeRetainCoralSpeed))
     .AndThen(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralFeedSpeed)
@@ -43,10 +44,11 @@ frc2::CommandPtr CommandController::ExpelCoral() {
 frc2::CommandPtr CommandController::IntakeAlgae() {
     return m_subsystems.algaeArm->MoveToPositionAbsolute(CommandConstants::kAlgaeIntakePosition)
     .AndThen(m_subsystems.algaeIntake->MoveAtPercent(CommandConstants::kAlgaeIntakeSpeed))
-    .Until([this]() {
-        return m_subsystems.algaeIntake->HasGamePiece();
-    })
-    .WithTimeout(CommandConstants::kAlgaeIntakeTimeout);
+    // .Until([this]() {
+    //     return m_subsystems.algaeIntake->HasGamePiece();
+    // })
+    // .WithTimeout(CommandConstants::kAlgaeIntakeTimeout);
+    ;
 }
 
 frc2::CommandPtr CommandController::ExpelAlgae() {
@@ -55,14 +57,17 @@ frc2::CommandPtr CommandController::ExpelAlgae() {
 
 frc2::CommandPtr CommandController::RemoveAlgaeFromL2() {
     return m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorRemoveAlgaeFromL2Position)
+    .AndThen(m_subsystems.algaeArm->MoveToPositionAbsolute(CommandConstants::kRemoveAlgaeAlgaeArmPosition))
     .AndThen(m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralArmRemoveAlgaeFromL2Position))
     .AndThen(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralExpelSpeed))
-    .WithTimeout(CommandConstants::kRemoveAlgaeFromReefTimeout);
+    .WithTimeout(CommandConstants::kRemoveAlgaeFromReefTimeout)
+    .RaceWith(m_subsystems.algaeIntake->MoveAtPercent(CommandConstants::kAlgaeIntakeSpeed))
     ;
 }
 
 frc2::CommandPtr CommandController::RemoveAlgaeFromL3() {
     return m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorRemoveAlgaeFromL3Position)
+    .AndThen(m_subsystems.algaeArm->MoveToPositionAbsolute(CommandConstants::kRemoveAlgaeAlgaeArmPosition))
     .AndThen(m_subsystems.coralArm->MoveToPositionAbsolute(CommandConstants::kCoralArmRemoveAlgaeFromL3Position))
     .AndThen(m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralFeedSpeed))
     .WithTimeout(CommandConstants::kRemoveAlgaeFromReefTimeout);
