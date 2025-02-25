@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Start to Reef Left Side Left"
+            "pathName": "Center Start To Reef Left Side Left"
           }
         },
         {
@@ -29,9 +29,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Pause"
+            "waitTime": 2.0
           }
         },
         {

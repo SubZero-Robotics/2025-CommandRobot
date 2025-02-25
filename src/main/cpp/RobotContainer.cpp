@@ -44,7 +44,7 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("To L2 Position", std::move(m_commandController.MoveToPositionL2()));
   pathplanner::NamedCommands::registerCommand("To L3 Position", std::move(m_commandController.MoveToPositionL3()));
   pathplanner::NamedCommands::registerCommand("To Feed Position", std::move(m_commandController.FeedCoral()));
-  pathplanner::NamedCommands::registerCommand("Remove Algae", std::move(m_commandController.RemoveAlgaeFromL3()));
+  pathplanner::NamedCommands::registerCommand("Remove Algae", std::move(m_commandController.RemoveAlgaeFromL2()));
   pathplanner::NamedCommands::registerCommand("Home Elevator", std::move(m_commandController.HomeElevator()));
   pathplanner::NamedCommands::registerCommand("To Feed Position", std::move(m_commandController.FeedCoral()));
   pathplanner::NamedCommands::registerCommand("Expel Coral", std::move(m_commandController.ExpelCoral().WithTimeout(CommandConstants::kExpelCoralTimeout)));
@@ -100,7 +100,7 @@ void RobotContainer::ConfigureBindings() {
   m_operatorController.Y().WhileTrue(m_commandController.IntakeAlgae());
 
   m_operatorController.LeftBumper().OnTrue(m_commandController.RemoveAlgaeFromL2());
-  m_operatorController.RightBumper().OnTrue(m_commandController.RemoveAlgaeFromL3());
+  // m_operatorController.RightBumper().OnTrue(m_commandController.RemoveAlgaeFromL3());
 
   m_driverController.LeftBumper().OnTrue(m_commandController.HomeElevator());
   m_driverController.RightBumper().OnTrue(frc2::InstantCommand(

@@ -161,6 +161,8 @@ constexpr double kPThetaController = 0.5;
 
 extern const frc::TrapezoidProfile<units::radians>::Constraints
     kThetaControllerConstraints;
+
+constexpr units::second_t kFeedWaitTime = 2_s;
 }  // namespace AutoConstants
 
 namespace OIConstants {
@@ -374,7 +376,7 @@ namespace CommandConstants {
     constexpr units::second_t kCoralFeedTimeout = 3_s;
     constexpr units::second_t kAlgaeIntakeTimeout = 5_s;
     constexpr units::second_t kRemoveAlgaeFromReefTimeout = 3_s;
-    constexpr units::second_t kExpelCoralTimeout = 3_s;
+    constexpr units::second_t kExpelCoralTimeout = 1_s;
 }
 
 namespace VisionConstants {
