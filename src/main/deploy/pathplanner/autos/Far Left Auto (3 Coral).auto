@@ -5,21 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Home"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Left Start to Reef Left"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Left Reef to Far Left Source"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Far Left Source to Left Reef"
+            "name": "Expel Coral"
           }
         },
         {
@@ -32,6 +32,30 @@
           "type": "path",
           "data": {
             "pathName": "Far Left Source to Left Reef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Expel Coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Reef to Far Left Source"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Far Left Source to Left Reef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Expel Coral"
           }
         }
       ]

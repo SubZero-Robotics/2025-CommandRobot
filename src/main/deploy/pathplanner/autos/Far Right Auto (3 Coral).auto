@@ -7,31 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Start to Reef Right"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Reef to Far Right Source"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Far Right Source to Reef Right"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Reef to Far Right Source"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Far Right Source to Reef Right"
+            "pathName": "Right Start to Reef Right Right Side"
           }
         }
       ]

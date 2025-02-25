@@ -5,27 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Home Elevator"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "To L1 Position"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Center Start to Center Rear Reef"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Expel Coral"
           }
         }
       ]

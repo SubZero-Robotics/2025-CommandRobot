@@ -8,30 +8,42 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6258522727272724,
-        "y": 1.7837662337662332
+        "x": 5.5575,
+        "y": 1.9092499999999994
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.708,
-        "y": 2.895
+        "x": 5.0992500000000005,
+        "y": 2.66
       },
       "prevControl": {
-        "x": 2.625852272727272,
-        "y": 1.7932629870129873
+        "x": 5.4502500000000005,
+        "y": 2.1237500000000002
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Reef"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "",
+      "waypointRelativePos": 0.09627791563275767,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "To L3 Position"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.349332043143804
+    "rotation": 119.53878225955823
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 55.61965527615502
+    "rotation": 126.6624195429256
   },
   "useDefaultConstraints": true
 }

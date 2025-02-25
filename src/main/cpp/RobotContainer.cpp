@@ -43,6 +43,8 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("To L1 Position", std::move(m_commandController.MoveToPositionL1()));
   pathplanner::NamedCommands::registerCommand("To L2 Position", std::move(m_commandController.MoveToPositionL2()));
   pathplanner::NamedCommands::registerCommand("To L3 Position", std::move(m_commandController.MoveToPositionL3()));
+  pathplanner::NamedCommands::registerCommand("To Feed Position", std::move(m_commandController.FeedCoral()));
+  pathplanner::NamedCommands::registerCommand("Remove Algae", std::move(m_commandController.RemoveAlgaeFromL3()));
   pathplanner::NamedCommands::registerCommand("Home Elevator", std::move(m_commandController.HomeElevator()));
   pathplanner::NamedCommands::registerCommand("To Feed Position", std::move(m_commandController.FeedCoral()));
   pathplanner::NamedCommands::registerCommand("Expel Coral", std::move(m_commandController.ExpelCoral().WithTimeout(CommandConstants::kExpelCoralTimeout)));
