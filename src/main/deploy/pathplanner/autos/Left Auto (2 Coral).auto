@@ -13,7 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Start to Reef Left"
+            "pathName": "Left Start to Reef Left Side Left"
           }
         },
         {
@@ -31,25 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Far Left Source to Left Reef"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Expel Coral"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Reef to Far Left Source"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Far Left Source to Left Reef"
+            "pathName": "Far Left Source to Right Reef"
           }
         },
         {

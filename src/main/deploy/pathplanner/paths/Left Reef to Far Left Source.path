@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5685000000000002,
-        "y": 5.204749999999999
+        "x": 5.46639344262295,
+        "y": 5.205788934426229
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3984999999999994,
-        "y": 6.56
+        "x": 7.492315573770492,
+        "y": 6.63232581967213
       },
       "isLocked": false,
       "linkedName": "Left Reef"
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "",
-      "waypointRelativePos": 0.21538461538461356,
+      "waypointRelativePos": 0.237677245104656,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -60,7 +60,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -58.24051991518723
+    "rotation": -120.19162296095763
   },
   "useDefaultConstraints": true
 }
