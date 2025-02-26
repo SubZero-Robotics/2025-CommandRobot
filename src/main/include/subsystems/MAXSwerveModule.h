@@ -47,6 +47,8 @@ class MAXSwerveModule {
    */
   void SetDesiredState(const frc::SwerveModuleState& state);
 
+  frc::SwerveModuleState GetDesiredState() { return m_desiredState; }
+
   /**
    * Zeroes all the SwerveModule encoders.
    */

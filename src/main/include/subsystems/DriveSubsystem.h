@@ -130,6 +130,9 @@ class DriveSubsystem : public frc2::SubsystemBase {
                             units::second_t timestamp,
                             const Eigen::Vector3d& stdDevs);
 
+  wpi::array<frc::SwerveModulePosition, 4U> GetModulePositions() const;
+
+  void logDrivebase();
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
@@ -164,7 +167,35 @@ class DriveSubsystem : public frc2::SubsystemBase {
   frc::Field2d m_field;
   frc::Pose2d m_lastGoodPosition;
 
-  subzero::PhotonVisionEstimators* m_vision;
+    photon::PhotonPoseEstimator poseFront{
+      // layout
+      VisionConstants::kTagLayout,
+      // strategy
+      VisionConstants::kPoseStrategy,
+      // offsets
+      VisionConstants::kRobotToCam};
+
+  photon::PhotonPoseEstimator poseRear{
+      // layout
+      VisionConstants::kTagLayout,
+      // strategy
+      VisionConstants::kPoseStrategy,
+      // offsets
+      VisionConstants::kRobotToCam2};
+ 
+  photon::PhotonCamera m_leftCamera{VisionConstants::kLeftCameraName};
+  photon::PhotonCamera m_rightCamera{VisionConstants::kRearCameraName};
+
+  std::vector<subzero::PhotonVisionEstimators::PhotonCameraEstimator>
+      poseCameras{
+          subzero::PhotonVisionEstimators::PhotonCameraEstimator(poseFront, m_leftCamera),
+          subzero::PhotonVisionEstimators::PhotonCameraEstimator(poseRear, m_rightCamera),
+      };
+
+  subzero::PhotonVisionEstimators m_vision{poseCameras,
+    VisionConstants::kSingleTagStdDevs,
+    VisionConstants::kMultiTagStdDevs
+  };
 };
 
 
