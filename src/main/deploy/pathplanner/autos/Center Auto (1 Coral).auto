@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Home"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Start to Reef Bottom Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Reef Bottom To Slight Rear"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Slight Rear To Center Reef Bottom"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Expel Coral"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.566,
+        "x": 7.000819672131148,
         "y": 4.103
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.263749999999999,
-        "y": 4.0835
+        "x": 6.473360655737705,
+        "y": 4.09093237704918
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Slight Rear"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 4.103
       },
       "prevControl": {
-        "x": 6.571499999999998,
-        "y": 4.09325
+        "x": 6.521311475409835,
+        "y": 4.09093237704918
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,14 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Remove Algae",
-      "waypointRelativePos": 0.521269412559083,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -55,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -178.93908830973575
+    "rotation": -176.70638131331938
   },
   "useDefaultConstraints": true
 }

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.566,
+        "x": 5.976749999999999,
         "y": 4.103
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.263749999999999,
-        "y": 4.0835
+        "x": 6.976749999999999,
+        "y": 4.103
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Reef Bottom Center"
     },
     {
       "anchor": {
-        "x": 5.976749999999999,
+        "x": 7.000819672131148,
         "y": 4.103
       },
       "prevControl": {
-        "x": 6.571499999999998,
-        "y": 4.09325
+        "x": 6.293545081967214,
+        "y": 4.126895491803278
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Reef Bottom Center"
+      "linkedName": "Slight Rear"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Remove Algae",
-      "waypointRelativePos": 0.521269412559083,
+      "name": "To L2 Position",
+      "waypointRelativePos": 0.7481431465226057,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -49,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -177.5633517531899
+    "rotation": -176.70638131331938
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -178.93908830973575
+    "rotation": -177.5633517531899
   },
   "useDefaultConstraints": true
 }

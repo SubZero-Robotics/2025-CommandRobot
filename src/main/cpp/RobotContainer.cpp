@@ -35,9 +35,10 @@ RobotContainer::RobotContainer() {
   m_chooser.SetDefaultOption(AutoConstants::kDefaultAutoName, AutoConstants::kDefaultAutoName);
 
   frc::SmartDashboard::PutData(&m_chooser);
-  m_chooser.SetDefaultOption(AutoConstants::kCenterToCenterAuto, AutoConstants::kCenterToCenterAuto);
-  m_chooser.AddOption(AutoConstants::kFarLeftAuto, AutoConstants::kFarLeftAuto);
-  m_chooser.AddOption(AutoConstants::kFarRightAuto, AutoConstants::kFarRightAuto);
+  m_chooser.SetDefaultOption(AutoConstants::kCenterAuto, AutoConstants::kCenterAuto);
+  // m_chooser.AddOption(AutoConstants::kFarLeftAuto, AutoConstants::kFarLeftAuto);
+  // m_chooser.AddOption(AutoConstants::kFarRightAuto, AutoConstants::kFarRightAuto);
+  m_chooser.AddOption(AutoConstants::kCenterAuto, AutoConstants::kCenterAuto);
       
   // pathplanner::NamedCommands::registerCommand("Test Command", frc2::cmd::Print("Test Command"));
   pathplanner::NamedCommands::registerCommand("To L1 Position", std::move(m_commandController.MoveToPositionL1()));
@@ -100,7 +101,7 @@ void RobotContainer::ConfigureBindings() {
   m_operatorController.Y().WhileTrue(m_commandController.IntakeAlgae());
 
   m_operatorController.LeftBumper().OnTrue(m_commandController.RemoveAlgaeFromL2());
-  // m_operatorController.RightBumper().OnTrue(m_commandController.RemoveAlgaeFromL3());
+  m_operatorController.RightBumper().OnTrue(m_algaeArm.MoveToPositionAbsolute(CommandConstants::kClimbAlgaeArmPosition));
 
   m_driverController.LeftBumper().OnTrue(m_commandController.HomeElevator());
   m_driverController.RightBumper().OnTrue(frc2::InstantCommand(
@@ -110,8 +111,8 @@ void RobotContainer::ConfigureBindings() {
     }
   ).ToPtr());
 
-  // m_operatorController.LeftBumper().WhileTrue(m_commandController.ExpelAlgae());
-  // m_operatorController.RightBumper().WhileTrue(m_commandController.ExpelCoral());
+  m_driverController.POVUp().OnTrue(m_commandController.ClimbUp());
+  m_driverController.POVDown().OnTrue(m_commandController.ClimbDown());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

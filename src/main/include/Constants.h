@@ -153,6 +153,7 @@ constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 const std::string kCenterToCenterAuto = "Center To Rear Center Reef (1 Coral)";
 const std::string kFarLeftAuto = "Far Left Auto (3 Coral)";
 const std::string kFarRightAuto = "Far Right Auto (3 Coral)";
+const std::string kCenterAuto = "Center Auto (1 Coral)";
 const std::string kDefaultAutoName = kCenterToCenterAuto;
 
 constexpr double kPXController = 0.5;
@@ -343,13 +344,15 @@ namespace CommandConstants {
     constexpr units::meter_t kElevatorL1Position = 0.25_m;
     constexpr units::meter_t kElevatorL2Position = 0.33_m;
     constexpr units::meter_t kElevatorL3Position = 0.51_m;
-    constexpr units::meter_t kElevatorFeedPosition = 1.2_in;
+    constexpr units::meter_t kElevatorFeedPosition = 0.2_in;
     constexpr units::meter_t kElevatorRemoveAlgaeFromL2Position = 0.38_m;
     constexpr units::meter_t kElevatorRemoveAlgaeFromL3Position = 0.50_m;
+    constexpr units::meter_t kElevatorClimbUpPosition = 18_in;
+    constexpr units::meter_t kElevatorClimbDownPosition = 0.0_in;
 
     constexpr units::degree_t kCoralL1Position = 249_deg;
-    constexpr units::degree_t kCoralL2Position = 233_deg;
-    constexpr units::degree_t kCoralL3Position = 215_deg;
+    constexpr units::degree_t kCoralL2Position = 240_deg;
+    constexpr units::degree_t kCoralL3Position = 218_deg;
     constexpr units::degree_t kCoralFeedPosition = 77_deg;
     constexpr units::degree_t kCoralHomePosition = 110_deg;
     constexpr units::degree_t kCoralArmRemoveAlgaeFromL2Position = 204_deg;
@@ -360,6 +363,7 @@ namespace CommandConstants {
     constexpr units::degree_t kAlgaeStowPosition = 0_deg;
     constexpr units::degree_t kAlgaeArmReefPosition = 20_deg;
     constexpr units::degree_t kRemoveAlgaeAlgaeArmPosition = 10_deg;
+    constexpr units::degree_t kClimbAlgaeArmPosition = 80_deg;
 
     constexpr double kCoralFeedSpeed = 0.25;
     constexpr double kCoralExpelSpeed = -0.25;

@@ -95,3 +95,12 @@ frc2::CommandPtr CommandController::HomeElevator() {
         }
     );
 }
+
+frc2::CommandPtr CommandController::ClimbUp() {
+    return m_subsystems.algaeArm->MoveToPositionAbsolute(CommandConstants::kClimbAlgaeArmPosition)
+    .AndThen(m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorClimbUpPosition));
+}
+
+frc2::CommandPtr CommandController::ClimbDown() {
+    return m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorClimbDownPosition);
+}

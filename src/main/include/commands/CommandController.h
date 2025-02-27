@@ -35,6 +35,9 @@ public:
     frc2::CommandPtr RemoveAlgaeFromL3();
 
     frc2::CommandPtr HomeElevator();
+
+    frc2::CommandPtr ClimbUp();
+    frc2::CommandPtr ClimbDown();
 private:
     Subsystems_t m_subsystems;
 };
