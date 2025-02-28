@@ -35,7 +35,7 @@ RobotContainer::RobotContainer() {
   m_chooser.SetDefaultOption(AutoConstants::kDefaultAutoName, AutoConstants::kDefaultAutoName);
 
   frc::SmartDashboard::PutData(&m_chooser);
-  m_chooser.SetDefaultOption(AutoConstants::kCenterAuto, AutoConstants::kCenterAuto);
+  m_chooser.SetDefaultOption(AutoConstants::kDefaultAutoName, AutoConstants::kDefaultAutoName);
   // m_chooser.AddOption(AutoConstants::kFarLeftAuto, AutoConstants::kFarLeftAuto);
   // m_chooser.AddOption(AutoConstants::kFarRightAuto, AutoConstants::kFarRightAuto);
   m_chooser.AddOption(AutoConstants::kCenterAuto, AutoConstants::kCenterAuto);
@@ -46,9 +46,10 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("To L3 Position", std::move(m_commandController.MoveToPositionL3()));
   pathplanner::NamedCommands::registerCommand("To Feed Position", std::move(m_commandController.FeedCoral()));
   pathplanner::NamedCommands::registerCommand("Remove Algae", std::move(m_commandController.RemoveAlgaeFromL2()));
-  pathplanner::NamedCommands::registerCommand("Home Elevator", std::move(m_commandController.HomeElevator()));
   pathplanner::NamedCommands::registerCommand("To Feed Position", std::move(m_commandController.FeedCoral()));
   pathplanner::NamedCommands::registerCommand("Expel Coral", std::move(m_commandController.ExpelCoral().WithTimeout(CommandConstants::kExpelCoralTimeout)));
+  pathplanner::NamedCommands::registerCommand("Home", std::move(m_commandController.HomeElevator()));
+  pathplanner::NamedCommands::registerCommand("Delayed To L2 Position", std::move(frc2::cmd::Wait(CommandConstants::kWaitBeforeL2).AndThen(m_commandController.MoveToPositionL2())));
 
   // Configure the button bindings
   ConfigureBindings();
@@ -101,7 +102,11 @@ void RobotContainer::ConfigureBindings() {
   m_operatorController.Y().WhileTrue(m_commandController.IntakeAlgae());
 
   m_operatorController.LeftBumper().OnTrue(m_commandController.RemoveAlgaeFromL2());
+  // m_operatorController.RightBumper().OnTrue(m_commandController.RemoveAlgaeFromL3());
   m_operatorController.RightBumper().OnTrue(m_algaeArm.MoveToPositionAbsolute(CommandConstants::kClimbAlgaeArmPosition));
+
+  m_driverController.POVUp().OnTrue(m_commandController.ClimbUp());
+  m_driverController.POVDown().OnTrue(m_commandController.ClimbDown());
 
   m_driverController.LeftBumper().OnTrue(m_commandController.HomeElevator());
   m_driverController.RightBumper().OnTrue(frc2::InstantCommand(
@@ -110,9 +115,6 @@ void RobotContainer::ConfigureBindings() {
       m_drive.ResetRotation();
     }
   ).ToPtr());
-
-  m_driverController.POVUp().OnTrue(m_commandController.ClimbUp());
-  m_driverController.POVDown().OnTrue(m_commandController.ClimbDown());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

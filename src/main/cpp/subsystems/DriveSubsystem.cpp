@@ -45,6 +45,8 @@ DriveSubsystem::DriveSubsystem()
   HAL_Report(HALUsageReporting::kResourceType_RobotDrive,
              HALUsageReporting::kRobotDriveSwerve_MaxSwerve);
 
+  frc::SmartDashboard::PutData("Field", &m_field);
+
   pathplanner::RobotConfig config = pathplanner::RobotConfig::fromGUISettings();
 
    pathplanner::AutoBuilder::configure(
@@ -85,6 +87,9 @@ void DriveSubsystem::Periodic() {
                     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()});
     auto &yaw = m_pidgey.GetYaw();
+
+  m_field.SetRobotPose(m_odometry.GetPose());
+
   if (frc::Timer::GetFPGATimestamp() - currentTime >= GyroConstants::kPrintPeriod) {
 
     std::cout << "Yaw: " << yaw.GetValue().value() << std::endl;

@@ -11,27 +11,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Center Start to Reef Bottom Center"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center Reef Bottom To Slight Rear"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Slight Rear To Center Reef Bottom"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Start To Bottom Left Reef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "To L1 Position"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Expel Coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Left Reef To Slight Rear"
           }
         }
       ]

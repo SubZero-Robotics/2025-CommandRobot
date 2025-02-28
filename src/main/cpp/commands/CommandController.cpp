@@ -98,6 +98,7 @@ frc2::CommandPtr CommandController::HomeElevator() {
 
 frc2::CommandPtr CommandController::ClimbUp() {
     return m_subsystems.algaeArm->MoveToPositionAbsolute(CommandConstants::kClimbAlgaeArmPosition)
+    .AndThen(m_subsystems.algaeArm->MoveToPositionAbsolute(50_deg))
     .AndThen(m_subsystems.elevator->MoveToPositionAbsolute(CommandConstants::kElevatorClimbUpPosition));
 }
 
