@@ -32,13 +32,12 @@
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
 
-  m_chooser.SetDefaultOption(AutoConstants::kDefaultAutoName, AutoConstants::kDefaultAutoName);
-
   frc::SmartDashboard::PutData(&m_chooser);
-  m_chooser.SetDefaultOption(AutoConstants::kDefaultAutoName, AutoConstants::kDefaultAutoName);
-  // m_chooser.AddOption(AutoConstants::kFarLeftAuto, AutoConstants::kFarLeftAuto);
-  // m_chooser.AddOption(AutoConstants::kFarRightAuto, AutoConstants::kFarRightAuto);
-  m_chooser.AddOption(AutoConstants::kCenterAuto, AutoConstants::kCenterAuto);
+  m_chooser.SetDefaultOption(AutoConstants::kCenterToCenterAuto, AutoConstants::kCenterToCenterAuto);
+  m_chooser.AddOption(AutoConstants::kCenterToCenterAuto, AutoConstants::kCenterToCenterAuto);
+  m_chooser.AddOption(AutoConstants::kLeftToLeftReefAuto, AutoConstants::kLeftToLeftReefAuto);
+  m_chooser.AddOption(AutoConstants::kRightToRightReefAuto, AutoConstants::kRightToRightReefAuto);
+  m_chooser.AddOption(AutoConstants::kForwardAuto, AutoConstants::kForwardAuto);
       
   // pathplanner::NamedCommands::registerCommand("Test Command", frc2::cmd::Print("Test Command"));
   pathplanner::NamedCommands::registerCommand("To L1 Position", std::move(m_commandController.MoveToPositionL1()));
