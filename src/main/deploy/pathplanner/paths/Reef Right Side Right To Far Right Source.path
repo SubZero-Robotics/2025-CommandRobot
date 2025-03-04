@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.403652597402597,
+        "y": 2.8806412337662333
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.15225,
+        "y": 1.63625
+      },
+      "isLocked": false,
+      "linkedName": "Reef Right Side Right"
+    },
+    {
+      "anchor": {
+        "x": 1.6809253246753246,
+        "y": 0.7391233766233768
+      },
+      "prevControl": {
+        "x": 4.251000000000001,
+        "y": 1.7044999999999992
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Far Right Source"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "",
+      "waypointRelativePos": 0.7511275112751122,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "To Feed Position"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 53.56914187983765
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 125.09581678702604
+  },
+  "useDefaultConstraints": true
+}

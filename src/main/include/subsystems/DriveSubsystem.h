@@ -5,9 +5,12 @@
 #pragma once
 
 #include <frc/ADIS16470_IMU.h>
+#include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Rotation2d.h>
+#include <frc/smartdashboard/Field2d.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
@@ -22,13 +25,18 @@
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/RunCommand.h>
 #include <ctre/phoenix6/Pigeon2.hpp>
+#include <networktables/StructArrayTopic.h>
+#include <ctre/phoenix6/sim/Pigeon2SimState.hpp>
+#include <subzero/vision/PhotonVisionEstimators.h>
+#include <subzero/target/ITurnToTarget.h>
+#include <subzero/logging/ConsoleLogger.h>
 
 #include "Constants.h"
 #include "MAXSwerveModule.h"
 
 class DriveSubsystem : public frc2::SubsystemBase {
  public:
-  DriveSubsystem();
+  explicit DriveSubsystem();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -104,7 +112,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   void OffsetRotation(frc::Rotation2d rot);
 
-  void ResetOdometry();
+  void ResetRotation();
 
   frc::SwerveDriveKinematics<4> m_driveKinematics{
       frc::Translation2d{DriveConstants::kWheelBase / 2,
@@ -115,6 +123,12 @@ class DriveSubsystem : public frc2::SubsystemBase {
                          DriveConstants::kTrackWidth / 2},
       frc::Translation2d{-DriveConstants::kWheelBase / 2,
                          -DriveConstants::kTrackWidth / 2}};
+
+  void AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
+                            units::second_t timestamp);
+  void AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
+                            units::second_t timestamp,
+                            const Eigen::Vector3d& stdDevs);
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -134,4 +148,23 @@ class DriveSubsystem : public frc2::SubsystemBase {
   // Odometry class for tracking robot pose
   // 4 defines the number of modules
   frc::SwerveDriveOdometry<4> m_odometry;
+
+  frc::SwerveDrivePoseEstimator<4> poseEstimator{
+      m_driveKinematics,
+      GetHeading(),
+      {m_frontLeft.GetPosition(), m_rearLeft.GetPosition(),
+       m_frontRight.GetPosition(), m_rearRight.GetPosition()},
+      frc::Pose2d{0_m, 0_m, 0_rad},
+      VisionConstants::kDrivetrainStd,
+      VisionConstants::kVisionStd};
+  nt::StructArrayPublisher<frc::SwerveModuleState> m_publisher;
+  nt::StructArrayPublisher<frc::SwerveModuleState> m_desiredPublisher;
+
+  // Pose viewing
+  frc::Field2d m_field;
+  frc::Pose2d m_lastGoodPosition;
+
+  subzero::PhotonVisionEstimators* m_vision;
 };
+
+

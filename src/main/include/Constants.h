@@ -13,6 +13,12 @@
 #include <subzero/motor/PidMotorController.h>
 #include <subzero/constants/ColorConstants.h>
 #include <subzero/singleaxis/ISingleAxisSubsystem.h>
+#include <frc/apriltag/AprilTagFieldLayout.h>
+#include <frc/geometry/Transform3d.h>
+#include <photon/PhotonPoseEstimator.h>
+#include <units/length.h>
+#include <wpi/array.h>
+
 
 #include <numbers>
 #include <string>
@@ -33,6 +39,10 @@
 
 #include <numbers>
 #include <string>
+
+#ifndef M_PI
+    #define M_PI 3.141592653589793238462643383279502884197
+#endif
 
 using SparkMaxPidController =
     subzero::PidMotorController<rev::spark::SparkMax, rev::spark::SparkClosedLoopController,
@@ -60,6 +70,7 @@ typedef
 namespace OperatorConstants {
 
 inline constexpr int kDriverControllerPort = 0;
+inline constexpr int kOperatorControllerPort = 1;
 
 }  // namespace OperatorConstants
 
@@ -70,7 +81,7 @@ namespace DriveConstants {
 // the robot, rather the allowed maximum speeds
 
 // Test sewrve
-// constexpr units::meters_per_second_t kMaxSpeed = 4.8_mps;
+// constexpr units::meters_per_second_t kMaxSpeed = 4.8_mps;+
 
 // Season robot
 constexpr units::meters_per_second_t kMaxSpeed = 4.92_mps;
@@ -139,8 +150,10 @@ constexpr auto kMaxAcceleration = 3_mps_sq;
 constexpr auto kMaxAngularSpeed = 3.142_rad_per_s;
 constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 
-const std::string kOutAuto = "Out Auto";
-const std::string kSpinAuto = "Spin Auto";
+const std::string kCenterToCenterAuto = "Center Auto (1 Coral)";
+const std::string kRightToRightReefAuto = "Right To Right Reef (1 Coral)";
+const std::string kLeftToLeftReefAuto = "Left To Left Reef (1 Coral)";
+const std::string kForwardAuto = "Center Auto (0 Coral)";
 
 constexpr double kPXController = 0.5;
 constexpr double kPYController = 0.5;
@@ -148,6 +161,8 @@ constexpr double kPThetaController = 0.5;
 
 extern const frc::TrapezoidProfile<units::radians>::Constraints
     kThetaControllerConstraints;
+
+constexpr units::second_t kFeedWaitTime = 2_s;
 }  // namespace AutoConstants
 
 namespace OIConstants {
@@ -164,20 +179,31 @@ namespace ElevatorConstants {
     const int kFollowerElevatorMotorCanId = 7;
 
     const int kBottomLimitSwitchPort = 1;
+    const int kTopLimitSwitchPort = 2;
 
     // Placeholder values
-    const double kElevatorP = 100.0;
+    const double kElevatorP = 70.0;
     const double kElevatorI = 0.0;
     const double kElevatorD = 0.0;
     const double kElevatorIZone = 0.0;
     const double kElevatorFF = 0.0;
 
+    const subzero::PidSettings kElevatorPidSettings = {
+      40.0, 0.0, 0.0,
+      0.0, 0.0, false};
+
+    const subzero::PidSettings kHomePidSettings = {
+      10.0, 0.0, 0.0,
+      0.0, 0.0, false};
+
+    constexpr units::meter_t kElevatorStartPosition = 4.875_in;
+
     constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
 
     // Placeholder values
     constexpr units::meter_t kMinDistance = 0_in;
-    constexpr units::meter_t kMaxDistance = 18_in;
-    constexpr units::meter_t kRelativeDistancePerRev = 5.51977829236_in / 36; // 36:1 ratio gearbox
+    constexpr units::meter_t kMaxDistance = 20.1_in;
+    constexpr units::meter_t kRelativeDistancePerRev = (1.685_in * M_PI) / 36; // Pitch diameter of gear with 36:1 ratio gearbox
     constexpr units::meters_per_second_t kDefaultVelocity = 0.66_mps;
     constexpr double kVelocityScalar = 1.0;
     constexpr units::meter_t kTolerance = 0.5_in;
@@ -201,9 +227,11 @@ namespace AlgaeArmConstants{
     constexpr int kIntakeMotorId = 6;
     constexpr double kP = 0.1;
     constexpr double kI = 0.0;
-    constexpr double kD = 0.001;
+    constexpr double kD = 0.0;
     constexpr double kIZone = 0.0;
     constexpr double kFF = 0.0;
+
+    constexpr double kHasAlgaeCurrent = 35;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
     constexpr units::degree_t kHomeRotation = 0_deg;
@@ -236,21 +264,24 @@ namespace AlgaeArmConstants{
 namespace CoralArmConstants{
     constexpr int kArmMotorId = 16;
     constexpr int kIntakeMotorId = 15;
-    constexpr double kP = 0.5;
+    constexpr double kP = 0.3;
     constexpr double kI = 0.0;
     constexpr double kD = 0.0;
     constexpr double kIZone = 0.0;
     constexpr double kFF = 0.0;
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 1_rpm;
-    constexpr units::degree_t kHomeRotation = 5_deg;
+    constexpr units::degree_t kMinRotation = 50_deg;
     constexpr units::degree_t kMaxRotation = 290_deg;
     constexpr units::degree_t kRelativeDistancePerRev = 360_deg / (15 * 4.7); // 4.7 is the ratio of the chain gear
     constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
-    constexpr units::degrees_per_second_t kDefaultVelocity = 10_deg_per_s;
+    constexpr units::degrees_per_second_t kDefaultVelocity = 100_deg_per_s;
     constexpr double kVelocityScalar = 1.0;
-    constexpr units::degree_t kTolerance = 2_deg;
+    constexpr units::degree_t kTolerance = 0.5_deg;
     constexpr units::meter_t kArmLength = 0.2_m;
+ 
+    // placeholder
+    constexpr double kHasCoralCurrent = 36;
     
     static const subzero::SingleAxisMechanism kCoralArmMechanism = {
     // length
@@ -279,13 +310,15 @@ namespace ClimberConstants{
     
     constexpr units::revolutions_per_minute_t kMaxRpm = 5676_rpm;
     constexpr units::degree_t kHomeRotation = 0_deg;
-    constexpr units::degree_t kMaxRotation = 85_deg;
+    constexpr units::degree_t kMaxRotation = 110_deg;
     constexpr units::degree_t kRelativeDistancePerRev = 360_deg / 125;
     constexpr units::degree_t kAbsoluteDistancePerRev = 360_deg;
     constexpr units::degrees_per_second_t kDefaultVelocity = 10_deg_per_s;
     constexpr double kVelocityScalar = 1.0;
     constexpr units::degree_t kTolerance = 2_deg;
     constexpr units::meter_t kArmLength = 17_in;
+
+    constexpr double kPercentageScalar = 0.8;
     
     static const subzero::SingleAxisMechanism kClimberMechanism = {
     // length
@@ -304,3 +337,91 @@ namespace ClimberConstants{
         kRotationalAxisConstraints;
 
 }
+
+namespace CommandConstants {
+    // Edging placeholfer
+    constexpr units::meter_t kElevatorL1Position = 0.25_m;
+    constexpr units::meter_t kElevatorL2Position = 0.33_m;
+    constexpr units::meter_t kElevatorL3Position = 0.51_m;
+    constexpr units::meter_t kElevatorFeedPosition = 0.2_in;
+    constexpr units::meter_t kElevatorRemoveAlgaeFromL2Position = 0.38_m;
+    constexpr units::meter_t kElevatorRemoveAlgaeFromL3Position = 0.50_m;
+    constexpr units::meter_t kElevatorClimbUpPosition = 20.1_in;
+    constexpr units::meter_t kElevatorClimbDownPosition = 0.0_in;
+
+    constexpr units::degree_t kCoralL1Position = 249_deg;
+    constexpr units::degree_t kCoralL2Position = 240_deg;
+    constexpr units::degree_t kCoralL3Position = 218_deg;
+    constexpr units::degree_t kCoralFeedPosition = 77_deg;
+    constexpr units::degree_t kCoralHomePosition = 110_deg;
+    constexpr units::degree_t kCoralClimbPosition = 50_deg;
+    constexpr units::degree_t kCoralArmRemoveAlgaeFromL2Position = 216_deg;
+    constexpr units::degree_t kCoralArmRemoveAlgaeFromL3Position = 205_deg;
+
+    constexpr units::degree_t kAlgaeIntakePosition = 38_deg;
+    constexpr units::degree_t kAlgaeStorePosition = 30_deg;
+    constexpr units::degree_t kAlgaeStowPosition = 0_deg;
+    constexpr units::degree_t kAlgaeArmReefPosition = 20_deg;
+    constexpr units::degree_t kRemoveAlgaeAlgaeArmPosition = 10_deg;
+    constexpr units::degree_t kClimbAlgaeArmPosition = 80_deg;
+
+    constexpr double kCoralFeedSpeed = 0.25;
+    constexpr double kCoralExpelSpeed = -0.25;
+    constexpr double kCoralIntakeRetainCoralSpeed = 0.25;
+
+    constexpr double kAlgaeIntakeSpeed = -0.3;
+    constexpr double kAlgaeExpelSpeed = 0.65;
+
+    // Placeholder values
+    constexpr units::degree_t kClimberDownAngle = 0_deg;
+    constexpr units::degree_t kClimberUpAngle = 110_deg;
+
+    // Placeholder
+    constexpr units::second_t kCoralFeedTimeout = 3_s;
+    constexpr units::second_t kAlgaeIntakeTimeout = 5_s;
+    constexpr units::second_t kRemoveAlgaeFromReefTimeout = 3_s;
+    constexpr units::second_t kExpelCoralTimeout = 1_s;
+    constexpr units::second_t kWaitBeforeL2 = 0.5_s;
+}
+
+namespace VisionConstants {
+static constexpr std::string_view kFrontCamera{"PhotonVision"};
+static constexpr std::string_view kRearCamera{"PhotonVision2"};
+static const frc::Transform3d kRobotToCam2{
+    frc::Translation3d{2.147_in, 0_in, 23.369_in},
+    frc::Rotation3d{-90_deg, -0_deg, -140_deg}};
+static const frc::Transform3d kRobotToCam{
+    frc::Translation3d{5.714_in, 0_in, 23.533_in},
+    frc::Rotation3d{90_deg, -23.461_deg, 140_deg}};
+constexpr photon::PoseStrategy kPoseStrategy =
+    photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR;
+static const frc::AprilTagFieldLayout kTagLayout{
+    frc::LoadAprilTagLayoutField(frc::AprilTagField::k2024Crescendo)};
+static const Eigen::Matrix<double, 3, 1> kSingleTagStdDevs{4, 4, 8};
+static const Eigen::Matrix<double, 3, 1> kMultiTagStdDevs{0.5, 0.5, 1};
+
+const std::string kLimelightName = "limelight";
+constexpr double kKnownPixelWidth = 58;
+constexpr units::inch_t kNoteWidth = 14_in;
+constexpr units::inch_t kKnownCalibrationDistance = 60_in;
+constexpr units::inch_t kCalibrationDistanceAreaPercentage =
+    kKnownCalibrationDistance * kKnownPixelWidth;
+constexpr auto focalLength = kCalibrationDistanceAreaPercentage / kNoteWidth;
+
+constexpr units::degree_t kCameraAngle = -20_deg;
+constexpr units::inch_t kCameraLensHeight = 15_in;
+constexpr double kConfidenceThreshold = 0.3;
+constexpr double kTrigDistancePercentage = 0.5;
+constexpr double kAreaPercentageThreshold = 0.04;
+constexpr uint8_t kMaxTrackedTargets = 10;
+
+constexpr double kMinAngleDeg = -30.0;
+constexpr double kMaxAngleDeg = 30.0;
+
+static const wpi::array<double, 3> kDrivetrainStd = {0.1, 0.1, 0.1};
+static const wpi::array<double, 3> kVisionStd = {0.9, 0.9, 0.9};
+
+constexpr units::degree_t kGamepieceRotation = 180_deg;
+constexpr frc::Pose2d kSimGamepiecePose =
+    frc::Pose2d(7_m, 4_m, frc::Rotation2d(kGamepieceRotation));
+}  // namespace VisionConstants

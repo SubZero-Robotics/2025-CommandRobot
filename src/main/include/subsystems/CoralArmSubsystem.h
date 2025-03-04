@@ -22,7 +22,8 @@ class CoralArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
                 ? dynamic_cast<subzero::IPidMotorController&>(m_coralArmController)
                 : dynamic_cast<subzero::IPidMotorController&>(simCoralArmController),
             {
-             CoralArmConstants::kHomeRotation,
+             // Min distance
+             CoralArmConstants::kMinRotation,
              // Max distance
              CoralArmConstants::kMaxRotation,
              // Distance per revolution of relative encoder
@@ -45,8 +46,8 @@ class CoralArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
              CoralArmConstants::kCoralArmMechanism,
              // Conversion Function
              std::nullopt,
-
-             [] { return false; }, CoralArmConstants::kRotationalAxisConstraints},
+             // 
+             [this] { return false; }, CoralArmConstants::kRotationalAxisConstraints},
             CoralArmConstants::kArmLength,
             node} {
     }
@@ -65,7 +66,7 @@ class CoralArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
   rev::spark::SparkAbsoluteEncoder m_absEnc = m_coralArmMotor.GetAbsoluteEncoder();
   subzero::PidSettings coralArmPidSettings = {
       CoralArmConstants::kP, CoralArmConstants::kI, CoralArmConstants::kD,
-      CoralArmConstants::kIZone, CoralArmConstants::kFF, false};
+      CoralArmConstants::kIZone, CoralArmConstants::kFF, true};
   SparkMaxPidController m_coralArmController{"Coral Arm",
                                    m_coralArmMotor,
                                    m_enc,
@@ -78,5 +79,4 @@ class CoralArmSubsystem : public subzero::RotationalSingleAxisSubsystem<subzero:
 
   subzero::SimPidMotorController simCoralArmController{"Sim Arm", coralArmPidSettings,
                                                   CoralArmConstants::kMaxRpm};
-
 };

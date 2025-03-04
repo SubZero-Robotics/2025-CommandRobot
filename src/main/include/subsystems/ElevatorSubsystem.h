@@ -35,7 +35,7 @@ public:
              // Tolerance
              ElevatorConstants::kTolerance,
              // Min limit switch
-             &m_bottomLimitSwitchPort,
+             std::nullopt,
              // Max limit switch
              std::nullopt,
              // Reversed
@@ -46,7 +46,7 @@ public:
              // units in shuffleboard
              std::nullopt,
              // Ignore soft limits if `true` is returned
-             []() { return false; },
+             [this]() { return false; },
              // Trapazoid profile constraints
              ElevatorConstants::kElevatorProfileConstraints
         },
@@ -56,6 +56,16 @@ public:
         m_followerMotor.Configure(m_followerConfig, rev::spark::SparkBase::ResetMode::kNoResetSafeParameters, 
                                   rev::spark::SparkBase::PersistMode::kPersistParameters);
     }
+
+    void SetEncoderPosition(units::meter_t pos);
+
+    bool GetMinLimitSwitch();
+
+    bool GetMaxLimitSwitch();
+
+    void UpdatePidSettings(subzero::PidSettings settings);
+
+    void Periodic() override;
 
 private:
     rev::spark::SparkMax m_leadMotor{
@@ -69,13 +79,9 @@ private:
     // Here so we can set the foller motor as a follower
     rev::spark::SparkMaxConfig m_followerConfig;
 
-    frc::DigitalInput m_bottomLimitSwitchPort{ElevatorConstants::kBottomLimitSwitchPort};
-
     rev::spark::SparkClosedLoopController m_pidController = m_leadMotor.GetClosedLoopController();
     rev::spark::SparkRelativeEncoder m_enc = m_leadMotor.GetEncoder();
-    subzero::PidSettings m_elevatorPidSettings = {
-      ElevatorConstants::kElevatorP, ElevatorConstants::kElevatorI, ElevatorConstants::kElevatorD,
-      ElevatorConstants::kElevatorIZone, ElevatorConstants::kElevatorFF, false};
+    subzero::PidSettings m_elevatorPidSettings = ElevatorConstants::kElevatorPidSettings;
     SparkMaxPidController m_elevatorController{"Elevator",
                                    m_leadMotor,
                                    m_enc,

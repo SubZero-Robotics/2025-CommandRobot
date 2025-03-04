@@ -2,17 +2,24 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "subsystems/DriveSubsystem.h"
-
+#include "subsystems/DriveSubsystem.h" 
+#include <frc/DriverStation.h>
+#include <frc/RobotBase.h>
+#include <frc/RobotController.h>
+#include <frc/Timer.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <pathplanner/lib/path/PathPlannerPath.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/config/RobotConfig.h>
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+#include <subzero/drivetrain/SwerveUtils.h>
 #include <frc/geometry/Rotation2d.h>
 #include <hal/FRCUsageReporting.h>
 #include <frc/DriverStation.h>
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
+#include <units/length.h>
 #include <iostream>
 
 #include "Constants.h"
@@ -37,6 +44,8 @@ DriveSubsystem::DriveSubsystem()
   // Usage reporting for MAXSwerve template
   HAL_Report(HALUsageReporting::kResourceType_RobotDrive,
              HALUsageReporting::kRobotDriveSwerve_MaxSwerve);
+
+  frc::SmartDashboard::PutData("Field", &m_field);
 
   pathplanner::RobotConfig config = pathplanner::RobotConfig::fromGUISettings();
 
@@ -68,7 +77,7 @@ DriveSubsystem::DriveSubsystem()
 
   m_pidgey.SetYaw(0_deg, 100_ms); // Set our yaw to 0 degrees and wait up to 100 milliseconds for the setter to take affect
   m_pidgey.GetYaw().WaitForUpdate(100_ms); // And wait up to 100 milliseconds for the yaw to take affect
-  std::cout << "Set the yaw to 144 degrees, we are currently at " << m_pidgey.GetYaw() << std::endl;
+  // std::cout << "Set the yaw to 144 degrees, we are currently at " << m_pidgey.GetYaw() << std::endl;
 }
 
 void DriveSubsystem::Periodic() {
@@ -78,6 +87,9 @@ void DriveSubsystem::Periodic() {
                     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()});
     auto &yaw = m_pidgey.GetYaw();
+
+  m_field.SetRobotPose(m_odometry.GetPose());
+
   if (frc::Timer::GetFPGATimestamp() - currentTime >= GyroConstants::kPrintPeriod) {
 
     std::cout << "Yaw: " << yaw.GetValue().value() << std::endl;
@@ -213,6 +225,10 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
       pose);
 }
 
+void DriveSubsystem::ResetRotation() {
+  m_pidgey.Reset();
+}
+
 void DriveSubsystem::OffsetRotation(frc::Rotation2d offset) {
   m_pidgey.SetYaw(offset.Degrees() + m_pidgey.GetYaw().GetValue());
     m_odometry.ResetPosition(
@@ -220,4 +236,16 @@ void DriveSubsystem::OffsetRotation(frc::Rotation2d offset) {
       {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
         m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
       m_odometry.GetPose());
+}
+
+void DriveSubsystem::AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
+                                          units::second_t timestamp) {
+  // poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp);
+}
+
+void DriveSubsystem::AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
+                                          units::second_t timestamp,
+                                          const Eigen::Vector3d& stdDevs) {
+  // wpi::array<double, 3> newStdDevs{stdDevs(0), stdDevs(1), stdDevs(2)};
+  // poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp, newStdDevs);
 }
