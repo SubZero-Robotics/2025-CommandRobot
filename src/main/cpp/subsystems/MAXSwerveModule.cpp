@@ -5,6 +5,7 @@
 #include "subsystems/MAXSwerveModule.h"
 
 #include <frc/geometry/Rotation2d.h>
+#include <frc/RobotBase.h>
 
 #include "subsystems/Configs.h"
 
@@ -25,18 +26,50 @@ MAXSwerveModule::MAXSwerveModule(const int drivingCANId, const int turningCANId,
                            SparkBase::PersistMode::kPersistParameters);
 
   m_chassisAngularOffset = chassisAngularOffset;
-  m_desiredState.angle =
-      frc::Rotation2d(units::radian_t{m_turningAbsoluteEncoder.GetPosition()});
-  m_drivingEncoder.SetPosition(0);
+  if (frc::RobotBase::IsReal()) {
+    m_desiredState.angle =
+        frc::Rotation2d(units::radian_t{m_turningAbsoluteEncoder.GetPosition()});
+    m_drivingEncoder.SetPosition(0);
+  }
 }
 
 frc::SwerveModuleState MAXSwerveModule::GetState() const {
+  if (!frc::RobotBase::IsReal()) {
+    return GetSimState();
+  }
+
   return {units::meters_per_second_t{m_drivingEncoder.GetVelocity()},
           units::radian_t{m_turningAbsoluteEncoder.GetPosition() -
                           m_chassisAngularOffset}};
 }
 
+frc::SwerveModuleState MAXSwerveModule::GetSimState() const {
+  return frc::SwerveModuleState{
+      m_simDriveEncoderVelocity,
+      frc::Rotation2d{
+          units::radian_t{m_simCurrentAngle.value() - m_chassisAngularOffset}}};
+}
+
+frc::SwerveModulePosition MAXSwerveModule::GetSimPosition() const {
+  return frc::SwerveModulePosition{
+      m_simDriveEncoderPosition,
+      frc::Rotation2d{
+          units::radian_t{m_simCurrentAngle.value() - m_chassisAngularOffset}}};
+}
+
+frc::Rotation2d MAXSwerveModule::GetRotation() const {
+  if (!frc::RobotBase::IsReal()) {
+    return frc::Rotation2d{m_simCurrentAngle};
+  }
+  return frc::Rotation2d{
+      units::radian_t{m_turningAbsoluteEncoder.GetPosition()}};
+}
+
 frc::SwerveModulePosition MAXSwerveModule::GetPosition() const {
+  if (!frc::RobotBase::IsReal()) {
+    return GetSimPosition();
+  }
+
   return {units::meter_t{m_drivingEncoder.GetPosition()},
           units::radian_t{m_turningAbsoluteEncoder.GetPosition() -
                           m_chassisAngularOffset}};
@@ -53,7 +86,7 @@ void MAXSwerveModule::SetDesiredState(
 
   // Optimize the reference state to avoid spinning further than 90 degrees.
   correctedDesiredState.Optimize(
-      frc::Rotation2d(units::radian_t{m_turningAbsoluteEncoder.GetPosition()}));
+      GetRotation());
 
   m_drivingClosedLoopController.SetReference(
       (double)correctedDesiredState.speed, SparkMax::ControlType::kVelocity);
@@ -62,6 +95,18 @@ void MAXSwerveModule::SetDesiredState(
       SparkMax::ControlType::kPosition);
 
   m_desiredState = desiredState;
+
+  if (!frc::RobotBase::IsReal()) {
+    simUpdateDrivePosition(correctedDesiredState);
+    m_simCurrentAngle = correctedDesiredState.angle.Radians();
+  }
+}
+
+void MAXSwerveModule::simUpdateDrivePosition(
+    const frc::SwerveModuleState& desiredState) {
+  m_simDriveEncoderVelocity = desiredState.speed;
+  m_simDriveEncoderPosition +=
+      m_simDriveEncoderVelocity * DriveConstants::kPeriodicInterval;
 }
 
 void MAXSwerveModule::ResetEncoders() { m_drivingEncoder.SetPosition(0); }
