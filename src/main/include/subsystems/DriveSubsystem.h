@@ -130,6 +130,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
                             units::second_t timestamp,
                             const Eigen::Vector3d& stdDevs);
 
+  void SimulationPeriodic() override;
+
+  wpi::array<frc::SwerveModulePosition, 4U> GetModulePositions() const;
+
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
@@ -143,6 +147,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   // Gyro Sensor
   ctre::phoenix6::hardware::Pigeon2 m_pidgey{DriveConstants::kPigeonCanId, "rio"};
+  ctre::phoenix6::sim::Pigeon2SimState& m_simPidgey = m_pidgey.GetSimState();
+
   units::time::second_t currentTime{frc::Timer::GetFPGATimestamp()};
 
   // Odometry class for tracking robot pose

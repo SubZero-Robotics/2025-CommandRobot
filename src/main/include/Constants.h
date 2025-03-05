@@ -89,6 +89,8 @@ constexpr units::radians_per_second_t kMaxAngularSpeed{2 * std::numbers::pi};
 
 const int kPigeonCanId = 13;
 
+constexpr units::second_t kPeriodicInterval = 20_ms;
+
 constexpr double kDirectionSlewRate = 1.2;   // radians per second
 constexpr double kMagnitudeSlewRate = 1.8;   // percent per second (1 = 100%)
 constexpr double kRotationalSlewRate = 2.0;  // percent per second (1 = 100%)

@@ -75,26 +75,35 @@ DriveSubsystem::DriveSubsystem()
 
     /* Configure Pigeon2 */
 
-  m_pidgey.SetYaw(0_deg, 100_ms); // Set our yaw to 0 degrees and wait up to 100 milliseconds for the setter to take affect
-  m_pidgey.GetYaw().WaitForUpdate(100_ms); // And wait up to 100 milliseconds for the yaw to take affect
+  m_pidgey.SetYaw(0_deg, 20_ms); // Set our yaw to 0 degrees and wait up to 100 milliseconds for the setter to take affect
+  m_pidgey.GetYaw().WaitForUpdate(20_ms); // And wait up to 100 milliseconds for the yaw to take affect
   // std::cout << "Set the yaw to 144 degrees, we are currently at " << m_pidgey.GetYaw() << std::endl;
 }
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
-  m_odometry.Update(frc::Rotation2d(units::radian_t{
+
+  if (frc::RobotBase::IsReal()) {
+    poseEstimator.UpdateWithTime(frc::Timer::GetFPGATimestamp(), GetHeading(),
+                                 GetModulePositions());
+
+    auto updatedPose = poseEstimator.GetEstimatedPosition();
+    // https://github.com/Hemlock5712/2023-Robot/blob/dd5ac64587a3839492cfdb0a28d21677d465584a/src/main/java/frc/robot/subsystems/PoseEstimatorSubsystem.java#L149
+    m_lastGoodPosition = updatedPose;
+    m_field.SetRobotPose(updatedPose);
+
+    m_odometry.Update(frc::Rotation2d(units::radian_t{
                         m_pidgey.GetYaw().GetValue()}),
                     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()});
     auto &yaw = m_pidgey.GetYaw();
+  }
 
-  m_field.SetRobotPose(m_odometry.GetPose());
+  // if (frc::Timer::GetFPGATimestamp() - currentTime >= GyroConstants::kPrintPeriod) {
 
-  if (frc::Timer::GetFPGATimestamp() - currentTime >= GyroConstants::kPrintPeriod) {
-
-    std::cout << "Yaw: " << yaw.GetValue().value() << std::endl;
+  //   std::cout << "Yaw: " << yaw.GetValue().value() << std::endl;
   
-    currentTime += GyroConstants::kPrintPeriod;
+  //   currentTime += GyroConstants::kPrintPeriod;
   //   /**
   //    * GetYaw automatically calls Refresh(), no need to manually refresh.
   //    *
@@ -128,7 +137,30 @@ void DriveSubsystem::Periodic() {
   //    * timestamps when it receives the frame. This can be further used for latency compensation.
   //    */
   //   std::cout << std::endl;
-  }
+  // }
+}
+
+wpi::array<frc::SwerveModulePosition, 4U> DriveSubsystem::GetModulePositions()
+    const {
+  return {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
+          m_rearLeft.GetPosition(), m_rearRight.GetPosition()};
+}
+
+void DriveSubsystem::SimulationPeriodic() {
+  frc::ChassisSpeeds chassisSpeeds = m_driveKinematics.ToChassisSpeeds(
+      m_frontLeft.GetState(), m_frontRight.GetState(), m_rearLeft.GetState(),
+      m_rearRight.GetState());
+
+  m_simPidgey.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
+  m_simPidgey.SetRawYaw(
+      GetHeading() +
+      units::degree_t(chassisSpeeds.omega.convert<units::deg_per_s>().value() *
+                      DriveConstants::kPeriodicInterval.value()));
+
+  poseEstimator.Update(GetHeading(), GetModulePositions());
+  m_field.SetRobotPose(poseEstimator.GetEstimatedPosition());
+
+  std::cout << "In Sim" << std::endl;
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
