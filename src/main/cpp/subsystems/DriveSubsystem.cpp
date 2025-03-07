@@ -75,31 +75,35 @@ DriveSubsystem::DriveSubsystem()
 
     /* Configure Pigeon2 */
 
-  m_pidgey.SetYaw(0_deg, 20_ms); // Set our yaw to 0 degrees and wait up to 100 milliseconds for the setter to take affect
-  m_pidgey.GetYaw().WaitForUpdate(20_ms); // And wait up to 100 milliseconds for the yaw to take affect
+  m_pidgey.SetYaw(0_deg, 100_ms); // Set our yaw to 0 degrees and wait up to 100 milliseconds for the setter to take affect
+  m_pidgey.GetYaw().WaitForUpdate(100_ms); // And wait up to 100 milliseconds for the yaw to take affect
   // std::cout << "Set the yaw to 144 degrees, we are currently at " << m_pidgey.GetYaw() << std::endl;
 }
 
 void DriveSubsystem::Periodic() {
+  // The `poseEstimator` object replaces our `m_odometry`
   // Implementation of subsystem periodic method goes here.
+  // m_odometry.Update(frc::Rotation2d(units::radian_t{
+  //                       m_pidgey.GetYaw().GetValue()}),
+  //                   {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
+  //                 m_rearLeft.GetPosition(), m_rearRight.GetPosition()});
+  //   auto &yaw = m_pidgey.GetYaw();
 
-  if (frc::RobotBase::IsReal()) {
-    poseEstimator.UpdateWithTime(frc::Timer::GetFPGATimestamp(), GetHeading(),
-                                 GetModulePositions());
+  poseEstimator.UpdateWithTime(frc::Timer::GetFPGATimestamp(), GetHeading(), GetModulePositions());
 
-    auto updatedPose = poseEstimator.GetEstimatedPosition();
-    // https://github.com/Hemlock5712/2023-Robot/blob/dd5ac64587a3839492cfdb0a28d21677d465584a/src/main/java/frc/robot/subsystems/PoseEstimatorSubsystem.java#L149
-    m_lastGoodPosition = updatedPose;
-    m_field.SetRobotPose(updatedPose);
+  m_vision.UpdateEstimatedGlobalPose(poseEstimator, true);
 
-    m_odometry.Update(frc::Rotation2d(units::radian_t{
-                        m_pidgey.GetYaw().GetValue()}),
-                    {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
-                  m_rearLeft.GetPosition(), m_rearRight.GetPosition()});
-    auto &yaw = m_pidgey.GetYaw();
-  }
+  auto updatedPose = poseEstimator.GetEstimatedPosition();
 
-  // if (frc::Timer::GetFPGATimestamp() - currentTime >= GyroConstants::kPrintPeriod) {
+  m_lastGoodPosition = updatedPose;
+  m_field.SetRobotPose(updatedPose);
+
+  logDrivebase();
+
+  frc::SmartDashboard::PutNumber("Robot X", poseEstimator.GetEstimatedPosition().X().value());
+  frc::SmartDashboard::PutNumber("Robot Y", poseEstimator.GetEstimatedPosition().Y().value());
+
+  if (frc::Timer::GetFPGATimestamp() - currentTime >= GyroConstants::kPrintPeriod) {
 
   //   std::cout << "Yaw: " << yaw.GetValue().value() << std::endl;
   
@@ -138,6 +142,7 @@ void DriveSubsystem::Periodic() {
   //    */
   //   std::cout << std::endl;
   // }
+  }
 }
 
 wpi::array<frc::SwerveModulePosition, 4U> DriveSubsystem::GetModulePositions()
@@ -247,15 +252,16 @@ double DriveSubsystem::GetTurnRate() {
   return -m_pidgey.GetAngularVelocityZWorld().GetValue().value();
 }
 
-frc::Pose2d DriveSubsystem::GetPose() { return m_odometry.GetPose(); }
+frc::Pose2d DriveSubsystem::GetPose() { return poseEstimator.GetEstimatedPosition(); }
 
 void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
-  m_odometry.ResetPosition(
-      GetHeading(),
-      {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
-        m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
-      pose);
+  // m_odometry.ResetPosition(
+  //     GetHeading(),
+  //     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
+  //       m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
+  //     pose);
 
+  m_lastGoodPosition = pose;
   poseEstimator.ResetPosition(GetHeading(), GetModulePositions(), pose);
 }
 
@@ -263,23 +269,38 @@ void DriveSubsystem::ResetRotation() {
   m_pidgey.Reset();
 }
 
+void DriveSubsystem::logDrivebase() {
+  std::vector states_vec = {m_frontLeft.GetState(), m_frontRight.GetState(),
+                            m_rearLeft.GetState(), m_rearRight.GetState()};
+  std::span<frc::SwerveModuleState, 4> states(states_vec.begin(),
+                                              states_vec.end());
+  std::vector desired_vec = {
+      m_frontLeft.GetDesiredState(), m_frontRight.GetDesiredState(),
+      m_rearLeft.GetDesiredState(), m_rearRight.GetDesiredState()};
+  std::span<frc::SwerveModuleState, 4> desiredStates(desired_vec.begin(),
+                                                     desired_vec.end());
+
+  m_publisher.Set(states);
+  m_desiredPublisher.Set(desiredStates);
+}
+
 void DriveSubsystem::OffsetRotation(frc::Rotation2d offset) {
   m_pidgey.SetYaw(offset.Degrees() + m_pidgey.GetYaw().GetValue());
-    m_odometry.ResetPosition(
-      m_pidgey.GetYaw().GetValue(),
-      {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
-        m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
-      m_odometry.GetPose());
+    // m_odometry.ResetPosition(
+    //   m_pidgey.GetYaw().GetValue(),
+    //   {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
+    //     m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
+    //   m_odometry.GetPose());
 }
 
 void DriveSubsystem::AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
                                           units::second_t timestamp) {
-  // poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp);
+  poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp);
 }
 
 void DriveSubsystem::AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
                                           units::second_t timestamp,
                                           const Eigen::Vector3d& stdDevs) {
-  // wpi::array<double, 3> newStdDevs{stdDevs(0), stdDevs(1), stdDevs(2)};
-  // poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp, newStdDevs);
+  wpi::array<double, 3> newStdDevs{stdDevs(0), stdDevs(1), stdDevs(2)};
+  poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp, newStdDevs);
 }

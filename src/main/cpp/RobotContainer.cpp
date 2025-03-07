@@ -68,6 +68,23 @@ RobotContainer::RobotContainer() {
             true);
       },
       {&m_drive}));
+
+    // m_climber.SetDefaultCommand(
+    //   frc2::RunCommand(
+    //     [this]() {
+    //       m_climber.RunMotorPercentage((-m_driverController.GetLeftTriggerAxis() 
+    //         + m_driverController.GetRightTriggerAxis()) * ClimberConstants::kPercentageScalar);
+
+    //         std::cout << "Controller input: " << (-m_driverController.GetLeftTriggerAxis() 
+    //         + m_driverController.GetRightTriggerAxis()) * ClimberConstants::kPercentageScalar
+    //         << ", Current relative position: " << m_climber.GetCurrentPosition().value() << std::endl;
+    //     },
+    //     {&m_climber}
+    //   )
+    // );
+
+  // Has to be raised before match so coral arm is within frame perimeter
+  // m_elevator.SetEncoderPosition(ElevatorConstants::kElevatorStartPosition);
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -115,6 +132,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
 void RobotContainer::Periodic() {
   frc::SmartDashboard::PutData("Robot Elevator", &m_elevatorMech);
+
+  // frc::SmartDashboard::PutData("Zero Odometry", new frc2::InstantCommand([this]() { m_drive.ResetRotation(); }));
 
   // frc::SmartDashboard::PutData("Zero Odometry", new frc2::InstantCommand([this]() { m_drive.ResetRotation(); }));
 }

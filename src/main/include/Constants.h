@@ -19,6 +19,12 @@
 #include <units/length.h>
 #include <wpi/array.h>
 
+#include <frc/apriltag/AprilTagFieldLayout.h>
+#include <frc/geometry/Transform3d.h>
+#include <photon/PhotonPoseEstimator.h>
+#include <units/length.h>
+#include <wpi/array.h>
+
 
 #include <numbers>
 #include <string>
@@ -386,9 +392,9 @@ namespace CommandConstants {
 }
 
 namespace VisionConstants {
-static constexpr std::string_view kLeftCamera{"PhotonVision"};
-static constexpr std::string_view kRightCamera{"PhotonVision2"};
-static constexpr std::string_view kBackCamera{"PhotonVision3"};
+static constexpr std::string_view kLeftCameraName{"PhotonVision"};
+static constexpr std::string_view kRightCameraName{"PhotonVision2"};
+static constexpr std::string_view kBackCameraName{"PhotonVision3"};
 static const frc::Transform3d kRobotToCamLeft{
     frc::Translation3d{2.514_in, -8.839_in, 25.22_in},
     frc::Rotation3d{90_deg, -0_deg, -10_deg}};
