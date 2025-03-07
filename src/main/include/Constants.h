@@ -378,7 +378,6 @@ namespace CommandConstants {
     constexpr units::degree_t kClimberDownAngle = 0_deg;
     constexpr units::degree_t kClimberUpAngle = 110_deg;
 
-    // Placeholder
     constexpr units::second_t kCoralFeedTimeout = 3_s;
     constexpr units::second_t kAlgaeIntakeTimeout = 5_s;
     constexpr units::second_t kRemoveAlgaeFromReefTimeout = 3_s;

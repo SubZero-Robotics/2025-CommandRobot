@@ -255,6 +255,8 @@ void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
       {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
         m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
       pose);
+
+  poseEstimator.ResetPosition(GetHeading(), GetModulePositions(), pose);
 }
 
 void DriveSubsystem::ResetRotation() {
