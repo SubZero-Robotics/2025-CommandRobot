@@ -71,14 +71,14 @@ Following the WPILib command based structure we have broken our robot up into a 
 
 |   Purpose/Name    | CAN ID | Motor/Driver Type | PDH Port |
 | :---------------: | :----: | :---------------: | :------: |
-| Front Right Drive |   2    |     SparkMax      |    8     |
-| Rear Right Drive  |   4    |     SparkMax      |    3     |
-|  Rear Left Drive  |   6    |     SparkMax      |    16    |
-| Front Left Drive  |   8    |     SparkMax      |    11    |
-| Front Right Turn  |   1    |     SparkMax      |    7     |
-|  Rear Right Turn  |   3    |     SparkMax      |    4     |
-|  Rear Left Turn   |   5    |     SparkMax      |    15    |
-|  Front Left Turn  |   7    |     SparkMax      |    12    |
+| Front Right Drive |   4    |     SparkMax      |    4     |
+| Rear Right Drive  |   9    |     SparkMax      |    9     |
+|  Rear Left Drive  |   1    |     SparkMax      |    1     |
+| Front Left Drive  |   18   |     SparkMax      |    17    |
+| Front Right Turn  |   5    |     SparkMax      |    5     |
+|  Rear Right Turn  |   8    |     SparkMax      |    8     |
+|  Rear Left Turn   |   20   |     SparkMax      |    20    |
+|  Front Left Turn  |   2    |     SparkMax      |    2     |
 
 \* = Inverted
 
