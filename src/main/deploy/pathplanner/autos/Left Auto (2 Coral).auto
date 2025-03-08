@@ -11,9 +11,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Left Start to Reef Left Side Left"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Start to Reef Left Side Left"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "To L2 Position"
+                }
+              }
+            ]
           }
         },
         {
@@ -29,9 +42,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Pause"
+            "commands": []
           }
         },
         {

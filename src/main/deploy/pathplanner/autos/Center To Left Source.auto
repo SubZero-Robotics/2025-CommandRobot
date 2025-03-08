@@ -11,9 +11,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Center Start To Reef Left Side Left"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Start To Reef Left Side Left"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "To L2 Position"
+                }
+              }
+            ]
           }
         },
         {
@@ -23,21 +36,41 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Left Reef to Far Left Source"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Reef to Far Left Source"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "To Feed Position"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "wait",
+          "type": "parallel",
           "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Far Left Source to Right Reef"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Far Left Source to Right Reef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "To L2 Position"
+                }
+              }
+            ]
           }
         },
         {

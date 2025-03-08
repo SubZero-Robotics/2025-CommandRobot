@@ -392,8 +392,8 @@ namespace CommandConstants {
 }
 
 namespace VisionConstants {
-static constexpr std::string_view kLeftCameraName{"PhotonVision"};
-static constexpr std::string_view kRightCameraName{"PhotonVision2"};
+static constexpr std::string_view kLeftCameraName{"PhotonVisionLeft"};
+static constexpr std::string_view kRightCameraName{"PhotonVisionRight"};
 static constexpr std::string_view kBackCameraName{"PhotonVision3"};
 static const frc::Transform3d kRobotToCamLeft{
     frc::Translation3d{2.514_in, -8.839_in, 25.22_in},

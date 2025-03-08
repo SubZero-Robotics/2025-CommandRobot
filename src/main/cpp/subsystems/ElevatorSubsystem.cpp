@@ -15,10 +15,10 @@ bool ElevatorSubsystem::GetMaxLimitSwitch() {
 
 void ElevatorSubsystem::Periodic() {
   if (GetMaxLimitSwitch()) {
-    std::cout << "Elevator at max" << std::endl;
+    // std::cout << "Elevator at max" << std::endl;
     SetEncoderPosition(ElevatorConstants::kMaxDistance);
   } else if (GetMinLimitSwitch()) {
-    std::cout << "Elevator at min" << std::endl;
+    // std::cout << "Elevator at min" << std::endl;
     SetEncoderPosition(ElevatorConstants::kMinDistance);
   }
 
