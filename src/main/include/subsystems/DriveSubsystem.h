@@ -142,6 +142,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   wpi::array<frc::SwerveModulePosition, 4U> GetModulePositions() const;
 
+frc::ChassisSpeeds GetSpeedsFromJoystick(
+    units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
+    units::radians_per_second_t rot, bool fieldRelative);
+
   void logDrivebase();
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -208,6 +212,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
     VisionConstants::kSingleTagStdDevs,
     VisionConstants::kMultiTagStdDevs
   };
+
+  units::second_t m_lastUpdatedTime;
 };
 
 

@@ -164,14 +164,19 @@ void DriveSubsystem::SimulationPeriodic() {
 
   poseEstimator.Update(GetHeading(), GetModulePositions());
   m_field.SetRobotPose(poseEstimator.GetEstimatedPosition());
-
-  std::cout << "In Sim" << std::endl;
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
                            units::radians_per_second_t rot,
                            bool fieldRelative) {
+
+  auto now = frc::Timer::GetFPGATimestamp();
+  auto dif = now - m_lastUpdatedTime;
+
+  auto joystickSpeeds =
+      GetSpeedsFromJoystick(xSpeed, ySpeed, rot, fieldRelative);
+
   // Convert the commanded speeds into the correct units for the drivetrain
   units::meters_per_second_t xSpeedDelivered =
       xSpeed.value() * DriveConstants::kMaxSpeed;
@@ -181,12 +186,9 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
       rot.value() * DriveConstants::kMaxAngularSpeed;
 
   auto states = m_driveKinematics.ToSwerveModuleStates(
-      fieldRelative
-          ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-                xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                frc::Rotation2d(units::radian_t{
-                    m_pidgey.GetYaw().GetValue()}))
-          : frc::ChassisSpeeds{xSpeedDelivered, ySpeedDelivered, rotDelivered});
+      frc::ChassisSpeeds::Discretize(joystickSpeeds, dif));
+
+  m_lastUpdatedTime = now;
 
   m_driveKinematics.DesaturateWheelSpeeds(&states, DriveConstants::kMaxSpeed);
 
@@ -196,6 +198,17 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   m_frontRight.SetDesiredState(fr);
   m_rearLeft.SetDesiredState(bl);
   m_rearRight.SetDesiredState(br);
+}
+
+frc::ChassisSpeeds DriveSubsystem::GetSpeedsFromJoystick(
+    units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
+    units::radians_per_second_t rot, bool fieldRelative) {
+  return fieldRelative
+             ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+                   xSpeed * DriveConstants::kMaxSpeed.value(),
+                   ySpeed * DriveConstants::kMaxSpeed.value(),
+                   rot * DriveConstants::kMaxAngularSpeed.value(), GetHeading())
+             : frc::ChassisSpeeds{xSpeed, ySpeed, rot};
 }
 
 void DriveSubsystem::Drive(frc::ChassisSpeeds speeds) {
