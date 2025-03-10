@@ -30,7 +30,7 @@
 #include <subzero/vision/PhotonVisionEstimators.h>
 #include <subzero/target/ITurnToTarget.h>
 #include <subzero/logging/ConsoleLogger.h>
-
+#include <photon/PhotonCamera.h>
 #include "Constants.h"
 #include "MAXSwerveModule.h"
 
@@ -133,7 +133,6 @@ class DriveSubsystem : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-
   frc::ChassisSpeeds getRobotRelativeSpeeds();
 
   MAXSwerveModule m_frontLeft;
@@ -165,6 +164,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
   frc::Pose2d m_lastGoodPosition;
 
   subzero::PhotonVisionEstimators* m_vision;
+  photon::PhotonCamera m_camera{"purplePipeCam"};
 };
 
 

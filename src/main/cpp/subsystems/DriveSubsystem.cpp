@@ -21,7 +21,7 @@
 #include <units/velocity.h>
 #include <units/length.h>
 #include <iostream>
-
+#include <photon/PhotonCamera.h>
 #include "Constants.h"
 
 using namespace DriveConstants;
@@ -78,10 +78,12 @@ DriveSubsystem::DriveSubsystem()
   m_pidgey.SetYaw(0_deg, 100_ms); // Set our yaw to 0 degrees and wait up to 100 milliseconds for the setter to take affect
   m_pidgey.GetYaw().WaitForUpdate(100_ms); // And wait up to 100 milliseconds for the yaw to take affect
   // std::cout << "Set the yaw to 144 degrees, we are currently at " << m_pidgey.GetYaw() << std::endl;
+ 
 }
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
+  
   m_odometry.Update(frc::Rotation2d(units::radian_t{
                         m_pidgey.GetYaw().GetValue()}),
                     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
@@ -128,6 +130,9 @@ void DriveSubsystem::Periodic() {
   //    * timestamps when it receives the frame. This can be further used for latency compensation.
   //    */
   //   std::cout << std::endl;
+  photon::PhotonPipelineResult result = m_camera.GetLatestResult();
+  bool hasTargets = result.HasTargets();
+  std::cout << "Has Targets:" << hasTargets << std::endl;
   }
 }
 
