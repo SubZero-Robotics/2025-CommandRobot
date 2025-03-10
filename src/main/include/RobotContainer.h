@@ -85,4 +85,7 @@ class RobotContainer {
   };
 
   CommandController m_commandController{subsystems};
+
+  units::second_t m_timeSinceControllerInput;
+  units::second_t m_defaultLastCalled;
 };

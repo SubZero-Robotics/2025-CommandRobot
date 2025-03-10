@@ -93,6 +93,8 @@ namespace DriveConstants {
 constexpr units::meters_per_second_t kMaxSpeed = 4.92_mps;
 constexpr units::radians_per_second_t kMaxAngularSpeed{2 * std::numbers::pi};
 
+constexpr units::second_t kSetXThreshold = 0.5_s;
+
 const int kPigeonCanId = 13;
 
 constexpr units::second_t kPeriodicInterval = 20_ms;
@@ -175,7 +177,7 @@ constexpr units::second_t kFeedWaitTime = 2_s;
 
 namespace OIConstants {
 constexpr int kDriverControllerPort = 0;
-constexpr double kDriveDeadband = 0.05;
+constexpr double kDriveDeadband = 0.08;
 }  // namespace OIConstants
 
 namespace GyroConstants {
@@ -393,7 +395,7 @@ namespace CommandConstants {
 
 namespace VisionConstants {
 static constexpr std::string_view kLeftCameraName{"PhotonVisionLeft"};
-static constexpr std::string_view kRightCameraName{"PhotonVisionRight"};
+static constexpr std::string_view kRightCameraName{"purplePipeCam"};
 static constexpr std::string_view kBackCameraName{"PhotonVision3"};
 static const frc::Transform3d kRobotToCamLeft{
     frc::Translation3d{2.514_in, -8.839_in, 25.22_in},
@@ -408,7 +410,7 @@ static const frc::Transform3d kRobotToCamBack{
 constexpr photon::PoseStrategy kPoseStrategy =
     photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR;
 static const frc::AprilTagFieldLayout kTagLayout{
-    frc::LoadAprilTagLayoutField(frc::AprilTagField::k2024Crescendo)};
+    frc::LoadAprilTagLayoutField(frc::AprilTagField::k2025ReefscapeWelded)};
 static const Eigen::Matrix<double, 3, 1> kSingleTagStdDevs{4, 4, 8};
 static const Eigen::Matrix<double, 3, 1> kMultiTagStdDevs{0.5, 0.5, 1};
 

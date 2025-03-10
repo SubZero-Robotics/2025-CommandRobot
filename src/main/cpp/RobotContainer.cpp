@@ -50,6 +50,9 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("Home", std::move(m_commandController.HomeElevator()));
   pathplanner::NamedCommands::registerCommand("Delayed To L2 Position", std::move(frc2::cmd::Wait(CommandConstants::kWaitBeforeL2).AndThen(m_commandController.MoveToPositionL2())));
 
+  m_timeSinceControllerInput = 0_s;
+  m_defaultLastCalled = 0_s;
+
   // Configure the button bindings
   ConfigureBindings();
 
@@ -59,13 +62,30 @@ RobotContainer::RobotContainer() {
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
         m_drive.Drive(
-            -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetLeftY(), OIConstants::kDriveDeadband)},
-            -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetLeftX(), OIConstants::kDriveDeadband)},
-            -units::radians_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetRightX(), OIConstants::kDriveDeadband)},
-            true);
+          -units::meters_per_second_t{frc::ApplyDeadband(
+              m_driverController.GetLeftY(), OIConstants::kDriveDeadband)},
+          -units::meters_per_second_t{frc::ApplyDeadband(
+              m_driverController.GetLeftX(), OIConstants::kDriveDeadband)},
+          -units::radians_per_second_t{frc::ApplyDeadband(
+              m_driverController.GetRightX(), OIConstants::kDriveDeadband)},
+        true);
+
+        units::second_t current = frc::Timer::GetFPGATimestamp();
+        if (std::hypot(m_driverController.GetLeftX(), m_driverController.GetLeftY()) < OIConstants::kDriveDeadband
+         && m_driverController.GetRightX() < OIConstants::kDriveDeadband) {
+          units::second_t dif = current - m_defaultLastCalled;
+          m_timeSinceControllerInput += dif;
+
+          if (m_timeSinceControllerInput > DriveConstants::kSetXThreshold) {
+            m_drive.SetX();
+
+            // std::cout << "Called SetX()" << std::endl;
+          }
+        } else {
+            m_timeSinceControllerInput = 0_s;
+        }
+
+        m_defaultLastCalled = current;
       },
       {&m_drive}));
 
