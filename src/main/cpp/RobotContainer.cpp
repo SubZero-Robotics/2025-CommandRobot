@@ -56,33 +56,50 @@ RobotContainer::RobotContainer() {
   // Configure the button bindings
   ConfigureBindings();
 
+  m_zeroedBeforeSetX = false;
+
   // Set up default drive command
   // The left stick controls translation of the robot.
   // Turning is controlled by the X axis of the right stick.
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
-        m_drive.Drive(
-          -units::meters_per_second_t{frc::ApplyDeadband(
-              m_driverController.GetLeftY(), OIConstants::kDriveDeadband)},
-          -units::meters_per_second_t{frc::ApplyDeadband(
-              m_driverController.GetLeftX(), OIConstants::kDriveDeadband)},
-          -units::radians_per_second_t{frc::ApplyDeadband(
-              m_driverController.GetRightX(), OIConstants::kDriveDeadband)},
-        true);
 
         units::second_t current = frc::Timer::GetFPGATimestamp();
         if (std::hypot(m_driverController.GetLeftX(), m_driverController.GetLeftY()) < OIConstants::kDriveDeadband
-         && m_driverController.GetRightX() < OIConstants::kDriveDeadband) {
+         && std::fabs(m_driverController.GetRightX()) < OIConstants::kDriveDeadband) {
           units::second_t dif = current - m_defaultLastCalled;
           m_timeSinceControllerInput += dif;
 
+          if (!m_zeroedBeforeSetX) {
+              m_drive.Drive(
+                0_mps,
+                0_mps,
+                0_deg_per_s,
+                true
+              );
+          }
+
           if (m_timeSinceControllerInput > DriveConstants::kSetXThreshold) {
+
+            m_zeroedBeforeSetX = true;
+
             m_drive.SetX();
 
-            // std::cout << "Called SetX()" << std::endl;
+            std::cout << "Called SetX()" << std::endl;
           }
         } else {
             m_timeSinceControllerInput = 0_s;
+
+          m_drive.Drive(
+            -units::meters_per_second_t{frc::ApplyDeadband(
+                m_driverController.GetLeftY(), OIConstants::kDriveDeadband)},
+            -units::meters_per_second_t{frc::ApplyDeadband(
+                m_driverController.GetLeftX(), OIConstants::kDriveDeadband)},
+            -units::radians_per_second_t{frc::ApplyDeadband(
+                m_driverController.GetRightX(), OIConstants::kDriveDeadband)},
+          true);
+
+          m_zeroedBeforeSetX = false;
         }
 
         m_defaultLastCalled = current;

@@ -44,13 +44,20 @@
         {
           "type": "parallel",
           "data": {
-            "commands": []
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Far Left Source to Right Reef"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "To L2 Position"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Far Left Source to Right Reef"
+                }
+              }
+            ]
           }
         },
         {

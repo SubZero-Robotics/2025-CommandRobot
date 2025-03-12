@@ -88,4 +88,6 @@ class RobotContainer {
 
   units::second_t m_timeSinceControllerInput;
   units::second_t m_defaultLastCalled;
+
+  bool m_zeroedBeforeSetX;
 };

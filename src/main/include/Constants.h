@@ -191,15 +191,8 @@ namespace ElevatorConstants {
     const int kBottomLimitSwitchPort = 1;
     const int kTopLimitSwitchPort = 2;
 
-    // Placeholder values
-    const double kElevatorP = 70.0;
-    const double kElevatorI = 0.0;
-    const double kElevatorD = 0.0;
-    const double kElevatorIZone = 0.0;
-    const double kElevatorFF = 0.0;
-
     const subzero::PidSettings kElevatorPidSettings = {
-      40.0, 0.0, 0.0,
+      160.0, 0.0, 0.0,
       0.0, 0.0, false};
 
     const subzero::PidSettings kHomePidSettings = {
@@ -229,7 +222,7 @@ namespace ElevatorConstants {
     // color
     subzero::ColorConstants::kRed};
 
-    const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{1_fps * 10, 0.75_fps_sq * 20};
+    const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{1_fps * 10, 20_fps_sq};
 };
 
 namespace AlgaeArmConstants{
