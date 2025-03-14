@@ -93,6 +93,8 @@ namespace DriveConstants {
 constexpr units::meters_per_second_t kMaxSpeed = 4.92_mps;
 constexpr units::radians_per_second_t kMaxAngularSpeed{2 * std::numbers::pi};
 
+constexpr double kLowSensivityCoefficient = 0.3;
+
 constexpr units::second_t kSetXThreshold = 0.5_s;
 
 const int kPigeonCanId = 13;
@@ -391,8 +393,8 @@ static constexpr std::string_view kLeftCameraName{"PhotonVisionLeft"};
 // static constexpr std::string_view kRightCameraName{"purplePipeCam"};
 // static constexpr std::string_view kBackCameraName{"PhotonVision3"};
 static const frc::Transform3d kRobotToCamLeft{
-    frc::Translation3d{2.514_in, -8.839_in, 25.22_in},
-    frc::Rotation3d{90_deg, -0_deg, 10_deg}};
+    frc::Translation3d{4.52_in, 0_in, 23.41_in},
+    frc::Rotation3d{0_deg, -0_deg, 180_deg}};
 // static const frc::Transform3d kRobotToCamRight{
 //     frc::Translation3d{2.514_in, 8.839_in, 25.22_in},
 //     frc::Rotation3d{-90_deg, 0_deg, 10_deg}};
