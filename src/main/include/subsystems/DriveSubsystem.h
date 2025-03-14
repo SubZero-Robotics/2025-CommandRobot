@@ -70,6 +70,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   void Drive(frc::ChassisSpeeds speeds);
 
+  frc2::CommandPtr MoveToAngle(units::degree_t angle);
+
   /**
    * Sets the wheels into an X formation to prevent movement.
    */
@@ -191,21 +193,21 @@ frc::ChassisSpeeds GetSpeedsFromJoystick(
       // offsets
       VisionConstants::kRobotToCamLeft};
 
-  photon::PhotonPoseEstimator poseRight{
-      // layout
-      VisionConstants::kTagLayout,
-      // strategy
-      VisionConstants::kPoseStrategy,
-      // offsets
-      VisionConstants::kRobotToCamRight};
+  // photon::PhotonPoseEstimator poseRight{
+  //     // layout
+  //     VisionConstants::kTagLayout,
+  //     // strategy
+  //     VisionConstants::kPoseStrategy,
+  //     // offsets
+  //     VisionConstants::kRobotToCamRight};
  
   photon::PhotonCamera m_leftCamera{VisionConstants::kLeftCameraName};
-  photon::PhotonCamera m_rightCamera{VisionConstants::kRightCameraName};
+  // photon::PhotonCamera m_rightCamera{VisionConstants::kRightCameraName};
 
   std::vector<subzero::PhotonVisionEstimators::PhotonCameraEstimator>
       poseCameras{
           subzero::PhotonVisionEstimators::PhotonCameraEstimator(poseLeft, m_leftCamera),
-          subzero::PhotonVisionEstimators::PhotonCameraEstimator(poseRight, m_rightCamera),
+          // subzero::PhotonVisionEstimators::PhotonCameraEstimator(poseRight, m_rightCamera),
       };
 
   subzero::PhotonVisionEstimators m_vision{poseCameras,

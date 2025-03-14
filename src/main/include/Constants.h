@@ -209,7 +209,7 @@ namespace ElevatorConstants {
     constexpr units::meter_t kRelativeDistancePerRev = (1.685_in * M_PI) / 36; // Pitch diameter of gear with 36:1 ratio gearbox
     constexpr units::meters_per_second_t kDefaultVelocity = 0.66_mps;
     constexpr double kVelocityScalar = 1.0;
-    constexpr units::meter_t kTolerance = 0.5_in;
+    constexpr units::meter_t kTolerance = 0.1_in;
 
     // Placeholder
     const subzero::SingleAxisMechanism kElevatorMechanism {
@@ -388,17 +388,17 @@ namespace CommandConstants {
 
 namespace VisionConstants {
 static constexpr std::string_view kLeftCameraName{"PhotonVisionLeft"};
-static constexpr std::string_view kRightCameraName{"purplePipeCam"};
-static constexpr std::string_view kBackCameraName{"PhotonVision3"};
+// static constexpr std::string_view kRightCameraName{"purplePipeCam"};
+// static constexpr std::string_view kBackCameraName{"PhotonVision3"};
 static const frc::Transform3d kRobotToCamLeft{
     frc::Translation3d{2.514_in, -8.839_in, 25.22_in},
-    frc::Rotation3d{90_deg, -0_deg, -10_deg}};
-static const frc::Transform3d kRobotToCamRight{
-    frc::Translation3d{2.514_in, 8.839_in, 25.22_in},
-    frc::Rotation3d{-90_deg, 0_deg, 10_deg}};
-static const frc::Transform3d kRobotToCamBack{
-    frc::Translation3d{4.52_in, 0_in, 23.41_in},
-    frc::Rotation3d{0_deg, -0_deg, 180_deg}};
+    frc::Rotation3d{90_deg, -0_deg, 10_deg}};
+// static const frc::Transform3d kRobotToCamRight{
+//     frc::Translation3d{2.514_in, 8.839_in, 25.22_in},
+//     frc::Rotation3d{-90_deg, 0_deg, 10_deg}};
+// static const frc::Transform3d kRobotToCamBack{
+//     frc::Translation3d{4.52_in, 0_in, 23.41_in},
+//     frc::Rotation3d{0_deg, -0_deg, 180_deg}};
 
 constexpr photon::PoseStrategy kPoseStrategy =
     photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR;
