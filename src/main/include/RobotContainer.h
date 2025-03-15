@@ -92,4 +92,6 @@ class RobotContainer {
   bool m_zeroedBeforeSetX;
 
   bool m_isReducedSensitivity;
+
+  double m_lowSensitivityCoefficient;
 };

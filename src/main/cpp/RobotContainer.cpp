@@ -30,8 +30,10 @@
 #include "subsystems/CoralArmSubsystem.h"
 
 RobotContainer::RobotContainer() 
-  : m_isReducedSensitivity{false} {
+  : m_isReducedSensitivity{false}, m_lowSensitivityCoefficient{DriveConstants::kLowSensivityCoefficient} {
   // Initialize all of your commands and subsystems here
+
+  frc::SmartDashboard::PutNumber("Low Sensitivity Percentage", m_lowSensitivityCoefficient);
 
   frc::SmartDashboard::PutData(&m_chooser);
   m_chooser.SetDefaultOption(AutoConstants::kCenterToCenterAuto, AutoConstants::kCenterToCenterAuto);
@@ -89,13 +91,11 @@ RobotContainer::RobotContainer()
             m_zeroedBeforeSetX = true;
 
             m_drive.SetX();
-
-            std::cout << "Called SetX()" << std::endl;
           }
         } else {
             m_timeSinceControllerInput = 0_s;
 
-            double multiplier = m_isReducedSensitivity ? DriveConstants::kLowSensivityCoefficient : 1.0;
+            double multiplier = m_isReducedSensitivity ? m_lowSensitivityCoefficient : 1.0;
 
           m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
@@ -178,6 +178,10 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
 void RobotContainer::Periodic() {
   frc::SmartDashboard::PutData("Robot Elevator", &m_elevatorMech);
+
+  frc::SmartDashboard::PutBoolean("Is Slow Mde Active", m_isReducedSensitivity);
+
+  m_lowSensitivityCoefficient = frc::SmartDashboard::GetNumber("Low Sensitivity Percentage", DriveConstants::kLowSensivityCoefficient);
 
   // frc::SmartDashboard::PutData("Zero Odometry", new frc2::InstantCommand([this]() { m_drive.ResetRotation(); }));
 
