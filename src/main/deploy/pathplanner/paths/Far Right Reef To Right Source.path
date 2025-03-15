@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.29425,
-        "y": 3.0987499999999994
+        "x": 4.953,
+        "y": 2.9524999999999992
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.0428474025974035,
-        "y": 1.8543587662337662
+        "x": 5.518500000000001,
+        "y": 2.2017499999999997
       },
       "isLocked": false,
-      "linkedName": "Reef Right Side Right"
+      "linkedName": "Right Reef Far Side"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 0.670999999999999
       },
       "prevControl": {
-        "x": 3.740074675324677,
-        "y": 1.6363766233766215
+        "x": 5.5672500000000005,
+        "y": 2.1822499999999994
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.09581678702604
+    "rotation": 122.58570735391453
   },
   "useDefaultConstraints": true
 }

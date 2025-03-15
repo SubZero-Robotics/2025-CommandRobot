@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.0115,
-        "y": 2.9232499999999995
+        "x": 4.953,
+        "y": 2.9524999999999992
       },
       "prevControl": {
-        "x": 5.202511363636363,
-        "y": 1.3810405844155835
+        "x": 5.144011363636364,
+        "y": 1.4102905844155833
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Reef Far Side"
     }
   ],
   "rotationTargets": [],
