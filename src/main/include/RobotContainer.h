@@ -90,4 +90,6 @@ class RobotContainer {
   units::second_t m_defaultLastCalled;
 
   bool m_zeroedBeforeSetX;
+
+  bool m_isReducedSensitivity;
 };

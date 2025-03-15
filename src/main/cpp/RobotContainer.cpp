@@ -29,7 +29,8 @@
 #include "subsystems/AlgaeArmSubsystem.h"
 #include "subsystems/CoralArmSubsystem.h"
 
-RobotContainer::RobotContainer() {
+RobotContainer::RobotContainer() 
+  : m_isReducedSensitivity{false} {
   // Initialize all of your commands and subsystems here
 
   frc::SmartDashboard::PutData(&m_chooser);
@@ -90,13 +91,15 @@ RobotContainer::RobotContainer() {
         } else {
             m_timeSinceControllerInput = 0_s;
 
+            double multiplier = m_isReducedSensitivity ? DriveConstants::kLowSensivityCoefficient : 1.0;
+
           m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetLeftY(), OIConstants::kDriveDeadband)},
+                m_driverController.GetLeftY() * multiplier, OIConstants::kDriveDeadband)},
             -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetLeftX(), OIConstants::kDriveDeadband)},
+                m_driverController.GetLeftX() * multiplier, OIConstants::kDriveDeadband)},
             -units::radians_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetRightX(), OIConstants::kDriveDeadband)},
+                m_driverController.GetRightX() * multiplier, OIConstants::kDriveDeadband)},
           true);
 
           m_zeroedBeforeSetX = false;
@@ -143,6 +146,8 @@ void RobotContainer::ConfigureBindings() {
 
   m_driverController.POVUp().OnTrue(m_commandController.ClimbUp());
   m_driverController.POVDown().OnTrue(m_commandController.ClimbDown());
+
+  m_driverController.A().OnTrue(frc2::InstantCommand([this]() { m_isReducedSensitivity = !m_isReducedSensitivity; }).ToPtr());
 
   m_driverController.LeftBumper().OnTrue(m_commandController.HomeElevator());
   m_driverController.RightBumper().OnTrue(frc2::InstantCommand(
