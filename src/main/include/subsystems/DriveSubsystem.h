@@ -206,7 +206,7 @@ frc::ChassisSpeeds GetSpeedsFromJoystick(
 
   std::vector<subzero::PhotonVisionEstimators::PhotonCameraEstimator>
       poseCameras{
-          subzero::PhotonVisionEstimators::PhotonCameraEstimator(poseLeft, m_leftCamera),
+          // subzero::PhotonVisionEstimators::PhotonCameraEstimator(poseLeft, m_leftCamera),
           // subzero::PhotonVisionEstimators::PhotonCameraEstimator(poseRight, m_rightCamera),
       };
 
