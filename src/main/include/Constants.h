@@ -360,7 +360,7 @@ namespace CommandConstants {
 
     constexpr units::degree_t kCoralL1Position = 249_deg;
     constexpr units::degree_t kCoralL2Position = 240_deg;
-    constexpr units::degree_t kCoralL3Position = 218_deg;
+    constexpr units::degree_t kCoralL3Position = 220_deg;
     constexpr units::degree_t kCoralFeedPosition = 77_deg;
     constexpr units::degree_t kCoralHomePosition = 110_deg;
     constexpr units::degree_t kCoralClimbPosition = 50_deg;

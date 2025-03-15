@@ -23,7 +23,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "To L2 Position"
+                  "name": "To L1 Position"
                 }
               }
             ]
@@ -61,7 +61,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "To L2 Position"
+                  "name": "To L1 Position"
                 }
               },
               {
