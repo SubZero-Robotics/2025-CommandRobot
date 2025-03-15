@@ -17,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left Start to Reef Left Side Left"
+                  "pathName": "Center Start To Reef Left Side Left"
                 }
               },
               {
@@ -36,9 +36,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Left Reef to Far Left Source"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Reef to Far Left Source"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "To Feed Position"
+                }
+              }
+            ]
           }
         },
         {
@@ -46,15 +59,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "To L2 Position"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "Far Left Source to Right Reef"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "To L2 Position"
                 }
               }
             ]

@@ -165,6 +165,10 @@ constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 const std::string kCenterToCenterAuto = "Center Auto (1 Coral)";
 const std::string kRightToRightReefAuto = "Right To Right Reef (1 Coral)";
 const std::string kLeftToLeftReefAuto = "Left To Left Reef (1 Coral)";
+const std::string kRightToRightSourceAuto = "Right To Right Source (2 Coral)";
+const std::string kLeftToLeftSourceAuto = "Left To Left Source (2 Coral)";
+const std::string kCenterToRightSourceAuto = "Center To Right Source (2 Coral)";
+const std::string kCenterToLeftSourceAuto = "Center To Right Source (2 Coral)";
 const std::string kForwardAuto = "Center Auto (0 Coral)";
 
 constexpr double kPXController = 0.5;
