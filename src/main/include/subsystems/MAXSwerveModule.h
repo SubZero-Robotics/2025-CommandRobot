@@ -47,12 +47,23 @@ class MAXSwerveModule {
    */
   void SetDesiredState(const frc::SwerveModuleState& state);
 
+  frc::SwerveModuleState GetDesiredState() { return m_desiredState; }
+
   /**
    * Zeroes all the SwerveModule encoders.
    */
   void ResetEncoders();
 
+  frc::SwerveModuleState GetSimState() const;
+
+  frc::SwerveModulePosition GetSimPosition() const;
+
+  frc::Rotation2d GetRotation() const;
+
  private:
+  void simUpdateDrivePosition(
+    const frc::SwerveModuleState& desiredState);
+
   SparkFlex m_drivingSpark;
   SparkMax m_turningSpark;
 
@@ -68,4 +79,9 @@ class MAXSwerveModule {
   double m_chassisAngularOffset = 0;
   frc::SwerveModuleState m_desiredState{units::meters_per_second_t{0.0},
                                         frc::Rotation2d()};
+
+  units::meter_t m_simDriveEncoderPosition;
+  units::meters_per_second_t m_simDriveEncoderVelocity;
+
+  units::radian_t m_simCurrentAngle;
 };

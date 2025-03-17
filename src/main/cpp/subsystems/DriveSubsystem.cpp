@@ -81,20 +81,33 @@ DriveSubsystem::DriveSubsystem()
 }
 
 void DriveSubsystem::Periodic() {
+  // The `poseEstimator` object replaces our `m_odometry`
   // Implementation of subsystem periodic method goes here.
-  m_odometry.Update(frc::Rotation2d(units::radian_t{
-                        m_pidgey.GetYaw().GetValue()}),
-                    {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
-                  m_rearLeft.GetPosition(), m_rearRight.GetPosition()});
-    auto &yaw = m_pidgey.GetYaw();
+  // m_odometry.Update(frc::Rotation2d(units::radian_t{
+  //                       m_pidgey.GetYaw().GetValue()}),
+  //                   {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
+  //                 m_rearLeft.GetPosition(), m_rearRight.GetPosition()});
+  //   auto &yaw = m_pidgey.GetYaw();
 
-  m_field.SetRobotPose(m_odometry.GetPose());
+  poseEstimator.UpdateWithTime(frc::Timer::GetFPGATimestamp(), GetHeading(), GetModulePositions());
+
+  m_vision.UpdateEstimatedGlobalPose(poseEstimator, true);
+
+  auto updatedPose = poseEstimator.GetEstimatedPosition();
+
+  m_lastGoodPosition = updatedPose;
+  m_field.SetRobotPose(updatedPose);
+
+  logDrivebase();
+
+  frc::SmartDashboard::PutNumber("Robot X", poseEstimator.GetEstimatedPosition().X().value());
+  frc::SmartDashboard::PutNumber("Robot Y", poseEstimator.GetEstimatedPosition().Y().value());
 
   if (frc::Timer::GetFPGATimestamp() - currentTime >= GyroConstants::kPrintPeriod) {
 
-    std::cout << "Yaw: " << yaw.GetValue().value() << std::endl;
+  //   std::cout << "Yaw: " << yaw.GetValue().value() << std::endl;
   
-    currentTime += GyroConstants::kPrintPeriod;
+  //   currentTime += GyroConstants::kPrintPeriod;
   //   /**
   //    * GetYaw automatically calls Refresh(), no need to manually refresh.
   //    *
@@ -128,13 +141,42 @@ void DriveSubsystem::Periodic() {
   //    * timestamps when it receives the frame. This can be further used for latency compensation.
   //    */
   //   std::cout << std::endl;
+  // }
   }
+}
+
+wpi::array<frc::SwerveModulePosition, 4U> DriveSubsystem::GetModulePositions()
+    const {
+  return {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
+          m_rearLeft.GetPosition(), m_rearRight.GetPosition()};
+}
+
+void DriveSubsystem::SimulationPeriodic() {
+  frc::ChassisSpeeds chassisSpeeds = m_driveKinematics.ToChassisSpeeds(
+      m_frontLeft.GetState(), m_frontRight.GetState(), m_rearLeft.GetState(),
+      m_rearRight.GetState());
+
+  m_simPidgey.SetSupplyVoltage(frc::RobotController::GetBatteryVoltage());
+  m_simPidgey.SetRawYaw(
+      GetHeading() +
+      units::degree_t(chassisSpeeds.omega.convert<units::deg_per_s>().value() *
+                      DriveConstants::kPeriodicInterval.value()));
+
+  poseEstimator.Update(GetHeading(), GetModulePositions());
+  m_field.SetRobotPose(poseEstimator.GetEstimatedPosition());
 }
 
 void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                            units::meters_per_second_t ySpeed,
                            units::radians_per_second_t rot,
                            bool fieldRelative) {
+
+  auto now = frc::Timer::GetFPGATimestamp();
+  auto dif = now - m_lastUpdatedTime;
+
+  auto joystickSpeeds =
+      GetSpeedsFromJoystick(xSpeed, ySpeed, rot, fieldRelative);
+
   // Convert the commanded speeds into the correct units for the drivetrain
   units::meters_per_second_t xSpeedDelivered =
       xSpeed.value() * DriveConstants::kMaxSpeed;
@@ -144,12 +186,9 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
       rot.value() * DriveConstants::kMaxAngularSpeed;
 
   auto states = m_driveKinematics.ToSwerveModuleStates(
-      fieldRelative
-          ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-                xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                frc::Rotation2d(units::radian_t{
-                    m_pidgey.GetYaw().GetValue()}))
-          : frc::ChassisSpeeds{xSpeedDelivered, ySpeedDelivered, rotDelivered});
+      frc::ChassisSpeeds::Discretize(joystickSpeeds, dif));
+
+  m_lastUpdatedTime = now;
 
   m_driveKinematics.DesaturateWheelSpeeds(&states, DriveConstants::kMaxSpeed);
 
@@ -159,6 +198,17 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   m_frontRight.SetDesiredState(fr);
   m_rearLeft.SetDesiredState(bl);
   m_rearRight.SetDesiredState(br);
+}
+
+frc::ChassisSpeeds DriveSubsystem::GetSpeedsFromJoystick(
+    units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
+    units::radians_per_second_t rot, bool fieldRelative) {
+  return fieldRelative
+             ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+                   xSpeed * DriveConstants::kMaxSpeed.value(),
+                   ySpeed * DriveConstants::kMaxSpeed.value(),
+                   rot * DriveConstants::kMaxAngularSpeed.value(), GetHeading())
+             : frc::ChassisSpeeds{xSpeed, ySpeed, rot};
 }
 
 void DriveSubsystem::Drive(frc::ChassisSpeeds speeds) {
@@ -215,37 +265,55 @@ double DriveSubsystem::GetTurnRate() {
   return -m_pidgey.GetAngularVelocityZWorld().GetValue().value();
 }
 
-frc::Pose2d DriveSubsystem::GetPose() { return m_odometry.GetPose(); }
+frc::Pose2d DriveSubsystem::GetPose() { return poseEstimator.GetEstimatedPosition(); }
 
 void DriveSubsystem::ResetOdometry(frc::Pose2d pose) {
-  m_odometry.ResetPosition(
-      GetHeading(),
-      {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
-        m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
-      pose);
+  // m_odometry.ResetPosition(
+  //     GetHeading(),
+  //     {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
+  //       m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
+  //     pose);
+
+  m_lastGoodPosition = pose;
+  poseEstimator.ResetPosition(GetHeading(), GetModulePositions(), pose);
 }
 
 void DriveSubsystem::ResetRotation() {
   m_pidgey.Reset();
 }
 
+void DriveSubsystem::logDrivebase() {
+  std::vector states_vec = {m_frontLeft.GetState(), m_frontRight.GetState(),
+                            m_rearLeft.GetState(), m_rearRight.GetState()};
+  std::span<frc::SwerveModuleState, 4> states(states_vec.begin(),
+                                              states_vec.end());
+  std::vector desired_vec = {
+      m_frontLeft.GetDesiredState(), m_frontRight.GetDesiredState(),
+      m_rearLeft.GetDesiredState(), m_rearRight.GetDesiredState()};
+  std::span<frc::SwerveModuleState, 4> desiredStates(desired_vec.begin(),
+                                                     desired_vec.end());
+
+  m_publisher.Set(states);
+  m_desiredPublisher.Set(desiredStates);
+}
+
 void DriveSubsystem::OffsetRotation(frc::Rotation2d offset) {
   m_pidgey.SetYaw(offset.Degrees() + m_pidgey.GetYaw().GetValue());
-    m_odometry.ResetPosition(
-      m_pidgey.GetYaw().GetValue(),
-      {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
-        m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
-      m_odometry.GetPose());
+    // m_odometry.ResetPosition(
+    //   m_pidgey.GetYaw().GetValue(),
+    //   {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
+    //     m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
+    //   m_odometry.GetPose());
 }
 
 void DriveSubsystem::AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
                                           units::second_t timestamp) {
-  // poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp);
+  poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp);
 }
 
 void DriveSubsystem::AddVisionMeasurement(const frc::Pose2d& visionMeasurement,
                                           units::second_t timestamp,
                                           const Eigen::Vector3d& stdDevs) {
-  // wpi::array<double, 3> newStdDevs{stdDevs(0), stdDevs(1), stdDevs(2)};
-  // poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp, newStdDevs);
+  wpi::array<double, 3> newStdDevs{stdDevs(0), stdDevs(1), stdDevs(2)};
+  poseEstimator.AddVisionMeasurement(visionMeasurement, timestamp, newStdDevs);
 }

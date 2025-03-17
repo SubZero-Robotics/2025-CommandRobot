@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.46639344262295,
-        "y": 5.205788934426229
+        "x": 5.303999999999999,
+        "y": 5.039
       },
       "prevControl": {
-        "x": 6.1425,
-        "y": 5.96525
+        "x": 5.9801065573770495,
+        "y": 5.798461065573771
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,19 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "To L2 Position",
-      "waypointRelativePos": 0.22133995037220952,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "To L2 Position"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -60,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -120.19162296095763
+    "rotation": 178.7659627954506
   },
   "useDefaultConstraints": true
 }

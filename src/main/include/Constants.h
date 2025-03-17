@@ -19,6 +19,12 @@
 #include <units/length.h>
 #include <wpi/array.h>
 
+#include <frc/apriltag/AprilTagFieldLayout.h>
+#include <frc/geometry/Transform3d.h>
+#include <photon/PhotonPoseEstimator.h>
+#include <units/length.h>
+#include <wpi/array.h>
+
 
 #include <numbers>
 #include <string>
@@ -87,7 +93,13 @@ namespace DriveConstants {
 constexpr units::meters_per_second_t kMaxSpeed = 4.92_mps;
 constexpr units::radians_per_second_t kMaxAngularSpeed{2 * std::numbers::pi};
 
+constexpr double kLowSensivityCoefficient = 0.3;
+
+constexpr units::second_t kSetXThreshold = 0.5_s;
+
 const int kPigeonCanId = 13;
+
+constexpr units::second_t kPeriodicInterval = 20_ms;
 
 constexpr double kDirectionSlewRate = 1.2;   // radians per second
 constexpr double kMagnitudeSlewRate = 1.8;   // percent per second (1 = 100%)
@@ -153,6 +165,10 @@ constexpr auto kMaxAngularAcceleration = 3.142_rad_per_s_sq;
 const std::string kCenterToCenterAuto = "Center Auto (1 Coral)";
 const std::string kRightToRightReefAuto = "Right To Right Reef (1 Coral)";
 const std::string kLeftToLeftReefAuto = "Left To Left Reef (1 Coral)";
+const std::string kRightToRightSourceAuto = "Right To Right Source (2 Coral)";
+const std::string kLeftToLeftSourceAuto = "Left To Left Source (2 Coral)";
+const std::string kCenterToRightSourceAuto = "Center To Right Source (2 Coral)";
+const std::string kCenterToLeftSourceAuto = "Center To Right Source (2 Coral)";
 const std::string kForwardAuto = "Center Auto (0 Coral)";
 
 constexpr double kPXController = 0.5;
@@ -167,7 +183,7 @@ constexpr units::second_t kFeedWaitTime = 2_s;
 
 namespace OIConstants {
 constexpr int kDriverControllerPort = 0;
-constexpr double kDriveDeadband = 0.05;
+constexpr double kDriveDeadband = 0.08;
 }  // namespace OIConstants
 
 namespace GyroConstants {
@@ -181,15 +197,8 @@ namespace ElevatorConstants {
     const int kBottomLimitSwitchPort = 1;
     const int kTopLimitSwitchPort = 2;
 
-    // Placeholder values
-    const double kElevatorP = 70.0;
-    const double kElevatorI = 0.0;
-    const double kElevatorD = 0.0;
-    const double kElevatorIZone = 0.0;
-    const double kElevatorFF = 0.0;
-
     const subzero::PidSettings kElevatorPidSettings = {
-      40.0, 0.0, 0.0,
+      160.0, 0.0, 0.0,
       0.0, 0.0, false};
 
     const subzero::PidSettings kHomePidSettings = {
@@ -206,7 +215,7 @@ namespace ElevatorConstants {
     constexpr units::meter_t kRelativeDistancePerRev = (1.685_in * M_PI) / 36; // Pitch diameter of gear with 36:1 ratio gearbox
     constexpr units::meters_per_second_t kDefaultVelocity = 0.66_mps;
     constexpr double kVelocityScalar = 1.0;
-    constexpr units::meter_t kTolerance = 0.5_in;
+    constexpr units::meter_t kTolerance = 0.1_in;
 
     // Placeholder
     const subzero::SingleAxisMechanism kElevatorMechanism {
@@ -219,7 +228,7 @@ namespace ElevatorConstants {
     // color
     subzero::ColorConstants::kRed};
 
-    const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{1_fps * 10, 0.75_fps_sq * 20};
+    const frc::TrapezoidProfile<units::meter>::Constraints kElevatorProfileConstraints{1_fps * 10, 20_fps_sq};
 };
 
 namespace AlgaeArmConstants{
@@ -281,7 +290,7 @@ namespace CoralArmConstants{
     constexpr units::meter_t kArmLength = 0.2_m;
  
     // placeholder
-    constexpr double kHasCoralCurrent = 36;
+    constexpr double kHasCoralCurrent = 38;
     
     static const subzero::SingleAxisMechanism kCoralArmMechanism = {
     // length
@@ -351,7 +360,7 @@ namespace CommandConstants {
 
     constexpr units::degree_t kCoralL1Position = 249_deg;
     constexpr units::degree_t kCoralL2Position = 240_deg;
-    constexpr units::degree_t kCoralL3Position = 218_deg;
+    constexpr units::degree_t kCoralL3Position = 220_deg;
     constexpr units::degree_t kCoralFeedPosition = 77_deg;
     constexpr units::degree_t kCoralHomePosition = 110_deg;
     constexpr units::degree_t kCoralClimbPosition = 50_deg;
@@ -376,8 +385,7 @@ namespace CommandConstants {
     constexpr units::degree_t kClimberDownAngle = 0_deg;
     constexpr units::degree_t kClimberUpAngle = 110_deg;
 
-    // Placeholder
-    constexpr units::second_t kCoralFeedTimeout = 3_s;
+    constexpr units::second_t kCoralFeedTimeout = 4_s;
     constexpr units::second_t kAlgaeIntakeTimeout = 5_s;
     constexpr units::second_t kRemoveAlgaeFromReefTimeout = 3_s;
     constexpr units::second_t kExpelCoralTimeout = 1_s;
@@ -385,18 +393,23 @@ namespace CommandConstants {
 }
 
 namespace VisionConstants {
-static constexpr std::string_view kFrontCamera{"PhotonVision"};
-static constexpr std::string_view kRearCamera{"PhotonVision2"};
-static const frc::Transform3d kRobotToCam2{
-    frc::Translation3d{2.147_in, 0_in, 23.369_in},
-    frc::Rotation3d{-90_deg, -0_deg, -140_deg}};
-static const frc::Transform3d kRobotToCam{
-    frc::Translation3d{5.714_in, 0_in, 23.533_in},
-    frc::Rotation3d{90_deg, -23.461_deg, 140_deg}};
+static constexpr std::string_view kLeftCameraName{"PhotonVisionLeft"};
+// static constexpr std::string_view kRightCameraName{"purplePipeCam"};
+// static constexpr std::string_view kBackCameraName{"PhotonVision3"};
+static const frc::Transform3d kRobotToCamLeft{
+    frc::Translation3d{4.52_in, 0_in, 23.41_in},
+    frc::Rotation3d{0_deg, -0_deg, 180_deg}};
+// static const frc::Transform3d kRobotToCamRight{
+//     frc::Translation3d{2.514_in, 8.839_in, 25.22_in},
+//     frc::Rotation3d{-90_deg, 0_deg, 10_deg}};
+// static const frc::Transform3d kRobotToCamBack{
+//     frc::Translation3d{4.52_in, 0_in, 23.41_in},
+//     frc::Rotation3d{0_deg, -0_deg, 180_deg}};
+
 constexpr photon::PoseStrategy kPoseStrategy =
     photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR;
 static const frc::AprilTagFieldLayout kTagLayout{
-    frc::LoadAprilTagLayoutField(frc::AprilTagField::k2024Crescendo)};
+    frc::LoadAprilTagLayoutField(frc::AprilTagField::k2025ReefscapeWelded)};
 static const Eigen::Matrix<double, 3, 1> kSingleTagStdDevs{4, 4, 8};
 static const Eigen::Matrix<double, 3, 1> kMultiTagStdDevs{0.5, 0.5, 1};
 

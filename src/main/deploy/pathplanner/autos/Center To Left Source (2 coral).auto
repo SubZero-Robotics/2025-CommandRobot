@@ -78,25 +78,6 @@
           "data": {
             "name": "Expel Coral"
           }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Far Left Reef To Left Source"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "To Feed Position"
-                }
-              }
-            ]
-          }
         }
       ]
     }

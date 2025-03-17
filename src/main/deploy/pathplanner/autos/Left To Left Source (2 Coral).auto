@@ -17,13 +17,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center Start To Reef Left Side Left"
+                  "pathName": "Left Start to Reef Left Side Left"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "To L2 Position"
+                  "name": "To L1 Position"
                 }
               }
             ]
@@ -55,19 +55,25 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Far Left Source to Right Reef"
+                  "name": "To L1 Position"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "To L2 Position"
+                  "pathName": "Far Left Source to Right Reef"
                 }
               }
             ]
@@ -77,25 +83,6 @@
           "type": "named",
           "data": {
             "name": "Expel Coral"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Far Left Reef To Left Source"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "To Feed Position"
-                }
-              }
-            ]
           }
         }
       ]

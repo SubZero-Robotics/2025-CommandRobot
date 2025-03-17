@@ -3,47 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.766396103896104,
-        "y": 7.34411525974026
+        "x": 1.1028688524590162,
+        "y": 7.339600409836065
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.766396103896104,
-        "y": 7.34411525974026
+        "x": 2.102868852459017,
+        "y": 7.339600409836065
       },
       "isLocked": false,
       "linkedName": "Far Left Source"
     },
     {
       "anchor": {
-        "x": 5.166700819672132,
-        "y": 5.457530737704917
+        "x": 4.96275,
+        "y": 5.06825
       },
       "prevControl": {
-        "x": 7.036782786885246,
-        "y": 6.6563012295081965
+        "x": 6.832831967213115,
+        "y": 6.2670204918032795
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Reef Far Side"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "",
-      "waypointRelativePos": 0.2619851451721815,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "To L2 Position"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

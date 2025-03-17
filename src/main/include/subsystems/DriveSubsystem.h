@@ -6,9 +6,12 @@
 
 #include <frc/ADIS16470_IMU.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
+#include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Rotation2d.h>
+#include <frc/smartdashboard/Field2d.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/smartdashboard/Field2d.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/kinematics/ChassisSpeeds.h>
@@ -25,6 +28,11 @@
 #include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/RunCommand.h>
 #include <ctre/phoenix6/Pigeon2.hpp>
+#include <networktables/StructArrayTopic.h>
+#include <ctre/phoenix6/sim/Pigeon2SimState.hpp>
+#include <subzero/vision/PhotonVisionEstimators.h>
+#include <subzero/target/ITurnToTarget.h>
+#include <subzero/logging/ConsoleLogger.h>
 #include <networktables/StructArrayTopic.h>
 #include <ctre/phoenix6/sim/Pigeon2SimState.hpp>
 #include <subzero/vision/PhotonVisionEstimators.h>
@@ -61,6 +69,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
              bool fieldRelative);
 
   void Drive(frc::ChassisSpeeds speeds);
+
+  frc2::CommandPtr MoveToAngle(units::degree_t angle);
 
   /**
    * Sets the wheels into an X formation to prevent movement.
@@ -114,6 +124,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   void ResetRotation();
 
+  void SimulationPeriodic() override;
+
   frc::SwerveDriveKinematics<4> m_driveKinematics{
       frc::Translation2d{DriveConstants::kWheelBase / 2,
                          DriveConstants::kTrackWidth / 2},
@@ -130,6 +142,13 @@ class DriveSubsystem : public frc2::SubsystemBase {
                             units::second_t timestamp,
                             const Eigen::Vector3d& stdDevs);
 
+  wpi::array<frc::SwerveModulePosition, 4U> GetModulePositions() const;
+
+frc::ChassisSpeeds GetSpeedsFromJoystick(
+    units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
+    units::radians_per_second_t rot, bool fieldRelative);
+
+  void logDrivebase();
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
@@ -143,6 +162,8 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   // Gyro Sensor
   ctre::phoenix6::hardware::Pigeon2 m_pidgey{DriveConstants::kPigeonCanId, "rio"};
+  ctre::phoenix6::sim::Pigeon2SimState& m_simPidgey = m_pidgey.GetSimState();
+
   units::time::second_t currentTime{frc::Timer::GetFPGATimestamp()};
 
   // Odometry class for tracking robot pose
@@ -164,7 +185,37 @@ class DriveSubsystem : public frc2::SubsystemBase {
   frc::Field2d m_field;
   frc::Pose2d m_lastGoodPosition;
 
-  subzero::PhotonVisionEstimators* m_vision;
+    photon::PhotonPoseEstimator poseLeft{
+      // layout
+      VisionConstants::kTagLayout,
+      // strategy
+      VisionConstants::kPoseStrategy,
+      // offsets
+      VisionConstants::kRobotToCamLeft};
+
+  // photon::PhotonPoseEstimator poseRight{
+  //     // layout
+  //     VisionConstants::kTagLayout,
+  //     // strategy
+  //     VisionConstants::kPoseStrategy,
+  //     // offsets
+  //     VisionConstants::kRobotToCamRight};
+ 
+  photon::PhotonCamera m_leftCamera{VisionConstants::kLeftCameraName};
+  // photon::PhotonCamera m_rightCamera{VisionConstants::kRightCameraName};
+
+  std::vector<subzero::PhotonVisionEstimators::PhotonCameraEstimator>
+      poseCameras{
+          subzero::PhotonVisionEstimators::PhotonCameraEstimator(poseLeft, m_leftCamera),
+          // subzero::PhotonVisionEstimators::PhotonCameraEstimator(poseRight, m_rightCamera),
+      };
+
+  subzero::PhotonVisionEstimators m_vision{poseCameras,
+    VisionConstants::kSingleTagStdDevs,
+    VisionConstants::kMultiTagStdDevs
+  };
+
+  units::second_t m_lastUpdatedTime;
 };
 
 

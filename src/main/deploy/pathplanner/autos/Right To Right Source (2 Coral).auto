@@ -17,13 +17,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center Start To Reef Left Side Left"
+                  "pathName": "Right Start To Reef Right Side Right"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "To L2 Position"
+                  "name": "To L1 Position"
                 }
               }
             ]
@@ -42,7 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left Reef to Far Left Source"
+                  "pathName": "Reef Right Side Right To Far Right Source"
                 }
               },
               {
@@ -61,13 +61,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Far Left Source to Right Reef"
+                  "pathName": "Far Right Source To Reef Right Side Left"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "To L2 Position"
+                  "name": "To L1 Position"
                 }
               }
             ]
@@ -86,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Far Left Reef To Left Source"
+                  "pathName": "Far Right Reef To Right Source"
                 }
               },
               {
@@ -96,6 +96,31 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Far Right Source To Reef Right Side Left"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "To L1 Position"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Expel Coral"
           }
         }
       ]

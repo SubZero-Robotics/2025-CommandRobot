@@ -29,8 +29,11 @@
 #include "subsystems/AlgaeArmSubsystem.h"
 #include "subsystems/CoralArmSubsystem.h"
 
-RobotContainer::RobotContainer() {
+RobotContainer::RobotContainer() 
+  : m_isReducedSensitivity{false}, m_lowSensitivityCoefficient{DriveConstants::kLowSensivityCoefficient} {
   // Initialize all of your commands and subsystems here
+
+  frc::SmartDashboard::PutNumber("Low Sensitivity Percentage", m_lowSensitivityCoefficient);
 
   frc::SmartDashboard::PutData(&m_chooser);
   m_chooser.SetDefaultOption(AutoConstants::kCenterToCenterAuto, AutoConstants::kCenterToCenterAuto);
@@ -38,6 +41,10 @@ RobotContainer::RobotContainer() {
   m_chooser.AddOption(AutoConstants::kLeftToLeftReefAuto, AutoConstants::kLeftToLeftReefAuto);
   m_chooser.AddOption(AutoConstants::kRightToRightReefAuto, AutoConstants::kRightToRightReefAuto);
   m_chooser.AddOption(AutoConstants::kForwardAuto, AutoConstants::kForwardAuto);
+  m_chooser.AddOption(AutoConstants::kRightToRightSourceAuto, AutoConstants::kRightToRightSourceAuto);
+  m_chooser.AddOption(AutoConstants::kLeftToLeftSourceAuto, AutoConstants::kLeftToLeftSourceAuto);
+  m_chooser.AddOption(AutoConstants::kCenterToRightSourceAuto, AutoConstants::kCenterToRightSourceAuto);
+  m_chooser.AddOption(AutoConstants::kCenterToLeftSourceAuto, AutoConstants::kCenterToLeftSourceAuto);
       
   // pathplanner::NamedCommands::registerCommand("Test Command", frc2::cmd::Print("Test Command"));
   pathplanner::NamedCommands::registerCommand("To L1 Position", std::move(m_commandController.MoveToPositionL1()));
@@ -50,24 +57,78 @@ RobotContainer::RobotContainer() {
   pathplanner::NamedCommands::registerCommand("Home", std::move(m_commandController.HomeElevator()));
   pathplanner::NamedCommands::registerCommand("Delayed To L2 Position", std::move(frc2::cmd::Wait(CommandConstants::kWaitBeforeL2).AndThen(m_commandController.MoveToPositionL2())));
 
+  m_timeSinceControllerInput = 0_s;
+  m_defaultLastCalled = 0_s;
+
   // Configure the button bindings
   ConfigureBindings();
+
+  m_zeroedBeforeSetX = false;
 
   // Set up default drive command
   // The left stick controls translation of the robot.
   // Turning is controlled by the X axis of the right stick.
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
-        m_drive.Drive(
+
+        units::second_t current = frc::Timer::GetFPGATimestamp();
+        if (std::hypot(m_driverController.GetLeftX(), m_driverController.GetLeftY()) < OIConstants::kDriveDeadband
+         && std::fabs(m_driverController.GetRightX()) < OIConstants::kDriveDeadband) {
+          units::second_t dif = current - m_defaultLastCalled;
+          m_timeSinceControllerInput += dif;
+
+          if (!m_zeroedBeforeSetX) {
+              m_drive.Drive(
+                0_mps,
+                0_mps,
+                0_deg_per_s,
+                true
+              );
+          }
+
+          if (m_timeSinceControllerInput > DriveConstants::kSetXThreshold) {
+
+            m_zeroedBeforeSetX = true;
+
+            m_drive.SetX();
+          }
+        } else {
+            m_timeSinceControllerInput = 0_s;
+
+            double multiplier = m_isReducedSensitivity ? m_lowSensitivityCoefficient : 1.0;
+
+          m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetLeftY(), OIConstants::kDriveDeadband)},
+                m_driverController.GetLeftY() * multiplier, OIConstants::kDriveDeadband)},
             -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetLeftX(), OIConstants::kDriveDeadband)},
+                m_driverController.GetLeftX() * multiplier, OIConstants::kDriveDeadband)},
             -units::radians_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetRightX(), OIConstants::kDriveDeadband)},
-            true);
+                m_driverController.GetRightX() * multiplier, OIConstants::kDriveDeadband)},
+          true);
+
+          m_zeroedBeforeSetX = false;
+        }
+
+        m_defaultLastCalled = current;
       },
       {&m_drive}));
+
+    // m_climber.SetDefaultCommand(
+    //   frc2::RunCommand(
+    //     [this]() {
+    //       m_climber.RunMotorPercentage((-m_driverController.GetLeftTriggerAxis() 
+    //         + m_driverController.GetRightTriggerAxis()) * ClimberConstants::kPercentageScalar);
+
+    //         std::cout << "Controller input: " << (-m_driverController.GetLeftTriggerAxis() 
+    //         + m_driverController.GetRightTriggerAxis()) * ClimberConstants::kPercentageScalar
+    //         << ", Current relative position: " << m_climber.GetCurrentPosition().value() << std::endl;
+    //     },
+    //     {&m_climber}
+    //   )
+    // );
+
+  // Has to be raised before match so coral arm is within frame perimeter
+  // m_elevator.SetEncoderPosition(ElevatorConstants::kElevatorStartPosition);
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -89,6 +150,8 @@ void RobotContainer::ConfigureBindings() {
 
   m_driverController.POVUp().OnTrue(m_commandController.ClimbUp());
   m_driverController.POVDown().OnTrue(m_commandController.ClimbDown());
+
+  m_driverController.A().OnTrue(frc2::InstantCommand([this]() { m_isReducedSensitivity = !m_isReducedSensitivity; }).ToPtr());
 
   m_driverController.LeftBumper().OnTrue(m_commandController.HomeElevator());
   m_driverController.RightBumper().OnTrue(frc2::InstantCommand(
@@ -115,6 +178,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
 void RobotContainer::Periodic() {
   frc::SmartDashboard::PutData("Robot Elevator", &m_elevatorMech);
+
+  frc::SmartDashboard::PutBoolean("Is Slow Mde Active", m_isReducedSensitivity);
+
+  m_lowSensitivityCoefficient = frc::SmartDashboard::GetNumber("Low Sensitivity Percentage", DriveConstants::kLowSensivityCoefficient);
+
+  // frc::SmartDashboard::PutData("Zero Odometry", new frc2::InstantCommand([this]() { m_drive.ResetRotation(); }));
 
   // frc::SmartDashboard::PutData("Zero Odometry", new frc2::InstantCommand([this]() { m_drive.ResetRotation(); }));
 }

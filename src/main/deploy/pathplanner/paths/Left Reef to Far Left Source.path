@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.46639344262295,
-        "y": 5.205788934426229
+        "x": 5.303999999999999,
+        "y": 5.039
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.50325,
-        "y": 6.95
+        "x": 6.34085655737705,
+        "y": 6.783211065573771
       },
       "isLocked": false,
       "linkedName": "Left Reef"
     },
     {
       "anchor": {
-        "x": 1.766396103896104,
-        "y": 7.34411525974026
+        "x": 1.1028688524590162,
+        "y": 7.339600409836065
       },
       "prevControl": {
-        "x": 2.65909090909091,
-        "y": 6.4324269480519485
+        "x": 1.9955636576538218,
+        "y": 6.427912098147754
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,19 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "",
-      "waypointRelativePos": 0.237677245104656,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "To Feed Position"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
