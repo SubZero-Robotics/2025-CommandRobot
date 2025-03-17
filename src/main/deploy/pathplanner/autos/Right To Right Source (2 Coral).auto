@@ -55,12 +55,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -102,6 +96,31 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Far Right Source To Reef Right Side Left"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "To L1 Position"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Expel Coral"
           }
         }
       ]

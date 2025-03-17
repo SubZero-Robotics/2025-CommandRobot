@@ -290,7 +290,7 @@ namespace CoralArmConstants{
     constexpr units::meter_t kArmLength = 0.2_m;
  
     // placeholder
-    constexpr double kHasCoralCurrent = 36;
+    constexpr double kHasCoralCurrent = 38;
     
     static const subzero::SingleAxisMechanism kCoralArmMechanism = {
     // length
