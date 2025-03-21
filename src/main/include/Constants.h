@@ -170,6 +170,7 @@ const std::string kLeftToLeftSourceAuto = "Left To Left Source (2 Coral)";
 const std::string kCenterToRightSourceAuto = "Center To Right Source (2 Coral)";
 const std::string kCenterToLeftSourceAuto = "Center To Right Source (2 Coral)";
 const std::string kForwardAuto = "Center Auto (0 Coral)";
+const std::string kPushRobotAuto = "Push Robot Auto (1 Coral)";
 
 constexpr double kPXController = 0.5;
 constexpr double kPYController = 0.5;

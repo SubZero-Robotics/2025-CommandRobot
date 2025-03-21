@@ -5,21 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Center To Slight Forward"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Home"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Slight Forward To Center Behind Line"
           }
         },
         {
@@ -29,7 +17,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center Behind Line To Center Reef"
+                  "pathName": "Center Straight"
                 }
               },
               {
@@ -45,6 +33,18 @@
           "type": "named",
           "data": {
             "name": "Expel Coral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Reef To Between Cage Push"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Between Cage To Slight Forward"
           }
         }
       ]
