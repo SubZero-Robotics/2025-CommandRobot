@@ -170,7 +170,8 @@ const std::string kLeftToLeftSourceAuto = "Left To Left Source (2 Coral)";
 const std::string kCenterToRightSourceAuto = "Center To Right Source (2 Coral)";
 const std::string kCenterToLeftSourceAuto = "Center To Right Source (2 Coral)";
 const std::string kForwardAuto = "Center Auto (0 Coral)";
-const std::string kPushRobotAuto = "Push Robot Auto (1 Coral)";
+const std::string kCenterPushRobotAuto = "Center Push Robot Auto (1 Coral)";
+const std::string kLeftPushRobotAuto = "Left Push Auto (1 Coral)";
 
 constexpr double kPXController = 0.5;
 constexpr double kPYController = 0.5;
@@ -381,6 +382,7 @@ namespace CommandConstants {
 
     constexpr double kAlgaeIntakeSpeed = -0.3;
     constexpr double kAlgaeExpelSpeed = 0.65;
+    constexpr double kAlgaeIntakeL1Speed = -0.25;
 
     // Placeholder values
     constexpr units::degree_t kClimberDownAngle = 0_deg;

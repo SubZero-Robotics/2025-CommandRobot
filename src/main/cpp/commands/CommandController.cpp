@@ -38,7 +38,8 @@ frc2::CommandPtr CommandController::FeedCoral() {
 }
 
 frc2::CommandPtr CommandController::ExpelCoral() {
-    return m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralExpelSpeed);
+    return m_subsystems.coralIntake->MoveAtPercent(CommandConstants::kCoralExpelSpeed)
+    .AlongWith(m_subsystems.algaeIntake->MoveAtPercent(CommandConstants::kAlgaeIntakeL1Speed));;
 }
 
 frc2::CommandPtr CommandController::IntakeAlgae() {

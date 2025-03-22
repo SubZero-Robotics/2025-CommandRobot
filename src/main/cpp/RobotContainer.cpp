@@ -45,7 +45,8 @@ RobotContainer::RobotContainer()
   m_chooser.AddOption(AutoConstants::kLeftToLeftSourceAuto, AutoConstants::kLeftToLeftSourceAuto);
   m_chooser.AddOption(AutoConstants::kCenterToRightSourceAuto, AutoConstants::kCenterToRightSourceAuto);
   m_chooser.AddOption(AutoConstants::kCenterToLeftSourceAuto, AutoConstants::kCenterToLeftSourceAuto);
-  m_chooser.AddOption(AutoConstants::kPushRobotAuto, AutoConstants::kPushRobotAuto);
+  m_chooser.AddOption(AutoConstants::kCenterPushRobotAuto, AutoConstants::kCenterPushRobotAuto);
+  m_chooser.AddOption(AutoConstants::kLeftPushRobotAuto, AutoConstants::kLeftPushRobotAuto);
       
   // pathplanner::NamedCommands::registerCommand("Test Command", frc2::cmd::Print("Test Command"));
   pathplanner::NamedCommands::registerCommand("To L1 Position", std::move(m_commandController.MoveToPositionL1()));
